@@ -1,0 +1,81 @@
+Implementation Plan and Timeline
+
+The project will be completed in 6 weeks:
+
+1st week - GUI’s, Completion of front end design, Login and Sign up Function
+
+March 30 - April 1 - Must be able to finish the finalization of Graphic User interface of both Admins/Officers and Students
+
+Day 1-  including, designing of Login, Signup, and features such as the Home page rating meter, events calendar.
+Day 2- Finalize GUI’s of , posting of files, Funds, Documentation and reviews.
+Day 3 - Spare day for Finalization, polishing and rest day.
+
+
+April 2- 4 - Designing Front end of the website using HTML and CSS. 
+Day 4- Find more ways to make coding efficient such as finding css templates for base designing and molding it to the original GUI. 
+Day 5- Log in/Sign up connection to firebase database authentication and fire store using JavaScript. Must be able to make Admin and Student accounts.
+Day 6 - Polish, testing and streamlining of codes securing right and stable maneuvering.       
+
+Week 2 - Making Profile Profile and Funds function usage GUI Application and back end
+
+April 5 - 7 - Making database for profiling admin/student
+Day 1 - After logging in, users should be able to edit their name, address, course, and year and the data will be linked and stored in firebase. 
+Day 2 - Implementation of  feature where you can see officers and students, students and admins                               should be able to search certain course, year and also name
+Day 3 - Polishing, making sure everything is connected, debugging and cleaning of code
+
+April 8 - 10 - Funds tracker, Admin can Edit and Students can only view. function usage GUI Application and back end
+Day 4 -  Successful display of funds from 1st to 4th year including completed funds, targeted      amount, unpaid amount and who’s complete or incomplete and firebase bindings for databases. 
+Day 5 -  Implement Admin editing and saving so that admins can save files such as pictures for a certain date or event.
+Day 6 - Ensure everything is connected and working, testing using admin and student account, debug and clean codes.
+
+
+
+
+	
+Week 3:  Date and events tracker, posting of events and program flows,  suggestions, and viewing of documentation/liquidation
+
+April 11 - 13 - Date and events tracker, posting of events in certain events and opening anonymous suggestions
+Day 1 -  Successful display of dates including year, month and day and events within specific dates and ensuring admin can make a post on that specific date with an open comment section. 
+Day 2 -  Implement student actions so that they can comment and post reactions, suggestions and agree upon the said activities.
+Day 3 - Ensure everything is connected and working, testing using admin and student account, debug and clean codes. Spare time to fix bugs.
+
+April 14 - 16 - Documentation viewing
+Day 4 -  Posting of files that contains information that can be publicly displayed by the admins including the officers contribution, documentation and liquidation of every event.
+Day 5 -  make sure the student commenting and reacting works also for rating 
+Day 6 - Ensure everything is connected and working, testing using admin and student account, debug and clean codes. Spare time to fix bugs.
+
+
+Week 4: Freedom wall
+
+April 17 - 19 - Open reviews and suggestion space, open for all without discrimination posted everyday.
+
+Day 1 -  Successful display of updated day on when did you comment, freely upload files and photos in public comment using firebase, html and javascript, Create a 5 star rating system using javascript.
+Day 2 -  Make a homepage where the overall star rating of the CCTE organization is posted and where admins can also post updates.
+Day 3 -  Make sure everything is connected, clean, and streamline codes.
+
+Week 5: Completion and Launching
+
+April 20 - 21 -  Double check everything, data accuracy , security measures and finalizing role based UI such as admin controls can’t be used by students
+Day  4 -  Run the code using student, admin and check if everything is working as intended
+Day  5 -  There should be no loopholes, lag or slow performance and bugs.
+Day  6 -  Make sure everything is connected, clean, and streamline codes.
+
+April 22 - 24 -  Testing
+Day 1 -  I would like to survey the users such as students, and officers to test if it’ll provide satisfaction of usage, is it worth using  and find out what can I improve.
+Day 2 -  Implement improvements.
+Day 3 -  Clean codes and make sure everything is working as intended.
+
+Week 6: Implementation
+
+April 25- 30
+Day 1 - Write admin manual and student manual, guidelines and  rules.
+Day 2 -  optimize load speed
+Day 3 - 6 - Survey Accessibility, Engagement, speed, and usefulness
+	
+Evaluation
+	The project could be evaluated using the following:
+Interview- asking officers about the  efficiency of the system and their needs enabling them  to do things they actually needed making it simpler, efficient and effective. 
+Testing  and Accessibility - at least 50 Students and officers should be able to easily access the web application system and participate within seconds of opening and do tasks with minimized delay in the first 3 weeks of launching the system.
+Expert review - Consulting at least 2 professional web developers about the effectiveness of the said system through testing using social applications such as facebook, discord, linked in. 
+Speed - must be responsive within 1-4 seconds with  minimized delay and display real time updated data.
+Engagement - Should be used by officers and students including their satisfaction using it.
