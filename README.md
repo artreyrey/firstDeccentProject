@@ -10,3 +10,5 @@ March 30, 2025
   = Notes to self, create and about, login/ signup, login sign up in just 1 day. 
   = Next will be the making of profiles and connecting it to data base
   = Next will be the managing of members
+  = Next will be the funds
+  
