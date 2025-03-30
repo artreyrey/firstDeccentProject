@@ -2,5 +2,9 @@
 
 
 March 30, 2025
-  = commencing the project.
-  = today we'll gonna make GUI's 
+  = Commencing the project.
+  = Today we'll gonna make GUI's 
+  = Finalization of all the GUI's Visuals
+  = We're gon**na start at login signup page
+  = Followed by home page, profile, people, funds, events and finally freedomwall
+  = 
