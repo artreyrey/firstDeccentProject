@@ -15,4 +15,4 @@ March 30, 2025
   = Freedom wall next 6th day
   = home page 7th day
   = foucs on day 1's and not general
-  
+  = I will take 3 rest day before starting while brainstorming
