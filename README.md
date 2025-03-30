@@ -8,7 +8,11 @@ March 30, 2025
   = We're gon**na start at login signup page
   = Followed by home page, profile, people, funds, events and finally freedomwall
   = Notes to self, create and about, login/ signup, login sign up in just 1 day. 
-  = Next will be the making of profiles and connecting it to data base
-  = Next will be the managing of members
-  = Next will be the funds
+  = Next will be the making of profiles and connecting it to data base 2nd day
+  = Next will be the managing of members 3rd day
+  = Next will be the funds 4th day
+  = Callendars next 5th day
+  = Freedom wall next 6th day
+  = home page 7th day
+  = foucs on day 1's and not general
   
