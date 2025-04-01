@@ -26,3 +26,4 @@ Aprill 1, 2025
   = no ml till di pa tapos yung task
   = todo: homepage, login sign up na nakaconnect sa data base using facebook and google then pede ka na maglaro
   = must be finished agad para makapagml 
+  = you have plenty of time and energy, you just have to invest it on the right things para magprogress
