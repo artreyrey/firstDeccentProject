@@ -24,3 +24,5 @@ Aprill 1, 2025
   = wake up, open visual studio
   = watch youtube tutorial
   = no ml till di pa tapos yung task
+  = todo: homepage, login sign up na nakaconnect sa data base using facebook and google then pede ka na maglaro
+  = must be finished agad para makapagml 
