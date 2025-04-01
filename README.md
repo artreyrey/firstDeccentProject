@@ -21,3 +21,4 @@ March 30, 2025
 Aprill 1, 2025
   = We need to make home page first, and then login and sign up now.
   = wakeup 4 am to code 5 hrs
+  = wake up, open visual studio
