@@ -17,3 +17,6 @@ March 30, 2025
   = foucs on day 1's and not general
   = I will take 3 rest day before starting while brainstorming
   = I need to be more disciplined
+
+Aprill 1, 2025
+  = We need to make home page first, and then login and sign up now.
