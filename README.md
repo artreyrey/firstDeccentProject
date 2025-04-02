@@ -32,3 +32,13 @@ Aprill 1, 2025
 April 2, 2025
   = homepage gawin, logo, login signup button, pharagraph, pictures, features
   = design first, then content, and then code
+
+  * To do
+  = Homepage
+  = About
+  = Navigation
+  = Features
+  = Login call to action
+
+  *Done:
+  = logo done
