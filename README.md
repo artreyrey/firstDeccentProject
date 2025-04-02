@@ -27,4 +27,5 @@ Aprill 1, 2025
   = todo: homepage, login sign up na nakaconnect sa data base using facebook and google then pede ka na maglaro
   = must be finished agad para makapagml 
   = you have plenty of time and energy, you just have to invest it on the right things para magprogress
-  =no distraction
+  = no distraction
+  = homepage gawin, logo, login signup button, pharagraph, pictures, features
