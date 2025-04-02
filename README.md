@@ -28,4 +28,7 @@ Aprill 1, 2025
   = must be finished agad para makapagml 
   = you have plenty of time and energy, you just have to invest it on the right things para magprogress
   = no distraction
+
+April 2, 2025
   = homepage gawin, logo, login signup button, pharagraph, pictures, features
+  = design first, then content, and then code
