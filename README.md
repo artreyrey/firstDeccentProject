@@ -39,6 +39,7 @@ April 2, 2025
   = Navigation
   = Features
   = Login call to action
+  = 1 logo, navigation, home
 
   *Done:
   = logo done
