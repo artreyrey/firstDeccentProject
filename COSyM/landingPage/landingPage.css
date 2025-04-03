@@ -39,7 +39,8 @@ nav a {
      transition: .6s;
 }
 
-nav a:hover, nav a.active {
+nav a:hover, 
+nav a.active {
     color: #ed720a;
 }
 
@@ -55,6 +56,6 @@ section {
 }
 
 section:nth-child(odd){
-    background-color: #ebeaea;
+    background: #ebeaea;
 
 }
