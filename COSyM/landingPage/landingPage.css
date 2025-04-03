@@ -15,7 +15,7 @@ header {
     left: 0;
     width: 100%;
     padding: 20px 120px;
-    background: #f2f8fc;
+    background: #ebeaea;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,8 +48,13 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ebeaea;
+    background: #f2f8fc;
     font-size: 100px;
     color: #5c5c5c;
-    font-weight: 700;
+    font-weight: 700;   
+}
+
+section:nth-child(odd){
+    background-color: #ebeaea;
+
 }
