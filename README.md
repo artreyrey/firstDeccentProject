@@ -43,3 +43,5 @@ April 2, 2025
 
   *Done:
   = logo done
+  = navbar next code
+  = then
