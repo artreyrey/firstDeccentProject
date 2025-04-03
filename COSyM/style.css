@@ -15,7 +15,14 @@ header {
     width: 100%;
     padding: 20px 120px;
     background: #f4f3e4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
 
 }
 
+.logo {
+    
+}
         
