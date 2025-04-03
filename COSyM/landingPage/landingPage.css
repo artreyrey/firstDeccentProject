@@ -15,7 +15,7 @@ header {
     left: 0;
     width: 100%;
     padding: 20px 120px;
-    background: #5c5c5c;
+    background: #f2f8fc;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,7 +32,7 @@ header {
 
 nav a {
      font-size: 18px;
-     color: #f2f8fc;
+     color: #5c5c5c;
      text-decoration: none;
      font-weight: 500;
      margin-left: 35px;
@@ -41,4 +41,15 @@ nav a {
 
 nav a:hover, nav a.active {
     color: #ed720a;
+}
+
+section {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ebeaea;
+    font-size: 100px;
+    color: #5c5c5c;
+    font-weight: 700;
 }
