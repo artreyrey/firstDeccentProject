@@ -14,7 +14,7 @@ header {
     left: 0;
     width: 100%;
     padding: 20px 120px;
-    background: #f4f3e4;
+    background: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,15 +24,19 @@ header {
 
 .logo {
     font-size: 25px;
-    color: #ed720a;
+    color: #ff7700;
     text-decoration: none;
     font-weight: 600;    
 }
 
 nav a {
      font-size: 18px;
-     color: #ed720a;
+     color: #4a4a4a;
      text-decoration: none;
      font-weight: 500;
      margin-left: 35px;
+}
+
+nav a:hover{
+    color: #b63905;
 }
