@@ -56,7 +56,3 @@ section:nth-child(odd){
     background: #f2f8fc;
 
 }
-
-html{
-    scroll-behavior: smooth;
-}
