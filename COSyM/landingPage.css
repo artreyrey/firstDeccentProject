@@ -15,7 +15,7 @@ header {
     left: 0;
     width: 100%;
     padding: 20px 120px;
-    background: #000000;
+    background: #5c5c5c;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,7 +25,7 @@ header {
 
 .logo {
     font-size: 25px;
-    color: #ed720a;
+    color: #ff7300;
     text-decoration: none;
     font-weight: 600;    
 }
@@ -36,9 +36,9 @@ nav a {
      text-decoration: none;
      font-weight: 500;
      margin-left: 35px;
-     transition: .3s;
+     transition: .6s;
 }
 
-nav a:hover f{
+nav a:hover {
     color: #ed720a;
 }
