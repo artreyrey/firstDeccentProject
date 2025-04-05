@@ -64,3 +64,20 @@ section:nth-child(odd){
 html{
     scroll-behavior: smooth;
 }
+
+.home-section{
+    min-height: 100vh;
+}
+
+.home-section .section-content{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    color: #5c5c5c;
+    justify-content: space-between;
+}
+
+.home-section .home-details .title{
+    font-size: xx-large;
+}
