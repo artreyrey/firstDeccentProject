@@ -36,7 +36,7 @@
 }
 
 header {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     width: 100%;
@@ -46,8 +46,10 @@ header {
     justify-content: space-between;
     align-items: center;
     z-index: 5;
-
+    backdrop-filter: blur(5px); /* Creates frosted glass effect */
+    background-color: rgba(242, 248, 252, 0.9); /* Slightly transparent */
 }
+
 
 .logo {
     display: flex;
@@ -90,7 +92,6 @@ section{
 }
 
 
-
 section:nth-child(odd){
     background: var(--cream-color);
 
@@ -99,12 +100,15 @@ section:nth-child(odd){
 html{
     scroll-behavior: smooth;
 }
+
+
 /*-- 1st stop--*/
 .home-section{
     min-height: 100vh;
 }
 
 .home-section .section-content{
+    margin-left: 60px;
     display: flex;
     align-items: center;
     min-height: 100vh;
@@ -119,9 +123,8 @@ html{
    font-family: "Poppins", sans-serif;
 }
 
-
 .home-section .home-details .subtitle{
-    margin-top: 8px;
+    margin-top: 1px;
     max-width: 70%;
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
@@ -130,7 +133,7 @@ html{
  .home-section .home-details .description{
     max-width: 70%;
     margin: 24px 0 40px;
-    font-size: var(--font-size-m);
+    font-size: var(--font-size-l);
  }
 
  .home-section .home-details .buttons{
@@ -138,6 +141,15 @@ html{
     gap: 23px;
  }
 
+.home-section .home-image-wrapper{/*image building*/
+    max-width: 250px;
+    margin-right: 0px;
+    display: flex;
+    transform: scale(0.1); /* Scales image to 70% of its size */
+    transform-origin: center; /* Ensures even scaling */
+ }
+
+ 
  .home-section .home-details .button{
     padding: 10px 26px;
     border: 2px solid transparent;
@@ -158,10 +170,7 @@ html{
 }
 
 
- .home-section .home-image-wrapper{
-    max-width: 500px;
-    margin-right: 30px;
- }
+ 
 
  @media  screen and (max-width: 900px) {
 
@@ -171,7 +180,8 @@ html{
         --font-size-xl: 1.5rem;
         --font-size-xxl: 1.8rem;
     }
-    .navigation {
+
+    .navbar {
         display: block;
         position: fixed;
         left: 0;
@@ -185,7 +195,7 @@ html{
         background: var(--pearl-color);
     }
 
-    .navigation{
+    .nav-menu {
         color: var(--gray-color);
         display: block;
         font-size: var(--font-size-l);
