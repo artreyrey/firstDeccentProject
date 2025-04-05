@@ -102,7 +102,7 @@ html{
 }
 
 
-/*-- 1st stop--*/
+/*-- contents--*/
 .home-section{
     min-height: 100vh;
 }
@@ -117,14 +117,13 @@ html{
 }
 
 .home-section .home-details .title{
-    margin-top: 100px;
    font-size: var(--font-size-xxl);
    color: var(--gray-color);
    font-family: "Poppins", sans-serif;
 }
 
 .home-section .home-details .subtitle{
-    margin-top: 1px;
+    margin-top: 10px;
     max-width: 70%;
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
