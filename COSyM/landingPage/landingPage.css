@@ -56,6 +56,7 @@ header {
     text-decoration: none;
     font-weight: 700;    
     margin-left: -40px;
+
 }
 
 nav a {
@@ -65,12 +66,17 @@ nav a {
      text-decoration: none;
      font-weight: 600;
      margin-left: 35px;
-     transition: .3s;
+     transition: all 0.3s ease;
 }
 
 nav a:hover, nav a.active {
+    
     color: var(--pearl-color);
     background: var(--orange-color);
+    border-radius: var(--border-radius-m);
+    transform: scale(1.25); /* Makes button slightly larger */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Adds shadow for depth */
+    cursor: pointer; /* Changes cursor to pointer */
 }
 
 
@@ -127,6 +133,11 @@ html{
     font-size: var(--font-size-m);
  }
 
+ .home-section .home-details .buttons{
+    display: flex;
+    gap: 23px;
+ }
+
  .home-section .home-details .button{
     padding: 10px 26px;
     border: 2px solid transparent;
@@ -134,7 +145,18 @@ html{
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
     font-weight: var(--font-weight-medium);
+    transition: all 0.3s ease; /* Smooth transition for all properties */
  }
+
+
+.home-section .home-details .button:hover {
+    color: var(--pearl-color);
+    background: var(--orange-color);
+    transform: scale(1.20); /* Makes button slightly larger */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Adds shadow for depth */
+    cursor: pointer; /* Changes cursor to pointer */
+}
+
 
  .home-section .home-image-wrapper{
     max-width: 500px;
