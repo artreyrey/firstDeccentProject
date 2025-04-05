@@ -26,36 +26,38 @@ header {
     font-size: 25px;
     color: #ff7300;
     text-decoration: none;
-    font-weight: 600;    
+    font-weight: 700;    
     margin-left: -40px;
 }
 
 nav a {
+    padding: 10px 18px;
      font-size: 18px;
      color: #5c5c5c;
      text-decoration: none;
-     font-weight: 500;
+     font-weight: 600;
      margin-left: 35px;
      transition: .3s;
 }
 
 nav a:hover, nav a.active {
-    color: #ed720a;
+    color: #f2f8fc;
+    background: #ff7300;
 }
 
-section {
+section{
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ebeaea;
+    background: #f2f8fc;
     font-size: 100px;
     color: #5c5c5c;
     font-weight: 700;   
 }
 
 section:nth-child(odd){
-    background: #f2f8fc;
+    background: #ebeaea;
 
 }
 
