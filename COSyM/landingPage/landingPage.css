@@ -27,13 +27,7 @@ header {
     color: #ff7300;
     text-decoration: none;
     font-weight: 600;    
-}
-
-.logo-image{
-    position: fixed;
-    height: auto;
-    left: 0px;
-    width: 250px;
+    margin-left: -40px;
 }
 
 nav a {
