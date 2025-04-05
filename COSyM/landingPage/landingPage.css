@@ -29,6 +29,13 @@ header {
     font-weight: 600;    
 }
 
+.logo-image{
+    position: fixed;
+    height: auto;
+    left: 0px;
+    width: 250px;
+}
+
 nav a {
      font-size: 18px;
      color: #5c5c5c;
