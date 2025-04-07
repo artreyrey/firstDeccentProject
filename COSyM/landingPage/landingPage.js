@@ -21,3 +21,19 @@ window.onscroll = () => {
     });
 };
 
+/*hamburger menu */
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navbar = document.querySelector('.navbar');
+    const overlay = document.querySelector('.overlay');
+
+    menuToggle.addEventListener('click', function() {
+        navbar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', function() {
+        navbar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+});
