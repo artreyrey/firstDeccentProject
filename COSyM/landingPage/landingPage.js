@@ -22,17 +22,17 @@ window.onscroll = () => {
 };
 
 /*hamburger menu */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const navbar = document.querySelector('.navbar');
     const overlay = document.querySelector('.overlay');
 
-    menuToggle.addEventListener('click', function() {
+    menuToggle.addEventListener('click', () => {
         navbar.classList.toggle('active');
         overlay.classList.toggle('active');
     });
 
-    overlay.addEventListener('click', function() {
+    overlay.addEventListener('click', () => {
         navbar.classList.remove('active');
         overlay.classList.remove('active');
     });

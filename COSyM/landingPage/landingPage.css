@@ -300,15 +300,8 @@ header {
     
         /* Nav menu styling */
         .nav-menu {
-            display: block;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 300px;
-            height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
             padding: 70px 20px 20px;
             height: 100%;
         }
