@@ -1,3 +1,4 @@
+//for highlighting
 let sections = document.querySelectorAll('section');
 let navLinks = document.querySelectorAll('header nav a');
 
@@ -30,10 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
     menuToggle.addEventListener('click', () => {
         navbar.classList.toggle('active');
         overlay.classList.toggle('active');
+        
+        // Toggle between hamburger and X icon
+        if (navbar.classList.contains('active')) {
+            menuToggle.textContent = "✕"; // X icon
+        } else {
+            menuToggle.textContent = "☰"; // Hamburger icon
+        }
     });
 
     overlay.addEventListener('click', () => {
         navbar.classList.remove('active');
         overlay.classList.remove('active');
+        menuToggle.textContent = "☰"; // Revert to hamburger icon
+    });
+
+    // Close menu when clicking on nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navbar.classList.remove('active');
+            overlay.classList.remove('active');
+            menuToggle.textContent = "☰";
+        });
     });
 });
+
