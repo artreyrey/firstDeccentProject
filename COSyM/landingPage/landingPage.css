@@ -180,7 +180,10 @@ html{
         --font-size-xxl: 1.8rem;
     }
 
-    .navbar {
+    .navbar .active{
+        left: 0;
+    }
+    .navbar .nav-menu {
         display: block;
         position: fixed;
         left: 0;
@@ -194,7 +197,7 @@ html{
         background: var(--pearl-color);
     }
 
-    .nav-menu {
+    .navbar .nav-menu .nav-link{
         color: var(--gray-color);
         display: block;
         font-size: var(--font-size-l);
