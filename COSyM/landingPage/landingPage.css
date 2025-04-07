@@ -140,12 +140,12 @@ html{
     gap: 23px;
  }
 
-.home-section .home-image-wrapper{/*image building*/
+.home-section .home-image-wrapper{
     max-width: 250px;
     margin-right: 0px;
     display: flex;
-    transform: scale(0.1); /* Scales image to 70% of its size */
-    transform-origin: center; /* Ensures even scaling */
+    transform: scale(0.1); 
+    transform-origin: center; /*even scaling */
  }
 
  
@@ -156,22 +156,21 @@ html{
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
     font-weight: var(--font-weight-medium);
-    transition: all 0.3s ease; /* Smooth transition for all properties */
+    transition: all 0.3s ease; /* Smooth transition for all */
  }
 
 
 .home-section .home-details .button:hover {
     color: var(--pearl-color);
     background: var(--orange-color);
-    transform: scale(1.20); /* Makes button slightly larger */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Adds shadow for depth */
-    cursor: pointer; /* Changes cursor to pointer */
+    transform: scale(1.20); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+    cursor: pointer; 
 }
 
 
 
 /*normal nav bar*/
- /* Default Desktop Styles (original horizontal nav) */
 header {
     display: flex;
     justify-content: space-between;
@@ -189,16 +188,12 @@ header {
     list-style: none;
 }
 
-.nav-menu li {
-    margin-left: 35px;
-}
 
 .menu-toggle, .overlay {
     display: none; /* Hide on desktop */
 }
 
 /* Mobile Styles (vertical sidebar) */
-/* ... (keep all your existing CSS above the media query) ... */
 
 @media screen and (max-width: 900px) {
     :root {
@@ -249,13 +244,13 @@ header {
 
     /* Nav menu styling */
     .nav-menu {
-        display: flex;
+        display: fixed;
         flex-direction: column;
         padding: 70px 20px 20px;
         height: 100%;
     }
 
-    .nav-link {
+    .nav-link {   
         display: block;
         padding: 12px 15px;
         margin: 8px 0;
