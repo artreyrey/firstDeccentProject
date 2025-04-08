@@ -246,8 +246,8 @@ header {
     font-weight: 400;
 }
 
-.about-section .about-details .section-title{
-
+.about-section .about-details .section-title {
+    padding: 0;
 }
 
 /* responsiveness */
