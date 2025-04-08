@@ -214,20 +214,22 @@ header {
     width: 800px;
     height: 800px;
     object-fit: cover;
-    border-radius: var(--border-radius-circle);
+    border-radius: var(--border-radius-m);
+    margin-right: 100px;
+    margin-left: 100px;
 }
+
 
 .section-title {
     text-align: center;
     padding: 60px 0 100px;
     text-align: uppercase;
-    font-size: var(--font-size-xl);
-    
+    font-size: 70px;
 }
 
 .section-title::after{
     content: "";
-    width: 80px;
+    width: 280px;
     height: 5px;
     display: block;
     margin: 10px auto 0;
