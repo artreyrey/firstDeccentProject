@@ -206,6 +206,12 @@ header {
     justify-content: space-between;
 }
 
+.about-section .about-image-wrapper .about-image{
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+}
+
 
 /* responsiveness */
 @media screen and (max-width: 900px) {
