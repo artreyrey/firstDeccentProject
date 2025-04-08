@@ -149,9 +149,6 @@ html{
     transform-origin: center; /*even scaling */
  }
 
-    
-
-
  .home-section .home-details .button{
     text-decoration: none;
     padding: 10px 26px;
@@ -197,7 +194,7 @@ header {
     display: none; /* Hide on desktop */
 }
 
-/* Mobile Styles (vertical sidebar) */
+/* About Section */
 
 @media screen and (max-width: 900px) {
     :root {
@@ -316,5 +313,3 @@ header {
     }
 
 }
-
-/* About Section */
