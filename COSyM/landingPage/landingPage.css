@@ -217,8 +217,14 @@ header {
     border-radius: var(--border-radius-m);
     margin-right: 50px;
     margin-left: 50px;
-    border: 3px solid var(--orange-color);
+    border: 10px solid var(--orange-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.about-image:hover {
+    border: 3px solid var(--orange-color);
+    transform: scale(1.03); /* Slight zoom */
+    transition: all 0.3s ease;
 }
 
 .section-title {
