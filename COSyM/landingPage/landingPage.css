@@ -215,8 +215,8 @@ header {
     height: 800px;
     object-fit: cover;
     border-radius: var(--border-radius-m);
-    margin-right: 100px;
-    margin-left: 100px;
+    margin-right: 50px;
+    margin-left: 50px;
 }
 
 
@@ -236,6 +236,10 @@ header {
     border-radius: var(--border-radius-s);
     background: var(--orange-color);
 
+}
+
+.about-section .about-details {
+    margin-top: -30px;
 }
 
 .about-section .about-details .text {
