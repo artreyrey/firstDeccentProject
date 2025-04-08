@@ -197,11 +197,14 @@ header {
 /* About Section styles*/
 
 .about-section{
-    padding: 120px 0;
-    
-
+    padding: 120px 0;    
 }
 
+.about-section .section-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 
 /* responsiveness */
