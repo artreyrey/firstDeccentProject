@@ -17,7 +17,7 @@
     --font-size-n: 0.1rem;
     --font-size-m: 1.12rem;
     --font-size-l: 1.5rem;
-    --font-size-xl: 2rem;
+    --font-size-xl: 2.0rem;
     --font-size-xxl: 100px;
 
     --font-weight-normal: 400;
@@ -174,16 +174,6 @@ html{
     cursor: pointer; 
 }
 
-.section-title {
-    text-align: center;
-    padding: 60px 0 100px;
-    text-align: uppercase;
-    font-size: var(--font-size-xl);
-}
-
-.section-title::after{
-
-}
 
 /*normal nav bar*/
 header {
@@ -221,10 +211,29 @@ header {
 }
 
 .about-section .about-image-wrapper .about-image{
-    width: 400px;
-    height: 400px;
+    width: 800px;
+    height: 800px;
     object-fit: cover;
     border-radius: var(--border-radius-circle);
+}
+
+.section-title {
+    text-align: center;
+    padding: 60px 0 100px;
+    text-align: uppercase;
+    font-size: var(--font-size-xl);
+    
+}
+
+.section-title::after{
+    content: "";
+    width: 80px;
+    height: 5px;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: var(--border-radius-s);
+    background: var(--orange-color);
+
 }
 
 
