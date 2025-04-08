@@ -35,6 +35,7 @@
 
 }
 
+/* Home section */
 header {
     position: sticky;
     top: 0;
@@ -148,8 +149,11 @@ html{
     transform-origin: center; /*even scaling */
  }
 
- 
+    
+
+
  .home-section .home-details .button{
+    text-decoration: none;
     padding: 10px 26px;
     border: 2px solid transparent;
     color: var(--pearl-color);
@@ -312,3 +316,5 @@ header {
     }
 
 }
+
+/* About Section */
