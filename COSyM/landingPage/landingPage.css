@@ -286,6 +286,17 @@ header {
     font-weight: var(--font-weight-bold);
 }
 
+.features-title::after{
+    content: "";
+    width: 230px;
+    height: 5px;
+    display: block;
+    margin: 1px auto 0;
+    border-radius: var(--border-radius-s);
+    background: var(--orange-color);
+
+}
+
 .features-details {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -300,7 +311,7 @@ header {
     background-color: var(--pearl-color);
     border: 2px solid var(--orange-color);
     border-radius: var(--border-radius-m);
-    padding: 25px;
+    padding: 45px;
     color: var(--gray-color);
 }
 
@@ -325,10 +336,9 @@ header {
     text-align: center;
 }
 
-/* Bottom row - last 2 features */
 .freedom-wall,
 .home-dashboard {
-    grid-column: span 1;
+    grid-column: span;
 }
 
 
