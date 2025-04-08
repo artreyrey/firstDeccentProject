@@ -266,7 +266,6 @@ header {
 }
 
 /* Features styles */
-/* Features Section */
 #features {
     padding: 80px 0;
 }
@@ -301,6 +300,7 @@ header {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 80px;
+    justify-items: center;
 }
 
 .member-directory,
@@ -335,6 +335,7 @@ header {
     line-height: 1.5;
     text-align: center;
 }
+
 
 .freedom-wall,
 .home-dashboard {
