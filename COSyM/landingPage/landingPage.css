@@ -245,6 +245,7 @@ header {
 
 }
 
+
 .about-section .about-details {
     margin-top: -30px;
     padding-left: 20px;
@@ -256,8 +257,8 @@ header {
     margin: 50px 0 30px;
     text-align: center;
     font-size: 23px;
-    font-weight: 250;
-    word-spacing: 2px
+    font-weight: 300;
+    word-spacing: 2px;
 }
 
 .about-section .about-details .section-title {
