@@ -246,6 +246,10 @@ header {
     font-weight: 400;
 }
 
+.about-section .about-details .section-title{
+
+}
+
 /* responsiveness */
 @media screen and (max-width: 900px) {
     :root {
