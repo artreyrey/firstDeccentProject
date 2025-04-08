@@ -102,8 +102,13 @@ html{
     scroll-behavior: smooth;
 }
 
+.section-content{
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: site;
+}
 
-/*-- contents--*/
+/*-- home contents--*/
 .home-section{
     min-height: 100vh;
 }
@@ -141,7 +146,7 @@ html{
     gap: 23px;
  }
 
-.home-section .home-image-wrapper{
+.home-section .home-image-wrapper .home-image{
     max-width: 250px;
     margin-right: 0px;
     display: flex;
@@ -169,7 +174,16 @@ html{
     cursor: pointer; 
 }
 
+.section-title {
+    text-align: center;
+    padding: 60px 0 100px;
+    text-align: uppercase;
+    font-size: var(--font-size-xl);
+}
 
+.section-title::after{
+
+}
 
 /*normal nav bar*/
 header {
@@ -210,6 +224,7 @@ header {
     width: 400px;
     height: 400px;
     object-fit: cover;
+    border-radius: var(--border-radius-circle);
 }
 
 
