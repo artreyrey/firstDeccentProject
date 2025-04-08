@@ -194,8 +194,17 @@ header {
     display: none; /* Hide on desktop */
 }
 
-/* About Section */
+/* About Section styles*/
 
+.about-section{
+    padding: 120px 0;
+    
+
+}
+
+
+
+/* responsiveness */
 @media screen and (max-width: 900px) {
     :root {
         --font-size-m: 1rem;
