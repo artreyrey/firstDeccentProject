@@ -371,6 +371,9 @@ header {
     animation: glow 1.5s ease-in-out infinite alternate;
 }
 
+/* Contact us seciton */
+
+
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
