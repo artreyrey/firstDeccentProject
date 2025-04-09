@@ -401,9 +401,15 @@ header {
 
 .contact-section .contact-infolist .contact-info i{
     font-size: var(--font-size-m);
-
 }
 
+.contact-section .contact-form .form-input{
+    width: 100%;
+    height: 50px;
+    background-color: var(--pearl-color);
+    border-radius: var(--border-radius-s);
+    border: var(--gray-color);
+}
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
