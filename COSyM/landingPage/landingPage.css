@@ -392,6 +392,10 @@ header {
 }
 
 .contact-section .contact-infolist .contact-info{
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+    align-items: center;
 
 }
 
