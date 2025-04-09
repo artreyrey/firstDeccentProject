@@ -37,7 +37,7 @@
 
 }
 
-/* Home section */
+
 header {
     position: sticky;
     top: 0;
@@ -374,6 +374,26 @@ header {
 }
 
 /* Contact us seciton */
+.contact-section{
+    padding: 50px 0 100px;
+    background: var(--gray-color);
+}
+
+.contact-section .section-title{
+    color: var(--cream-color);
+}
+
+.contact-section .section-content{
+    display: flex;  
+    gap: 48px;
+    align-items: flex-start;
+    justify-content: space-between;
+    color: var(--cream-color);
+}
+
+.contact-section .contact-infolist .contact-info{
+
+}
 
 
 /* responsiveness home*/
