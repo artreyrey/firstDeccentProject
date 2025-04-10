@@ -574,7 +574,6 @@ header {
         transform: scale(1.02);
     }
 
-    /* Overlay when menu is open */
     .overlay {
         position: fixed;
         top: 0;
@@ -593,7 +592,6 @@ header {
         visibility: visible;
     }
 
-    /* Hide image on mobile */
     .home-section .section-content .home-image {
         display: none;
     }
