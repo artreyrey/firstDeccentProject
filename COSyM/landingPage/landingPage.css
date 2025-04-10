@@ -37,7 +37,6 @@
 
 }
 
-
 header {
     position: sticky;
     top: 0;
@@ -49,10 +48,7 @@ header {
     justify-content: space-between;
     align-items: center;
     z-index: 5;
-    backdrop-filter: blur(5px); /* Creates frosted glass effect */
-    background-color: rgba(242, 248, 252, 0.9); /* Slightly transparent */
 }
-
 
 .logo {
     display: flex;
