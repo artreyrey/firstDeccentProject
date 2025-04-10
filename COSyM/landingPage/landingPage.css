@@ -199,9 +199,6 @@ header {
     padding: 120px 0;    
 }
 
-img{
-    width: 100%;
-}
 .about-section .section-content{
     display: flex;
     align-items: center;
@@ -508,7 +505,7 @@ img{
     margin: 0 5px;
     color: inherit;
 }
-/* 
+
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
@@ -628,7 +625,7 @@ img{
 
 }
 
-/*  responsiveness featuers
+/*  responsiveness featuers*/
 @media (max-width: 1024px) {
     .features-details {
         grid-template-columns: 1fr;
@@ -665,4 +662,4 @@ img{
         width: 180px;
     }
 }
- */
+
