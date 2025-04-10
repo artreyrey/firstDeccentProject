@@ -199,6 +199,9 @@ header {
     padding: 120px 0;    
 }
 
+img{
+    width: 100%;
+}
 .about-section .section-content{
     display: flex;
     align-items: center;
