@@ -479,7 +479,7 @@ header {
     background: var(--cream-color);
 }
 
-.footer-section:where(.copyright-text,.social-link, .policy-link){
+.footer-section:where(.copyright-text, .social-link,.policy-link){
     color: var(--gray-color);
     transition: 0.3 ease;
 }
@@ -507,6 +507,7 @@ header {
 .footer-section .policy-text .separator{
     margin: 0 5px;
     color: var(--gray-color);
+
 
 }
 /* responsiveness home*/
@@ -664,4 +665,8 @@ header {
     .features-title::after {
         width: 180px;
     }
+}
+
+@media screen {
+    
 }
