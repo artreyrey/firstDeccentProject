@@ -508,7 +508,7 @@ img{
     margin: 0 5px;
     color: inherit;
 }
-
+/* 
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
@@ -628,7 +628,7 @@ img{
 
 }
 
-/*  responsiveness featuers*/
+/*  responsiveness featuers
 @media (max-width: 1024px) {
     .features-details {
         grid-template-columns: 1fr;
@@ -665,4 +665,4 @@ img{
         width: 180px;
     }
 }
-
+ */
