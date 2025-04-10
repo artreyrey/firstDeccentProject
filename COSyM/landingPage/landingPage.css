@@ -33,8 +33,10 @@
     --border-radius-circle: 50%;
 
     --site-max-width:
-    
+}
 
+html {
+    scroll-behavior: smooth;
 }
 
 header {
@@ -75,11 +77,10 @@ nav a:hover, nav a.active {
     color: var(--pearl-color);
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
-    transform: scale(1.25); /* Makes button slightly larger */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Adds shadow for depth */
-    cursor: pointer; /* Changes cursor to pointer */
+    transform: scale(1.25); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer; 
 }
-
 
 section{
     min-height: 100vh;
