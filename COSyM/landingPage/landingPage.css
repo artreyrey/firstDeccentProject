@@ -474,42 +474,45 @@ header {
 }
 
 /* footer section */
-.footer-section{
+.footer-section {
     padding: 20px 0;
     background: var(--cream-color);
+    color: var(--gray-color); 
 }
 
-.footer-section:where(.copyright-text, .social-link,.policy-link){
-    color: var(--gray-color);
-    transition: 0.3 ease;
-}
-
-.footer-section .section-content{
+.footer-section .section-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.footer-section .social-link-list{
+.footer-section .social-link-list {
     display: flex;
     gap: 25px;
 }
 
-.footer-section .social-link-list .social-link{
+.footer-section .social-link {
     font-size: var(--font-size-l);
+    color: inherit; 
+    transition: 0.3s ease;
 }
 
-.footer-section .social-link-list .social-link:hover,
-.footer-section .policy-text .policy-link:hover {
+.footer-section .policy-link {
+    color: inherit;
+    text-decoration: none; 
+    transition: 0.3s ease;
+}
+
+.footer-section .social-link:hover,
+.footer-section .policy-link:hover {
     color: var(--orange-color);
 }
 
-.footer-section .policy-text .separator{
+.footer-section .separator {
     margin: 0 5px;
-    color: var(--gray-color);
-
-
+    color: inherit;
 }
+
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
