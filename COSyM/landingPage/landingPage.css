@@ -489,7 +489,9 @@ header {
     justify-content: space-between;
 }
 
-.footer-section
+.footer-section .social-link-list{
+    
+}
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
