@@ -34,19 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Toggle between hamburger and X icon
         if (navbar.classList.contains('active')) {
-            menuToggle.textContent = "✕"; // X icon
+            menuToggle.textContent = "✕"; 
         } else {
-            menuToggle.textContent = "☰"; // Hamburger icon
+            menuToggle.textContent = "☰"; 
         }
     });
 
     overlay.addEventListener('click', () => {
         navbar.classList.remove('active');
         overlay.classList.remove('active');
-        menuToggle.textContent = "☰"; // Revert to hamburger icon
+        menuToggle.textContent = "☰"; // Revert to hamburger
     });
 
-    // Close menu when clicking on nav links
+    // Close menu
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             navbar.classList.remove('active');
