@@ -795,6 +795,14 @@ header {
         margin: 225px 0 0;
         min-height: 100px;
       }
+
+      .features-content .features-details .member-directory, .funds-tracker, .event-calendar, .freedom-wall, .home-dashboard ,.own-account{
+        padding: 20px;
+      }
+
+      .features-content .features-details{
+        24px
+      }
   }
   
   @media screen and (min-width: 992px) {
