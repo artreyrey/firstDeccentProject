@@ -624,7 +624,6 @@ header {
 
 }
 
-/*  responsiveness featuers */
 /* Responsive Styles */
 @media screen and (max-width: 1024px) {
     /* Features Section */
@@ -746,6 +745,13 @@ header {
         font-size: 2.5rem; /* 40px */
     }
     
+    .logo {
+        position: relative;
+        left: 0;
+        margin-left: 0; 
+        font-size: var(--font-size-l);
+    }
+
     .features-title::after {
         width: 180px;
     }
@@ -791,12 +797,12 @@ header {
     }
     
     .section-title {
-        font-size: 4.375rem; /* 70px */
+        font-size: 4.375rem;
         padding: 60px 0 100px;
     }
     
     .about-section .about-details .text {
-        font-size: 1.438rem; /* 23px */
+        font-size: 1.438rem; 
         line-height: 40px;
         word-spacing: 7px;
     }
