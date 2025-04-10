@@ -261,7 +261,6 @@ header {
 }
 
 /* Features styles */
-/* Features Section */
 #features {
     padding: 80px 0;
 }
@@ -600,11 +599,10 @@ header {
     }
 
     /* Hide image on mobile */
-    .home-section .section-content .home-image-wrapper .home-image {
+    .home-section .section-content .home-image {
         display: none;
     }
 
-    /* Adjust text content for mobile */
     .home-section .section-content {
         flex-direction: column;
         text-align: center;
@@ -625,7 +623,7 @@ header {
 
 }
 
-/*  responsiveness featuers*/
+/*  responsiveness featuers */
 @media (max-width: 1024px) {
     .features-details {
         grid-template-columns: 1fr;
