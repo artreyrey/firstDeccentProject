@@ -625,195 +625,198 @@ header {
 }
 
 /* Responsive Styles */
+/* ===== Responsive Breakpoints ===== */
 @media screen and (max-width: 1024px) {
-    /* Features Section */
+    /* Features Grid Adjustment */
     .features-details {
-        grid-template-columns: 1fr;
-        gap: 40px;
+      grid-template-columns: 1fr;
+      gap: 40px;
     }
     
     .features-title {
-        font-size: 3.125rem; /* 50px */
+      font-size: 3.125rem;
     }
-}
-
-@media screen and (max-width: 900px) {
+  }
+  
+  @media screen and (max-width: 900px) {
+    /* Root Variables */
     :root {
-        --font-size-m: 1rem;
-        --font-size-l: 1.3rem;
-        --font-size-xl: 1.5rem;
-        --font-size-xxl: 1.8rem;
+      --font-size-m: 1rem;
+      --font-size-l: 1.3rem;
+      --font-size-xl: 1.5rem;
+      --font-size-xxl: 1.8rem;
     }
-
+  
     /* Header */
     header {
-        padding: 15px 20px;
+      padding: 15px 20px;
     }
-
+  
     /* Mobile Navigation */
     .menu-toggle {
-        display: block;
-        position: absolute;
-        right: 20px;
-        top: 15px;
-        font-size: var(--font-size-xl);
-        cursor: pointer;
-        z-index: 1000;
-        transition: transform 0.3s ease;
+      display: block;
+      position: fixed;
+      right: 20px;
+      top: 15px;
+      font-size: var(--font-size-xl);
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.3s ease;
     }
-
+  
     .navbar {
-        position: fixed;
-        left: -100%;
-        top: 0;
-        width: 250px;
-        height: 100vh;
-        background: var(--pearl-color);
-        transition: left 0.3s ease;
-        z-index: 999;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      position: fixed;
+      left: -100%;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: var(--pearl-color);
+      transition: left 0.3s ease;
+      z-index: 999;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     }
-
+  
     .navbar.active {
-        left: 0;
+      left: 0;
     }
-
+  
     .nav-menu {
-        flex-direction: column;
-        padding: 70px 20px 20px;
+      flex-direction: column;
+      padding: 70px 20px 20px;
     }
-
+  
     .nav-link {
-        display: block;
-        padding: 12px 15px;
-        margin: 8px 0;
-        font-size: var(--font-size-m);
-        border-radius: var(--border-radius-s);
-        transition: all 0.3s ease;
+      display: block;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: var(--font-size-m);
+      border-radius: var(--border-radius-s);
+      transition: all 0.3s ease;
     }
-
+  
     .nav-link:hover, 
     .nav-link.active {
-        color: var(--pearl-color);
-        background: var(--orange-color);
-        transform: scale(1.02);
+      color: var(--pearl-color);
+      background: var(--orange-color);
+      transform: scale(1.02);
     }
-
+  
     .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 998;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
     }
-
+  
     .overlay.active {
-        opacity: 1;
-        visibility: visible;
+      opacity: 1;
+      visibility: visible;
     }
-
+  
     /* Home Section */
     .home-section .section-content {
-        flex-direction: column;
-        text-align: center;
-        margin-left: 0;
+      flex-direction: column;
+      text-align: center;
+      margin: 225px 0 0;
+      min-height: 100px;
     }
-
+  
     .home-section .home-image {
-        display: none;
+      display: none;
     }
-
+  
     .home-section .home-details .title,
     .home-section .home-details .subtitle,
     .home-section .home-details .description {
-        max-width: 100%;
+      max-width: 100%;
     }
-
+  
     .home-section .home-details .buttons {
-        justify-content: center;
+      justify-content: center;
     }
-}
-
-@media screen and (max-width: 768px) {
-    /* Features Section */
+  }
+  
+  @media screen and (max-width: 768px) {
+    /* Typography */
     .features-title {
-        font-size: 2.5rem; /* 40px */
+      font-size: 2.5rem;
     }
     
     .logo {
-        position: relative;
-        left: 0;
-        margin-left: 0; 
-        font-size: var(--font-size-l);
+      position: relative;
+      left: 0;
+      margin-left: 0; 
+      font-size: var(--font-size-l);
     }
-
+  
     .features-title::after {
-        width: 180px;
+      width: 180px;
     }
-
+  
+    /* Components */
     .feature-box {
-        padding: 30px;
+      padding: 30px;
     }
-
+  
     /* About Section */
     .about-section {
-        padding: 80px 0;
+      padding: 80px 0;
     }
     
     .about-section .section-content {
-        flex-direction: column;
-        margin-top: 100px;
+      flex-direction: column;
+      margin-top: 210px;
+      min-height: 100px;
     }
     
     .about-section .about-image-wrapper {
-        display: none;
+      display: none;
     }
     
     .section-title {
-        font-size: 3rem;
-        padding: 40px 0 70px;
+      font-size: 3rem;
+      padding: 40px 0 70px;
     }
     
     .about-section .about-details .text {
-        font-size: 1.2rem;
-        line-height: 1.8;
+      font-size: 1.2rem;
+      line-height: 1.8;
     }
 
-    .home-section .section-content{
-        margin-top: 225px;
-    }
-
-    .home-section .section-content{
+    .home-section .section-content {
+        flex-direction: column;
+        text-align: center;
+        margin: 225px 0 0;
         min-height: 100px;
-    }
-}
-
-@media screen and (min-width: 992px) {
-    
-    /* About Section - Desktop */
+      }
+  }
+  
+  @media screen and (min-width: 992px) {
+    /* About Section */
     .about-section {
-        padding: 120px 0;
+      padding: 120px 0;
     }
     
     .about-section .about-image-wrapper .about-image {
-        width: 800px;
-        height: 800px;
-        margin: 0 50px;
+      width: 800px;
+      height: 800px;
+      margin: 0 50px;
     }
     
     .section-title {
-        font-size: 4.375rem;
-        padding: 60px 0 100px;
+      font-size: 4.375rem;
+      padding: 60px 0 100px;
     }
     
     .about-section .about-details .text {
-        font-size: 1.438rem; 
-        line-height: 40px;
-        word-spacing: 7px;
+      font-size: 1.438rem; 
+      line-height: 40px;
+      word-spacing: 7px;
     }
-}
+  }
