@@ -496,7 +496,6 @@ header {
 
 .footer-section .social-link-list .social link{
     font-size: var(--font-size-l);
-    
 }
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
