@@ -490,6 +490,8 @@ header {
 }
 
 .footer-section .social-link-list{
+    display: flex;
+    gap: 25px;
     
 }
 /* responsiveness home*/
