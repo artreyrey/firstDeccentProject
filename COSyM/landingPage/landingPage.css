@@ -767,6 +767,7 @@ header {
     
     .about-section .section-content {
         flex-direction: column;
+        margin-top: 100px;
     }
     
     .about-section .about-image-wrapper {
@@ -782,9 +783,18 @@ header {
         font-size: 1.2rem;
         line-height: 1.8;
     }
+
+    .home-section .section-content{
+        margin-top: 225px;
+    }
+
+    .home-section .section-content{
+        min-height: 100px;
+    }
 }
 
 @media screen and (min-width: 992px) {
+    
     /* About Section - Desktop */
     .about-section {
         padding: 120px 0;
