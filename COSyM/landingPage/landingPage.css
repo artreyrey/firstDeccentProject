@@ -492,6 +492,10 @@ header {
 .footer-section .social-link-list{
     display: flex;
     gap: 25px;
+}
+
+.footer-section .social-link-list .social link{
+    font-size: var(--font-size-l);
     
 }
 /* responsiveness home*/
