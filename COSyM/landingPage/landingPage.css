@@ -782,9 +782,12 @@ header {
     .section-title {
       font-size: 3rem;
       padding: 40px 0 70px;
+
     }
+
     
     .about-section .about-details .text {
+      padding-top: 30px;
       font-size: 1.2rem;
       line-height: 1.8;
     }
@@ -800,9 +803,6 @@ header {
         padding: 20px;
       }
 
-      .features-content .features-details{
-        24px
-      }
   }
   
   @media screen and (min-width: 992px) {
@@ -817,9 +817,10 @@ header {
       margin: 0 50px;
     }
     
-    .section-title {
+    .about section .about-details .section-title {
       font-size: 4.375rem;
       padding: 60px 0 100px;
+      margin-top: -100px;
     }
     
     .about-section .about-details .text {
