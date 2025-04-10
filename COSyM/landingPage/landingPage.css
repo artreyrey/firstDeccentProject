@@ -474,8 +474,22 @@ header {
 }
 
 /* footer section */
+.footer-section{
+    padding: 20px 0;
+    background: var(--cream-color);
+}
 
+.footer-section:where(.copyright-text,.social-link, .policy-link){
+    color: var(--gray-color);
+}
 
+.footer-section .section-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-section
 /* responsiveness home*/
 @media screen and (max-width: 900px) {
     :root {
