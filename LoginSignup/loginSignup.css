@@ -23,6 +23,8 @@
     font-family: 'Poppins', sans-serif;
 }
 
+/* hanap ng masmaayos na design galing sa yt tapos iconnect na alang din */
+
 body {
     background-color: var(--pearl-color);
     display: flex;
