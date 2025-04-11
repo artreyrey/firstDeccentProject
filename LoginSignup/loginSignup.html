@@ -9,8 +9,85 @@
     <script type="module" src=""></script>
 </head>
 <body>
-    <h2>niga</h2>
+    <div class="auth-container">
+        <input type="checkbox" id="signup-toggle" class="form-toggle">
+        
+        <div class="auth-illustration">
+            <div>
+                <h2>CCTE Nexus</h2>
+                <p>Connect, Explore and Innovate with your community</p>
+            </div>
+        </div>
 
+        <!-- Login Form -->
+        <div class="auth-form" id="login-form">
+            <h2 class="form-title">Sign In</h2>
+            
+            <form>
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                
+                <div class="form-group" style="text-align: right;">
+                    <a href="#" style="font-size: 0.9rem;">Recover Password</a>
+                </div>
+                
+                <button type="submit" class="btn">Sign In</button>
+                
+                <div class="divider">or</div>
+                
+                <div class="form-footer">
+                    Don't have account yet? <br>
+                    <label for="signup-toggle" class="btn btn-outline">
+                        Sign Up
+                    </label>
+                </div>
+            </form>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="auth-form" id="signup-form">
+            <h2 class="form-title">Register</h2>
+            
+            <form>
+                <div class="form-group">
+                    <label for="signup-firstname">First Name</label>
+                    <input type="text" id="signup-firstname" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-lastname">Last Name</label>
+                    <input type="text" id="signup-lastname" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn">Sign Up</button>
+                
+                <div class="form-footer">
+                    Already Have Account? <br>
+                    <label for="signup-toggle" class="btn btn-outline">
+                        Sign In
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <script src="loginSignup.js"></script>
 </body>
 </html>
