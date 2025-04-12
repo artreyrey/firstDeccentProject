@@ -209,7 +209,7 @@ button:hover{
     border: none;
     background-color: transparent;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     display: inline-block; 
     transition: transform 0.3s ease;
     cursor: pointer; 
