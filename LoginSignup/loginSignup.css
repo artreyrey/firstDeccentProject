@@ -25,28 +25,32 @@
 
 /* designs */
 body{
-    background-color: var(--pearl-color);
+    background-color: var(--cream-color);
 }
 
 .container{
-    background:var(--cream-color);
+    background:var(--pearl-color);
     width:450px;
     padding:1.5rem;
-    margin-top: 5px;
-    margin:50px auto;
+    margin-top: 200px;
+    margin-left: 690px;
     border-radius:30px;
     box-shadow:0 5px 15px var(--orange-color);
+    border-color: var(--orange-color);
+    border-width: 50px;
 }
 
 form{
     margin:0 2rem;
 }
-.form-title{
+
+.container .form-title{
     font-size:1.5rem;
     font-weight:bold;
     text-align:center;
     padding:1.3rem;
     margin-bottom:0.4rem;
+    color: var(--orange-color);
 }
 input{
     color:inherit;
