@@ -25,16 +25,17 @@
 
 /* designs */
 body{
-    background-color: var(--cream-color);
+    background-color: var(--pearl-color);
 }
 
 .container{
-    background:#fff;
+    background:var(--cream-color);
     width:450px;
     padding:1.5rem;
+    margin-top: 5px;
     margin:50px auto;
-    border-radius:10px;
-    box-shadow:0 20px 35px rgba(0,0,1,0.9);
+    border-radius:30px;
+    box-shadow:0 5px 15px var(--orange-color);
 }
 form{
     margin:0 2rem;
