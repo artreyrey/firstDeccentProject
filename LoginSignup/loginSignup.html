@@ -9,17 +9,62 @@
     <script type="module" src="firebaseAuth.js"></script> <!-- Firebase authentication module -->
 </head>
 <body>
-    <!-- SIGN UP SECTION -->
+    
+        
+        
+
+    <!-- SIGN IN SECTION (visible by default) -->
+    <div class="container" id="signIn">
+          <h1 class="form-title">CCTE Nexus</h1>
+          <form method="post" action="">
+            <div id="signInMessage" class="messageDiv" style="display:none;"></div> 
+  
+            <!-- Email Input -->
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email" required>
+                <label for="email">Email</label>
+            </div>
+            
+            <!-- Password Input -->
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+                <label for="password">Password</label>
+            </div>
+            
+            <p class="recover"><a href="#">Recover Password</a></p>
+           <button class="btn" id="submitSignIn">Log In</button>
+          </form>
+          
+          <p class="or">----------or--------</p> 
+          
+          <!-- Social Login Icons -->
+          <div class="icons">
+            <i class="fab fa-google"></i>
+            <i class="fab fa-facebook"></i>
+          </div>
+          
+          <!-- Switch to Sign Up -->
+          <div class="links">
+            <p>Don't have account yet?</p>
+            <button id="signUpButton">Sign Up</button>
+          </div>
+    </div>
+    
+
+    <!-- SIGN UP SECTION (hidden at first) -->
     <div class="container" id="signup" style="display:none;">
-        <h1 class="form-title">Register</h1> 
+        <h1 class="form-title">Create Account</h1> 
+        <!-- form -->
         <form method="post" action=""> 
           <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
           
           <!-- First Name Input -->
           <div class="input-group">
-             <i class="fas fa-user"></i> <!-- User icon -->
-             <input type="text" id="fName" placeholder="First Name" required> <!-- Required field -->
-             <label for="fname">First Name</label> <!-- Label -->
+             <i class="fas fa-user"></i> 
+             <input type="text" id="fName" placeholder="First Name" required> 
+             <label for="fname">First Name</label>
           </div>
           
           <!-- Last Name Input -->
@@ -43,64 +88,23 @@
               <label for="rPassword">Password</label>
           </div>
           
-         <button class="btn" id="submitSignUp">Sign Up</button> <!-- Submit button -->
+         <button class="btn" id="submitSignUp">Log In</button> 
         </form>
+
+        <p class="or">or Login with</p> 
         
-        <p class="or">----------or--------</p> <!-- Divider -->
-        
-        <!-- Social Login Icons -->
+        <!-- Icons -->
         <div class="icons">
-          <i class="fab fa-google"></i> <!-- Google icon -->
-          <i class="fab fa-facebook"></i> <!-- Facebook icon -->
+          <i class="fab fa-google"></i>
+          <i class="fab fa-facebook"></i> 
         </div>
         
         <!-- Switch to Sign In -->
         <div class="links">
           <p>Already Have Account?</p>
-          <button id="signInButton">Sign In</button> <!-- Toggle button -->
+          <button id="signInButton">Sign In</button>
         </div>
     </div>
-
-    <!-- SIGN IN SECTION (visible by default) -->
-    <div class="container" id="signIn">
-          <h1 class="form-title">Sign In</h1>
-          <form method="post" action="">
-            <div id="signInMessage" class="messageDiv" style="display:none;"></div> <!-- Messages -->
-  
-            <!-- Email Input -->
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="email" placeholder="Email" required>
-                <label for="email">Email</label>
-            </div>
-            
-            <!-- Password Input -->
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Password" required>
-                <label for="password">Password</label>
-            </div>
-            
-            <p class="recover"><a href="#">Recover Password</a></p> <!-- Password recovery -->
-            
-           <button class="btn" id="submitSignIn">Sign In</button> <!-- Submit button -->
-          </form>
-          
-          <p class="or">----------or--------</p> <!-- Divider -->
-          
-          <!-- Social Login Icons -->
-          <div class="icons">
-            <i class="fab fa-google"></i>
-            <i class="fab fa-facebook"></i>
-          </div>
-          
-          <!-- Switch to Sign Up -->
-          <div class="links">
-            <p>Don't have account yet?</p>
-            <button id="signUpButton">Sign Up</button> <!-- Toggle button -->
-          </div>
-    </div>
-    
     <script src="loginSignup.js"></script> <!-- Main JavaScript file -->
 </body>
 </html>
