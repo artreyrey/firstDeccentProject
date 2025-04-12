@@ -53,31 +53,26 @@ form{
     color: var(--orange-color);
 }
 
-input{
-    color:var(--gray-color);
-    width:100%;
-    background-color:transparent;
-    border:none;
-    border-bottom:1px solid #757575;
-    padding-left:1.5rem;
-    font-size:15px;
-}
-.input-group{
-    padding:1% 0;
-    position:relative;
-    border-radius: 10px;
-    border-color: var(--gray-color);
-    border-width: 30px;
 
+/* input design */
+.input-group {
+    padding: 1% 0;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
 }
-.input-group i{
-    position:absolute;
+
+/* Keep your existing input border styling */
+.input-group input {
+    border: none; /* Remove the default border */
+    background-color: transparent;
 }
 
 input:focus{
     background-color: transparent;
     outline:transparent;
-    border-bottom:2px solid hsl(327,90%,28%);
 }
 
 input::placeholder{
