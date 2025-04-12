@@ -53,32 +53,35 @@ form{
     color: var(--orange-color);
 }
 
-
-/* input design */
-.input-group {
-    padding: 1% 0;
-    position: relative;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 15px;
+input{
+    color:var(--gray-color);
+    width:100%;
+    background-color:transparent;
+    border:none;
+    border-bottom:1px solid #757575;
+    padding-left:1.5rem;
+    font-size:15px;
 }
+.container .input-group{
+    padding:1% 0;
+    position:relative;
+    border-radius: 10px;
+    border-color: var(--gray-color);
+    border-width: 30px;
 
-/* Keep your existing input border styling */
-.input-group input {
-    border: none; /* Remove the default border */
-    background-color: transparent;
 }
-
+.input-group i{
+    position:absolute;
+    color:black;
+}
 input:focus{
     background-color: transparent;
     outline:transparent;
+    border-bottom:2px solid var(--orange-color);
 }
-
 input::placeholder{
     color:transparent;
 }
-
 label{
     color:#757575;
     position:relative;
@@ -92,12 +95,6 @@ input:focus~label,input:not(:placeholder-shown)~label{
     color:hsl(327,90%,28%);
     font-size:15px;
 }
-
-input:not(:placeholder-shown) ~ label {
-    opacity: 0;
-    visibility: hidden;
-}
-
 .recover{
     text-align:right;
     font-size:1rem;
