@@ -52,6 +52,7 @@ form{
     margin-bottom:0.4rem;
     color: var(--orange-color);
 }
+
 input{
     color:inherit;
     width:100%;
