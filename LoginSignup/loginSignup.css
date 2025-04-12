@@ -31,7 +31,7 @@ body{
 
 .container{
     background:var(--pearl-color);
-    width:450px;
+    width:455px;
     padding:1.5rem;
     margin-top: 200px;
     margin-bottom: 200px;
@@ -58,7 +58,7 @@ form{
 .input-group {
     position: relative;
     margin-bottom: 1.5rem;
-    border: 1px solid #ddd; 
+    border: 1.6px solid #ddd; 
     border-radius: 6px;
     padding: 8px 12px;
     transition: all 0.3s ease;
@@ -163,8 +163,8 @@ button:hover{
     position: absolute;
     top: 50%;
     width: 40%;
-    height: 1px;
-    background: var(--gray-light);
+    height: 1.9px;
+    background: #e0e0e0;
 }
 
 .or::before {
@@ -182,19 +182,16 @@ button:hover{
 }
 
 .icons i{
-    margin-top: px;
     color:var(--gray-color);
     padding:0.8rem 1.5rem;
-    border-width: 4000px;
     font-size:1.5rem;
     cursor:pointer;
-    border-radius: 100px;
     transition:0.3s;
 }
 
 .icons i:hover{
     color: var(--orange-color);
-    font-size:1.6rem;
+    font-size:3rem;
     transform: scale(5px);
    
 }
