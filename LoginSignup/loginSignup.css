@@ -62,23 +62,28 @@ input{
     padding-left:1.5rem;
     font-size:15px;
 }
-.container .input-group{
+.input-group{
     padding:1% 0;
     position:relative;
+    border-radius: 10px;
+    border-color: var(--gray-color);
+    border-width: 30px;
 
 }
 .input-group i{
     position:absolute;
-    color:black;
 }
+
 input:focus{
     background-color: transparent;
     outline:transparent;
     border-bottom:2px solid hsl(327,90%,28%);
 }
+
 input::placeholder{
     color:transparent;
 }
+
 label{
     color:#757575;
     position:relative;
