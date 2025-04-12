@@ -92,6 +92,12 @@ input:focus~label,input:not(:placeholder-shown)~label{
     color:hsl(327,90%,28%);
     font-size:15px;
 }
+
+input:not(:placeholder-shown) ~ label {
+    opacity: 0;
+    visibility: hidden;
+}
+
 .recover{
     text-align:right;
     font-size:1rem;
