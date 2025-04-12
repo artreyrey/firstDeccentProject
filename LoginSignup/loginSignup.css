@@ -51,69 +51,74 @@ form{
     padding:1.5rem;
     margin-bottom:0.4rem;
     color: var(--orange-color);
+}.input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ddd; /* Gray border by default */
+    border-radius: 6px;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
 }
 
-input{
-    color:var(--gray-color);
-    width:100%;
-    background-color:transparent;
-    border:none;
-    border-bottom:1px solid #757575;
-    padding-left:1.5rem;
-    font-size:15px;
-    
-}
-.container .input-group{
-    padding: 10px;
-    position:relative;
-    border-radius: 10px;
-    border-color: var(--gray-color);
-    border-width: 30px;
-
-
-}
-.input-group i{
-    position:absolute;
-    color: var(--gray-color);
+/* Hover state */
+.input-group:hover {
+    border-color: var(--orange-color); /* Orange on hover */
 }
 
-input:focus{
-    background-color: transparent;
-    outline:transparent;
-    border-bottom:2px solid var(--orange-color);
+/* Focus state (when typing) */
+.input-group:focus-within {
+    border-color: var(--orange-color); /* Orange when focused */
+    box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.2); /* Optional glow effect */
 }
 
-input::placeholder{
-    color:transparent;
+/* Input field styling */
+.input-group input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding-left: 30px;
+    font-size: 15px;
+    outline: none;
 }
 
-label{
-    color: var(--gray-color);
-    position:relative;
-    left:1.2em;
-    top:-1.3em;
-    cursor:auto;
-    transition:0.3s ease all;
+/* Icon styling */
+.input-group i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #757575;
+    transition: all 0.3s ease;
 }
-input:focus~label,input:not(:placeholder-shown)~label{
-    display: none;
-    font-size:15px;
-}
-.recover{
-    text-align:right;
-    font-size:1rem;
-    margin-bottom:1rem;
 
-}
-.recover a{
-    text-decoration:none;
-    color:var(--gray-color);
-}
-.recover a:hover{
+/* Icon color change on hover/focus */
+.input-group:hover i,
+.input-group:focus-within i {
     color: var(--orange-color);
-    transform: 0.3s ease;
-    transform: scale(1.5px);
 }
+
+/* forgot password */
+.recover {
+    text-align: right;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.recover a {
+    text-decoration: none;
+    color: var(--gray-color);
+    display: inline-block; 
+    transition: all 0.3s ease; 
+}
+
+.recover a:hover {
+    color: var(--orange-color);
+    transform: scale(1.09); 
+   
+}
+
+
+
 button{
     font-size:1.1rem;
     padding:8px 0;
