@@ -204,12 +204,22 @@ button:hover{
     font-weight: 500;
 }
 
- #signUpButton, #signInButton{
+#signUpButton, #signInButton {
     color: var(--orange-color);
-    border:none;
-    background-color:transparent;
-    font-size:1rem;
-    font-weight:bold;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-block; 
+    transition: transform 0.3s ease;
+    cursor: pointer; 
+    padding: 0.2rem 0.5rem; 
+    border-radius: 4px;
+}
+
+#signUpButton:hover, #signInButton:hover {
+    transform: scale(1.17); 
+    text-decoration: none; 
 }
 
 
