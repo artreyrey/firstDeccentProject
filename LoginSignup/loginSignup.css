@@ -30,7 +30,7 @@ body{
 
 .container{
     background:var(--pearl-color);
-    width:450px;
+    width:400px;
     padding:1.5rem;
     margin-top: 200px;
     margin-left: 690px;
@@ -61,29 +61,34 @@ input{
     border-bottom:1px solid #757575;
     padding-left:1.5rem;
     font-size:15px;
+    
 }
 .container .input-group{
-    padding:1% 0;
+    padding: 10px;
     position:relative;
     border-radius: 10px;
     border-color: var(--gray-color);
     border-width: 30px;
 
+
 }
 .input-group i{
     position:absolute;
-    color:black;
+    color: var(--gray-color);
 }
+
 input:focus{
     background-color: transparent;
     outline:transparent;
     border-bottom:2px solid var(--orange-color);
 }
+
 input::placeholder{
     color:transparent;
 }
+
 label{
-    color:#757575;
+    color: var(--gray-color);
     position:relative;
     left:1.2em;
     top:-1.3em;
@@ -91,8 +96,7 @@ label{
     transition:0.3s ease all;
 }
 input:focus~label,input:not(:placeholder-shown)~label{
-    top:-3em;
-    color:hsl(327,90%,28%);
+    display: none;
     font-size:15px;
 }
 .recover{
@@ -103,11 +107,12 @@ input:focus~label,input:not(:placeholder-shown)~label{
 }
 .recover a{
     text-decoration:none;
-    color:rgb(125,125,235);
+    color:var(--gray-color);
 }
 .recover a:hover{
-    color:blue;
-    text-decoration:underline;
+    color: var(--orange-color);
+    transform: 0.3s ease;
+    transform: scale(1.5px);
 }
 button{
     font-size:1.1rem;
