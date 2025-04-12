@@ -51,27 +51,26 @@ form{
     padding:1.5rem;
     margin-bottom:0.4rem;
     color: var(--orange-color);
-}.input-group {
+}
+
+.input-group {
     position: relative;
     margin-bottom: 1.5rem;
-    border: 1px solid #ddd; /* Gray border by default */
+    border: 1px solid #ddd; 
     border-radius: 6px;
     padding: 8px 12px;
     transition: all 0.3s ease;
 }
 
-/* Hover state */
 .input-group:hover {
-    border-color: var(--orange-color); /* Orange on hover */
+    border-color: var(--orange-color);
 }
 
-/* Focus state (when typing) */
 .input-group:focus-within {
-    border-color: var(--orange-color); /* Orange when focused */
-    box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.2); /* Optional glow effect */
+    border-color: var(--orange-color); 
+    box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.2); 
 }
 
-/* Input field styling */
 .input-group input {
     width: 100%;
     border: none;
@@ -81,7 +80,6 @@ form{
     outline: none;
 }
 
-/* Icon styling */
 .input-group i {
     position: absolute;
     left: 12px;
@@ -91,7 +89,6 @@ form{
     transition: all 0.3s ease;
 }
 
-/* Icon color change on hover/focus */
 .input-group:hover i,
 .input-group:focus-within i {
     color: var(--orange-color);
@@ -118,21 +115,23 @@ form{
 }
 
 
-
+/* buttons */
 button{
     font-size:1.1rem;
     padding:8px 0;
     border-radius:5px;
     outline:none;
     border:none;
-    width:100%;
-    background:rgb(125,125,235);
+    align-items: center;
+    width:80%;
+    background:var(--orange-color);
     color:white;
     cursor:pointer;
-    transition:0.9s;
+    transition: all 0.3s ease; 
 }
+
 button:hover{
-    background:#07001f;
+    transform: scale(1.09); 
 }
 .or{
     font-size:1.1rem;
@@ -143,20 +142,22 @@ button:hover{
     text-align:center;
 }
 .icons i{
-    color:rgb(125,125,235);
+    color:var(--orange-color);
     padding:0.8rem 1.5rem;
     border-radius:10px;
     font-size:1.5rem;
     cursor:pointer;
-    border:2px solid #dfe9f5;
+    border:2px solid var(--gray-color);
+    border-radius: 10px;
     margin:0 15px;
     transition:1s;
 }
 .icons i:hover{
-    background:#07001f;
+    background: var(--orange-color) ;
     font-size:1.6rem;
-    border:2px solid rgb(125,125,235);
+   
 }
+
 .links{
     display:flex;
     justify-content:space-around;
