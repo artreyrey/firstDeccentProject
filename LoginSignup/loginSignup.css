@@ -24,19 +24,20 @@
 }
 
 /* designs */
+
 body{
-    background-color: var(--cream-color);
+    background-color: var(--gray-color);
 }
 
 .container{
     background:var(--pearl-color);
-    width:400px;
+    width:450px;
     padding:1.5rem;
     margin-top: 200px;
     margin-bottom: 200px;
     margin-left: 700px;
     border-radius:30px;
-    box-shadow:0 5px 15px var(--orange-color);
+    box-shadow:0 9px 20px rgba(255, 115, 0, 0.233);
     border-color: var(--orange-color);
     border-width: 50px;
 }
@@ -148,11 +149,32 @@ button:hover{
     transform: scale(1.09); 
 }
 
-.or{
-    font-size:1.1rem;
-    margin-top: 20px;
-    text-align:center;
+/* divider or style */
+.or {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: var(--gray-color);
 }
+
+.or::before,
+.or::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: var(--gray-light);
+}
+
+.or::before {
+    left: 0;
+}
+
+.or::after {
+    right: 0;
+}
+
 
 /* icon styles */
 .icons{
