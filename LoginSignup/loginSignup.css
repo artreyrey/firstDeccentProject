@@ -33,7 +33,8 @@ body{
     width:400px;
     padding:1.5rem;
     margin-top: 200px;
-    margin-left: 690px;
+    margin-bottom: 200px;
+    margin-left: 700px;
     border-radius:30px;
     box-shadow:0 5px 15px var(--orange-color);
     border-color: var(--orange-color);
@@ -62,14 +63,6 @@ form{
     transition: all 0.3s ease;
 }
 
-.input-group:hover {
-    border-color: var(--orange-color);
-}
-
-.input-group:focus-within {
-    border-color: var(--orange-color); 
-    box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.2); 
-}
 
 .input-group input {
     width: 100%;
@@ -92,6 +85,26 @@ form{
 .input-group:hover i,
 .input-group:focus-within i {
     color: var(--orange-color);
+}
+
+/* labels */
+label {
+    position: absolute;
+    left: 2.5rem; 
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-color);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+    top: 0;
+    left: 1rem;
+    font-size: 0.8rem;
+    background: var(--pearl-color);
+    padding: 0 0.5rem;
 }
 
 /* forgot password */
@@ -118,43 +131,49 @@ form{
 /* buttons */
 button{
     font-size:1.1rem;
+    margin-left: 20px;
     padding:8px 0;
-    border-radius:5px;
+    border-radius:10px;
     outline:none;
     border:none;
-    align-items: center;
-    width:80%;
+    width:90%;
     background:var(--orange-color);
-    color:white;
+    color: var(--pearl-color);
     cursor:pointer;
+    font-display: center;
     transition: all 0.3s ease; 
 }
 
 button:hover{
     transform: scale(1.09); 
 }
+
 .or{
     font-size:1.1rem;
-    margin-top:0.5rem;
+    margin-top: 20px;
     text-align:center;
 }
+
+/* icon styles */
 .icons{
     text-align:center;
 }
+
 .icons i{
-    color:var(--orange-color);
+    margin-top: px;
+    color:var(--gray-color);
     padding:0.8rem 1.5rem;
-    border-radius:10px;
+    border-width: 4000px;
     font-size:1.5rem;
     cursor:pointer;
-    border:2px solid var(--gray-color);
-    border-radius: 10px;
-    margin:0 15px;
-    transition:1s;
+    border-radius: 100px;
+    transition:0.3s;
 }
+
 .icons i:hover{
-    background: var(--orange-color) ;
+    color: var(--orange-color);
     font-size:1.6rem;
+    transform: scale(5px);
    
 }
 
@@ -163,22 +182,21 @@ button:hover{
     justify-content:space-around;
     padding:0 4rem;
     margin-top:0.9rem;
-    font-weight:bold;
+    font-weight: 500;
 }
+
  #signUpButton, #signInButton{
-    color:rgb(125,125,235);
+    color: var(--orange-color);
     border:none;
     background-color:transparent;
     font-size:1rem;
     font-weight:bold;
 }
-#signUpButton:hover, #signInButton:hover {
-    text-decoration:underline;
-    color:blue;
-} 
+
+
 .messageDiv{
-    background-color:hsl(327,90%,28%);
-    color:white;
+    background-color: var(--gray-color);
+    color:var(--pearl-color);
     padding:10px 20px;
     margin:10px;
     border-radius: 5px;
