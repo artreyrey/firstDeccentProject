@@ -54,7 +54,7 @@ form{
 }
 
 input{
-    color:inherit;
+    color:var(--gray-color);
     width:100%;
     background-color:transparent;
     border:none;
