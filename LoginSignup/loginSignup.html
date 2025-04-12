@@ -1,19 +1,19 @@
-<!DOCTYPE html> <!-- Declares HTML5 document -->
-<html lang="en"> <!-- Root element with English language -->
+<!DOCTYPE html>
+<html lang="en"> 
 <head>
-    <meta charset="UTF-8"> <!-- Character encoding -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive meta tag -->
-    <title>CCTE NEXUS - Login/Signup</title> <!-- Page title -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>CCTE NEXUS - Login/Signup</title> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Font Awesome icons -->
-    <link rel="stylesheet" href="loginSignup.css"> <!-- Custom CSS -->
+    <link rel="stylesheet" href="loginSignup.css"> 
     <script type="module" src="firebaseAuth.js"></script> <!-- Firebase authentication module -->
 </head>
 <body>
-    <!-- SIGN UP SECTION (initially hidden) -->
+    <!-- SIGN UP SECTION -->
     <div class="container" id="signup" style="display:none;">
-        <h1 class="form-title">Register</h1> <!-- Form heading -->
-        <form method="post" action=""> <!-- Form starts -->
-          <div id="signUpMessage" class="messageDiv" style="display:none;"></div> <!-- Error/success messages -->
+        <h1 class="form-title">Register</h1> 
+        <form method="post" action=""> 
+          <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
           
           <!-- First Name Input -->
           <div class="input-group">
