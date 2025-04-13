@@ -1,76 +1,66 @@
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import {getAuth, createUserWithEmailAndPassowrd, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-  import {getFirestore, setDoc, doc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
-    authDomain: "login-form-783e1.firebaseapp.com",
-    projectId: "login-form-783e1",
-    storageBucket: "login-form-783e1.firebasestorage.app",
-    messagingSenderId: "598925515666",
-    appId: "1:598925515666:web:b16534b6158c7232a47f4b"
-  };
+const firebaseConfig = { /* Your config */ };
+const app = initializeApp(firebaseConfig);
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
-  function showMessage(message, divId){
-    var messageDiv = document.getElementById(divId);
-    messageDiv.style.display="bllock";
-    messageDiv.innerHTML=message;
-    messageDiv.style.opacity=1;
-    setTimeout(function(){
-      messageDiv.style.opacity=0;
+function showMessage(message, divId) {
+  const messageDiv = document.getElementById(divId);
+  if (messageDiv) {
+    messageDiv.style.display = "block";
+    messageDiv.innerHTML = message;
+    messageDiv.style.opacity = 1;
+    setTimeout(() => {
+      messageDiv.style.opacity = 0;
     }, 5000);
   }
+}
 
-  // signup functions when clicked
-  const signUp = document.getElementById('submitSignUp');
+const signUp = document.getElementById('submitSignUp');
+signUp?.addEventListener('click', (event) => {
+  event.preventDefault();
   
-  signUp.addEventListener('click', (event)=>{
-    event.preventDefault();
-    // initialize values
-    const email=document.getElementById('rEmail').value;
-    const password=document.getElementById('rPassword').value;
-    const firstName=document.getElementById('fName').value;
-    const lastName=document.getElementById('lName').value;
+  const email = document.getElementById('rEmail')?.value;
+  const password = document.getElementById('rPassword')?.value;
+  const firstName = document.getElementById('fName')?.value;
+  const lastName = document.getElementById('lName')?.value;
 
-    const auth=getAuth();
-    const db=getFirestore();
+  if (!email || !password || !firstName || !lastName) {
+    showMessage('Please fill all fields!', 'signUpMessage');
+    return;
+  }
 
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential)=>{
-      const user=userCredential.user;
-      const userData={
-        email : email,
-        firstName: firstName,
-        lastName: lastName
-      };
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-      showMessage('Account Created Successfully', 'signUpMessage');
-      const docRef=doc(db, "users", user.uid);
-      setDoc(docRef, userData)
-      .then(()=>{
-        window.location.href='loginSignup.html';
-      })
-
-      .catch((error)=>{
-        console.error("error writing document", error);
-      });
-    })
-
-    .catch((error)=>{
-      const errorCode=error.code;
-      if(errorCode=='auth/emai-already-in-use'){
-        showMessage('Email Address Already Used By Another User !!!', 'signUpMessage');
-      }
-
-      else{
-        showMessage('unable to create User', 'signUpMessage');
-      }
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      const userData = { email, firstName, lastName };
       
+      setDoc(doc(db, "users", user.uid), userData)
+        .then(() => {
+          showMessage('Account Created!', 'signUpMessage');
+          setTimeout(() => {
+            window.location.href = 'loginSignup.html';
+          }, 2000);
+        })
+        .catch((error) => {
+          showMessage('Error saving user data', 'signUpMessage');
+          console.error("Firestore error:", error);
+        });
     })
-  });
+    .catch((error) => {
+      const errorCode = error.code;
+      if (errorCode === 'auth/email-already-in-use') {
+        showMessage('Email already in use!', 'signUpMessage');
+      } 
+      else if (errorCode === 'auth/weak-password') {
+        showMessage('Password must be 6+ characters', 'signUpMessage');
+      }
+      else {
+        showMessage('Error: ' + error.message, 'signUpMessage');
+      }
+    });
+});
