@@ -39,6 +39,9 @@
     const firstName=document.getElementById('fName').value;
     const lastName=document.getElementById('lName').value;
 
+    const auth=getAuth();
+    const db=getFirestore();
+
     createUserWithEmailAndPassowrd(auth, email, password).then((userCredential)=>{
       const user=userCredential.user;
       const userData={
