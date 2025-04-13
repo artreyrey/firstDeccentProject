@@ -52,7 +52,16 @@
         window.location.href='loginSignup.html';
       })
       .catch((error)=>{
-        console.error("error writing document", error)
-      })
+        console.error("error writing document", error);
+      });
+    })
+    .catch((error)=>{
+      const errorCode=error.code;
+      if(errorCode=='auth/emai-already-in-use'){
+        showMessage('Email Address Already Used By Another User !!!', 'signUpMessage')
+      }
+      else{
+        showMessage('unable to create User', 'signUpMessage');
+      }
     })
   })
