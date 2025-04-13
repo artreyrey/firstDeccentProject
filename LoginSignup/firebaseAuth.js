@@ -42,29 +42,36 @@
     const auth=getAuth();
     const db=getFirestore();
 
-    createUserWithEmailAndPassowrd(auth, email, password).then((userCredential)=>{
+    createUserWithEmailAndPassword(auth, email, password).then((userCredential)=>{
       const user=userCredential.user;
       const userData={
         email : email,
         firstName: firstName,
         lastName: lastName
       };
+
       showMessage('Account Created Successfully', 'signUpMessage');
       const docRef=doc(db, "users", user.uid);
-      setDoc(docRef, userData).then(()=>{
+      setDoc(docRef, userData)
+      
+      .then(()=>{
         window.location.href='loginSignup.html';
       })
+
       .catch((error)=>{
         console.error("error writing document", error);
       });
     })
+
     .catch((error)=>{
       const errorCode=error.code;
       if(errorCode=='auth/emai-already-in-use'){
         showMessage('Email Address Already Used By Another User !!!', 'signUpMessage')
       }
+
       else{
         showMessage('unable to create User', 'signUpMessage');
       }
+      
     })
   })
