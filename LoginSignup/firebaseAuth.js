@@ -1,6 +1,6 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import {getAuth, createUserWithEmailAndPassowrd, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-Auth.js";
+  import {getAuth, createUserWithEmailAndPassowrd, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
   import {getFirestore, setDoc, doc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -53,7 +53,6 @@
       showMessage('Account Created Successfully', 'signUpMessage');
       const docRef=doc(db, "users", user.uid);
       setDoc(docRef, userData)
-      
       .then(()=>{
         window.location.href='loginSignup.html';
       })
@@ -66,7 +65,7 @@
     .catch((error)=>{
       const errorCode=error.code;
       if(errorCode=='auth/emai-already-in-use'){
-        showMessage('Email Address Already Used By Another User !!!', 'signUpMessage')
+        showMessage('Email Address Already Used By Another User !!!', 'signUpMessage');
       }
 
       else{
@@ -74,4 +73,4 @@
       }
       
     })
-  })
+  });
