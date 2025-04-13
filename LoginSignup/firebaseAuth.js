@@ -82,7 +82,7 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
-    window.location.href = 'homepage.html'; // Go to homepage
+    window.location.href = 'http://127.0.0.1:5500/homePage/homePage.html'; // Go to homepage
   })
   .catch((error)=>{ // If login fails:
     if(error.code==='auth/invalid-credential') {
