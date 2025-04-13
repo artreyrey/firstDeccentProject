@@ -46,6 +46,13 @@
         firstName: firstName,
         lastName: lastName
       };
+      showMessage('Account Created Successfully', 'signUpMessage');
+      const docRef=doc(db, "users", user.uid);
+      setDoc(docRef, userData).then(()=>{
+        window.location.href='loginSignup.html';
+      })
+      .catch((error)=>{
+        console.error("error writing document", error)
+      })
     })
-
   })
