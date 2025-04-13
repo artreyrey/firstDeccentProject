@@ -91,4 +91,15 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
       showMessage('Login failed', 'signInMessage');
     }
   })
+  
 })
+
+// Function to check if user is logged in (call this on homePage.html)
+function checkAuth() {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  
+  if (!user && !localStorage.getItem('loggedInUserId')) {
+    window.location.href = 'loginSignup.html'; // Redirect to login if not authenticated
+  }
+}
