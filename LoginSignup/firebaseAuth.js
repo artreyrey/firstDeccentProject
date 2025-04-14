@@ -17,8 +17,7 @@
     appId: "1:598925515666:web:b16534b6158c7232a47f4b"
   };
 
-  // Initialize Firebase
-  // Initialize Firebase with our project settings
+
 const app = initializeApp(firebaseConfig);
 
 // Function to show temporary messages (disappears after 5 seconds)
@@ -94,4 +93,23 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
     }
   })
   
+})
+
+
+// Resetting Password
+const reset = document.getElementById("reset"); //get the reset id of forgot password
+reset.addEventListener("click", function(event){
+  event.preventDefault()
+
+  const email = document.getElementById("email").value;
+  sendPasswordResetEmail(auth, email)
+    .then(()=>{
+      alert("email sent")
+    })
+
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage)
+    });
 })
