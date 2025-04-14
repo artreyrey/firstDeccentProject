@@ -96,20 +96,25 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
 })
 
 
-// Resetting Password
-const reset = document.getElementById("reset"); //get the reset id of forgot password
 reset.addEventListener("click", function(event){
-  event.preventDefault()
-
+  event.preventDefault();
   const email = document.getElementById("email").value;
-  sendPasswordResetEmail(auth, email)
-    .then(()=>{
-      alert("email sent")
-    })
+  
+  if (!email) {
+    alert("Please enter your email address");
+    return;
+  }
 
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      alert("Password reset email sent! Check your inbox.");
+    })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage)
+      console.error("Error details:", error); // Check browser console
+      if (error.code === "auth/user-not-found") {
+        alert("No user found with this email address");
+      } else {
+        alert("Error: " + error.message);
+      }
     });
-})
+});
