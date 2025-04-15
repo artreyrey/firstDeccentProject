@@ -95,4 +95,6 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
   
 })
 
+// fogot password
+const reset = document.getElementById('reset');
 
