@@ -19,7 +19,6 @@
   };
 
 
-const app = initializeApp(firebaseConfig);
 
 // Function to show temporary messages (disappears after 5 seconds)
 function showMessage(message, divId) {
@@ -42,6 +41,7 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   const lastName = document.getElementById('lName').value;
 
   const auth = getAuth(app); // Get Firebase auth service
+  const app = initializeApp(firebaseConfig);
   const db = getFirestore(); 
 
   createUserWithEmailAndPassword(auth, email, password)
