@@ -19,9 +19,9 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore();
-  auth.languageCode = 'en'; 
+const auth = getAuth(app);
+const db = getFirestore();
+auth.languageCode = 'en';
 
 // Function to show temporary messages (disappears after 5 seconds)
 function showMessage(message, divId) {
@@ -33,63 +33,73 @@ function showMessage(message, divId) {
 }
 
 // SIGN UP BUTTON CODE
-  signUp.addEventListener('click', (event) => {
-  event.preventDefault();
+const signUp = document.getElementById('submitSignUp'); 
+signUp.addEventListener('click', (event)=>{ // When clicked:
+  event.preventDefault(); // Stop page from refreshing
   
+  // Get user input values
   const email = document.getElementById('rEmail').value;
   const password = document.getElementById('rPassword').value;
   const firstName = document.getElementById('fName').value;
   const lastName = document.getElementById('lName').value;
 
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      const userData = {
-        email: email,
-        firstName: firstName,
-        lastName: lastName
-      };
-      showMessage('Account Created!', 'signUpMessage');
-      
-      return setDoc(doc(db, "users", user.uid), userData);
-    })
-    .then(() => {
-      window.location.href = 'loginSignup.html';
-    })
-    .catch((error) => {
-      if(error.code == 'auth/email-already-in-use') {
-        showMessage('Email already used!', 'signUpMessage');
-      } else {
-        showMessage('Signup failed: ' + error.message, 'signUpMessage');
-      }
-    });
+  .then((userCredential)=>{
+    const user = userCredential.user;
+    const userData = { // Prepare user data to save
+      email: email,
+      firstName: firstName,
+      lastName: lastName
+    };
+    showMessage('Account Created!', 'signUpMessage'); 
+    
+    // Save user data to database
+    setDoc(doc(db, "users", user.uid), userData)
+    .then(()=>{ window.location.href='loginSignup.html'; }) 
+    .catch((error)=>{ console.error("Save error:", error); })
+  })
+  .catch((error)=>{ 
+    if(error.code=='auth/email-already-in-use') {
+      showMessage('Email already used!', 'signUpMessage');
+    } else {
+      showMessage('Signup failed', 'signUpMessage');
+    }
+  })
 });
 
 // SIGN IN BUTTON CODE
-signIn.addEventListener('click', (event) => {
-  event.preventDefault();
+const signIn = document.getElementById('submitSignIn'); // Get login button
+signIn.addEventListener('click', (event)=>{ 
+  event.preventDefault(); // Stop page refresh
   
+  // Get login credentials
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
+  const auth = getAuth(); // Get auth service
 
+  // Try to log in
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      showMessage('Login successful!', 'signInMessage');
-      localStorage.setItem('loggedInUserId', userCredential.user.uid);
-      window.location.href = 'http://127.0.0.1:5500/homePage/homePage.html';
-    })
-    .catch((error) => {
-      if(error.code === 'auth/invalid-credential') {
-        showMessage('Wrong email/password', 'signInMessage');
-      } else {
-        showMessage('Login failed: ' + error.message, 'signInMessage');
-      }
-    });
-});
+
+  .then((userCredential)=>{ // If successful:
+    showMessage('Login successful!', 'signInMessage'); // Show message
+    localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
+    window.location.href = 'http://127.0.0.1:5500/homePage/homePage.html'; // Go to homepage
+  })
+
+  .catch((error)=>{ // If login fails:
+    if(error.code==='auth/invalid-credential') {
+      showMessage('Wrong email/password', 'signInMessage');
+    } else {
+      showMessage('Login failed', 'signInMessage');
+    }
+  })
+  
+})
 
 // fogot password
+const resetLink = document.getElementById('reset');
 resetLink.addEventListener('click', async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // Prevent the default link behavior
   
   const email = document.getElementById('email').value.trim();
   
@@ -109,28 +119,33 @@ resetLink.addEventListener('click', async (e) => {
     } else if (error.code === 'auth/invalid-email') {
       showMessage('Please enter a valid email address', 'signInMessage');
     } else {
-      showMessage('Failed to send reset email: ' + error.message, 'signInMessage');
+      showMessage('Failed to send reset email. Please try again.', 'signInMessage');
     }
   }
 });
 
-
-
 // google login
+const googleProvider = new GoogleAuthProvider();
 const googleLogin = document.getElementById("google-login-btn");
 
-googleLogin.addEventListener("click", (e) => {
-  e.preventDefault();
-  signInWithPopup(auth, googleProvider)
-    .then((result) => {
-      const user = result.user;
-      showMessage('Google login successful!', 'signInMessage');
-      localStorage.setItem('loggedInUserId', user.uid);
-      window.location.href = 'http://127.0.0.1:5500/homePage/homePage.html';
-    })
-    .catch((error) => {
-      showMessage('Google login failed: ' + error.message, 'signInMessage');
-    });
-});
+googleLogin.addEventListener("click", function(){
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+ });
 
 
