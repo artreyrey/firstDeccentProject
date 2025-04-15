@@ -1,7 +1,9 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-  import {getFirestore, setDoc, doc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+  import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} 
+  from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+  import {getFirestore, setDoc, doc} 
+  from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -39,7 +41,7 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   const firstName = document.getElementById('fName').value;
   const lastName = document.getElementById('lName').value;
 
-  const auth = getAuth(); // Get Firebase auth service
+  const auth = getAuth(app); // Get Firebase auth service
   const db = getFirestore(); 
 
   createUserWithEmailAndPassword(auth, email, password)
@@ -78,7 +80,7 @@ signIn.addEventListener('click', (event)=>{
 
   // Try to log in
   signInWithEmailAndPassword(auth, email, password)
-  
+
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
@@ -96,17 +98,30 @@ signIn.addEventListener('click', (event)=>{
 })
 
 // fogot password
-const reset = document.getElementById('reset');
+const resetLink = document.getElementById('reset');
+resetLink.addEventListener('click', async (e) => {
+  e.preventDefault(); // Prevent the default link behavior
+  
+  const email = document.getElementById('email').value.trim();
+  const auth = getAuth(app); // Make sure to use your initialized app
+  
+  if (!email) {
+    showMessage('Please enter your email address', 'signInMessage');
+    return;
+  }
 
-const reset = ()=> {
-  sendPasswordResetEmail(auth, email.value)
-  .then(()=>{
-    alert("A password Reset Link has been sent to your Email");
-  })
-  .catch((error)=>{
-    console.log(error.code);
-    console.log(error.message);
-  })
-}
-reset.addEventListener('click', reset);
-
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showMessage('Password reset email sent! Check your inbox.', 'signInMessage');
+  } catch (error) {
+    console.error("Password reset error:", error);
+    
+    if (error.code === 'auth/user-not-found') {
+      showMessage('No account found with this email', 'signInMessage');
+    } else if (error.code === 'auth/invalid-email') {
+      showMessage('Please enter a valid email address', 'signInMessage');
+    } else {
+      showMessage('Failed to send reset email. Please try again.', 'signInMessage');
+    }
+  }
+});
