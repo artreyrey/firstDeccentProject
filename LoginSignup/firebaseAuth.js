@@ -128,11 +128,36 @@ resetLink.addEventListener('click', async (e) => {
 });
 
 // google login
-const googleProvider = new GoogleAuthProvider();
-const googleLogin = document.getElementById("google-login-butn");
+// At the top with other imports
+import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-googleLogin.addEventListener("click", function(){
-  alert(5)
- })
+// After auth initialization
+const googleProvider = new GoogleAuthProvider();
+
+// Google Sign-In
+const googleLogin = document.getElementById("google-login-btn");
+
+googleLogin.addEventListener("click", async (e) => {
+  e.preventDefault();
+  
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    
+    // Save user data to Firestore if needed
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      name: user.displayName,
+      provider: 'google'
+    });
+    
+    showMessage('Google login successful!', 'signInMessage');
+    localStorage.setItem('loggedInUserId', user.uid);
+    window.location.href = 'homePage.html';
+  } catch (error) {
+    console.error("Google sign-in error:", error);
+    showMessage('Google login failed', 'signInMessage');
+  }
+});
 
 
