@@ -129,8 +129,10 @@ resetLink.addEventListener('click', async (e) => {
 
 // google login
 const googleProvider = new GoogleAuthProvider();
-
 const googleLogin = document.getElementById("google-button");
+
 googleLogin.addEventListener("click", function(){
-  alert(5);
-})
+  alert(5)
+ })
+
+
