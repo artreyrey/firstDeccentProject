@@ -96,25 +96,3 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
 })
 
 
-reset.addEventListener("click", function(event){
-  event.preventDefault();
-  const email = document.getElementById("email").value;
-  
-  if (!email) {
-    alert("Please enter your email address");
-    return;
-  }
-
-  sendPasswordResetEmail(auth, email)
-    .then(() => {
-      alert("Password reset email sent! Check your inbox.");
-    })
-    .catch((error) => {
-      console.error("Error details:", error); // Check browser console
-      if (error.code === "auth/user-not-found") {
-        alert("No user found with this email address");
-      } else {
-        alert("Error: " + error.message);
-      }
-    });
-});
