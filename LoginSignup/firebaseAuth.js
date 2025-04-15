@@ -127,4 +127,4 @@ resetLink.addEventListener('click', async (e) => {
 });
 
 // google login
-const
+const provider = new GoogleAuthProvider();
