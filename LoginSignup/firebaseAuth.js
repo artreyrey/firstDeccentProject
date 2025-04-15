@@ -40,8 +40,8 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   const firstName = document.getElementById('fName').value;
   const lastName = document.getElementById('lName').value;
 
-  const auth = getAuth(app); // Get Firebase auth service
-  const app = initializeApp(firebaseConfig);
+  const app = initializeApp(firebaseConfig); // Initialize FIRST
+  const auth = getAuth(app); 
   const db = getFirestore(); 
   auth.languageCode ='en';
 
@@ -128,36 +128,29 @@ resetLink.addEventListener('click', async (e) => {
 });
 
 // google login
-// At the top with other imports
-import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+// const googleProvider = new GoogleAuthProvider();
+// const googleLogin = document.getElementById("google-login-btn");
 
-// After auth initialization
-const googleProvider = new GoogleAuthProvider();
-
-// Google Sign-In
-const googleLogin = document.getElementById("google-login-btn");
-
-googleLogin.addEventListener("click", async (e) => {
-  e.preventDefault();
-  
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    
-    // Save user data to Firestore if needed
-    await setDoc(doc(db, "users", user.uid), {
-      email: user.email,
-      name: user.displayName,
-      provider: 'google'
-    });
-    
-    showMessage('Google login successful!', 'signInMessage');
-    localStorage.setItem('loggedInUserId', user.uid);
-    window.location.href = 'homePage.html';
-  } catch (error) {
-    console.error("Google sign-in error:", error);
-    showMessage('Google login failed', 'signInMessage');
-  }
-});
+// googleLogin.addEventListener("click", function(){
+//   signInWithPopup(auth, provider)
+//   .then((result) => {
+//     // This gives you a Google Access Token. You can use it to access the Google API.
+//     const credential = GoogleAuthProvider.credentialFromResult(result);
+//     const token = credential.accessToken;
+//     // The signed-in user info.
+//     const user = result.user;
+//     // IdP data available using getAdditionalUserInfo(result)
+//     // ...
+//   }).catch((error) => {
+//     // Handle Errors here.
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     // The email of the user's account used.
+//     const email = error.customData.email;
+//     // The AuthCredential type that was used.
+//     const credential = GoogleAuthProvider.credentialFromError(error);
+//     // ...
+//   });
+//  });
 
 
