@@ -2,8 +2,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
   import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
   import {getFirestore, setDoc, doc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-  
-  
+
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,15 +21,15 @@ const app = initializeApp(firebaseConfig);
 
 // Function to show temporary messages (disappears after 5 seconds)
 function showMessage(message, divId) {
-  var messageDiv = document.getElementById(divId); // Find message box in HTML
-  messageDiv.style.display = "block"; // Make it visible
-  messageDiv.innerHTML = message; // Put message text inside
-  messageDiv.style.opacity = 1; // Make fully visible
+  var messageDiv = document.getElementById(divId); 
+  messageDiv.style.display = "block"; 
+  messageDiv.innerHTML = message; 
+  messageDiv.style.opacity = 1; 
   setTimeout(function(){ messageDiv.style.opacity = 0; },5000); // Fade out after 5s
 }
 
 // SIGN UP BUTTON CODE
-const signUp = document.getElementById('submitSignUp'); // Get signup button
+const signUp = document.getElementById('submitSignUp'); 
 signUp.addEventListener('click', (event)=>{ // When clicked:
   event.preventDefault(); // Stop page from refreshing
   
@@ -41,25 +40,24 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   const lastName = document.getElementById('lName').value;
 
   const auth = getAuth(); // Get Firebase auth service
-  const db = getFirestore(); // Get Firestore database
+  const db = getFirestore(); 
 
-  // Create user account with email/password
   createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential)=>{ // If successful:
-    const user = userCredential.user; // Get new user info
+  .then((userCredential)=>{
+    const user = userCredential.user;
     const userData = { // Prepare user data to save
       email: email,
       firstName: firstName,
       lastName: lastName
     };
-    showMessage('Account Created!', 'signUpMessage'); // Show success
+    showMessage('Account Created!', 'signUpMessage'); 
     
     // Save user data to database
     setDoc(doc(db, "users", user.uid), userData)
-    .then(()=>{ window.location.href='loginSignup.html'; }) // Go to login page
-    .catch((error)=>{ console.error("Save error:", error); }) // Log errors
+    .then(()=>{ window.location.href='loginSignup.html'; }) 
+    .catch((error)=>{ console.error("Save error:", error); })
   })
-  .catch((error)=>{ // If signup fails:
+  .catch((error)=>{ 
     if(error.code=='auth/email-already-in-use') {
       showMessage('Email already used!', 'signUpMessage');
     } else {
@@ -70,7 +68,7 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
 
 // SIGN IN BUTTON CODE
 const signIn = document.getElementById('submitSignIn'); // Get login button
-signIn.addEventListener('click', (event)=>{ // When clicked:
+signIn.addEventListener('click', (event)=>{ 
   event.preventDefault(); // Stop page refresh
   
   // Get login credentials
@@ -80,11 +78,13 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
 
   // Try to log in
   signInWithEmailAndPassword(auth, email, password)
+  
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
     window.location.href = 'http://127.0.0.1:5500/homePage/homePage.html'; // Go to homepage
   })
+
   .catch((error)=>{ // If login fails:
     if(error.code==='auth/invalid-credential') {
       showMessage('Wrong email/password', 'signInMessage');
@@ -97,4 +97,16 @@ signIn.addEventListener('click', (event)=>{ // When clicked:
 
 // fogot password
 const reset = document.getElementById('reset');
+
+const reset = ()=> {
+  sendPasswordResetEmail(auth, email.value)
+  .then(()=>{
+    alert("A password Reset Link has been sent to your Email");
+  })
+  .catch((error)=>{
+    console.log(error.code);
+    console.log(error.message);
+  })
+}
+reset.addEventListener('click', reset);
 
