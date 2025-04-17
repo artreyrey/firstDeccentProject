@@ -147,5 +147,12 @@ const facebookProvider = new FacebookAuthProvider();
 const facebookLogin = document.getElementById("facebook-login-btn");
 
 document.addEventListener("DOMContentLoaded", function(){
-  facebookLogin.addEventListener("click")
+  facebookLogin.addEventListener("click", function(event){
+    event.preventDefault();
+    signInWithPopup(auth, facebookProvider)
+    .then((result) =>{
+      const user = result.user;
+      
+    })
+  });
 })
