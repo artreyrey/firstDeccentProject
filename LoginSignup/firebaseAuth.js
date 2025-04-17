@@ -134,7 +134,7 @@ googleLogin.addEventListener("click", function(){
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const user = result.user;
     console.log(user);
-    window.location.href="gmailLogged.html";
+    window.location.href="http://127.0.0.1:5500/homePage/homePage.html";
 
   }).catch((error) => {
     const errorCode = error.code;
