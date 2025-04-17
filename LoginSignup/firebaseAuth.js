@@ -143,4 +143,3 @@ googleLogin.addEventListener("click", function(){
  }) 
 
 // Facebook Login
-
