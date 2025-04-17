@@ -146,7 +146,30 @@ googleLogin.addEventListener("click", function(){
 const facebookProvider = new FacebookAuthProvider();
 const facebookLogin = document.getElementById("facebook-login-btn");
 
-facebookLogin.addEventListener("click", function(){
 
-  
-})
+// Add additional permissions if needed
+facebookProvider.addScope('email');
+facebookProvider.addScope('public_profile');
+
+facebookProvider.addScope('email');
+facebookProvider.addScope('public_profile');
+
+document.getElementById("facebook-login-btn").addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    const user = result.user;
+    
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      provider: "facebook",
+      lastLogin: new Date()
+    });
+    
+    window.location.href = "/homePage/homePage.html";
+  } catch (error) {
+    console.error("Facebook login error:", error);
+    alert(`Login failed: ${error.message}`);
+  }
+});
