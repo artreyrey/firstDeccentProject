@@ -129,7 +129,7 @@ const googleProvider = new GoogleAuthProvider();
 const googleLogin = document.getElementById("google-login-btn");
 
 googleLogin.addEventListener("click", function(){
-  signInWithPopup(auth, provider)
+  signInWithPopup(auth, googleProvider)
   .then((result) => {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const user = result.user;
@@ -140,9 +140,6 @@ googleLogin.addEventListener("click", function(){
     const errorCode = error.code;
     const errorMessage = error.message;
   });
-
-
-  
  })
 
 
