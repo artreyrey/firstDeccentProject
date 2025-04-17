@@ -140,7 +140,7 @@ googleLogin.addEventListener("click", function(){
     const errorCode = error.code;
     const errorMessage = error.message;
   });
- }) 
+ })  
 
 // Facebook Login
 const facebookProvider = new FacebookAuthProvider();
