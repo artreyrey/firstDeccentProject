@@ -152,7 +152,17 @@ document.addEventListener("DOMContentLoaded", function(){
     signInWithPopup(auth, facebookProvider)
     .then((result) =>{
       const user = result.user;
-      
+
+      const credential = FacebookAuthProvider.credentialFromResult(result);
+      const accessToken = credential.accessToken;
+
+      console.log(user);
+      window.location.href="http://127.0.0.1:5500/homePage/homePage.html";
+
     })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
   });
 })
