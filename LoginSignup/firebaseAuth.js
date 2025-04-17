@@ -1,6 +1,6 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup} 
+  import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider} 
   from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
   import {getFirestore, setDoc, doc} 
   from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -18,7 +18,7 @@
     appId: "1:598925515666:web:b16534b6158c7232a47f4b"
   };
 
-  const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore();
 auth.languageCode = 'en';
@@ -143,3 +143,10 @@ googleLogin.addEventListener("click", function(){
  }) 
 
 // Facebook Login
+const facebookProvider = new FacebookAuthProvider();
+const facebookLogin = document.getElementById("facebook-login-btn");
+
+facebookLogin.addEventListener("click", function(){
+
+  
+})
