@@ -151,9 +151,6 @@ const facebookLogin = document.getElementById("facebook-login-btn");
 facebookProvider.addScope('email');
 facebookProvider.addScope('public_profile');
 
-facebookProvider.addScope('email');
-facebookProvider.addScope('public_profile');
-
 document.getElementById("facebook-login-btn").addEventListener("click", async () => {
   try {
     const result = await signInWithPopup(auth, facebookProvider);
