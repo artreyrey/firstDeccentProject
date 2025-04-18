@@ -56,7 +56,8 @@ April 18, 2025
   = Later I will implement thee following:
   = Making of the home page:
     = NAV BARS: Dash board, Profile, Members, Funds, Calendar, Reviews.
-      
+    = I will create the profile editing first, understand fetching system and create the members.
+    = Second one I will create the logic for my Funds as well as fetching of documentation and uploading to firebase.
   
 
   
