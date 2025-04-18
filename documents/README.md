@@ -52,6 +52,11 @@ April 18, 2025
   = Project Console: https://console.firebase.google.com/project/login-form-783e1/overview
   = Hosting URL: https://login-form-783e1.web.app
   = And I also created new public file in which it will be used for accessing and uploading domain
+  = We are having a nice progess. 
+  = Later I will implement thee following:
+  = Making of the home page:
+    = NAV BARS: Dash board, Profile, Members, Funds, Calendar, Reviews.
+      
   
 
   
