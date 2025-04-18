@@ -48,4 +48,10 @@ April 2, 2025
 April 18, 2025
   = Im done with the login/signup page and home pages.
   = Im also done making firebase authentications like signin using google and facebook.
+  = here is my firebase domain hosting
+  = Project Console: https://console.firebase.google.com/project/login-form-783e1/overview
+  = Hosting URL: https://login-form-783e1.web.app
+  = And I also created new public file in which it will be used for accessing and uploading domain
+  
+
   
