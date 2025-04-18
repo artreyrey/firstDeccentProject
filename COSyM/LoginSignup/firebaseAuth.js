@@ -83,7 +83,7 @@ signIn.addEventListener('click', (event)=>{
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
-    window.location.href = 'http://127.0.0.1:5500/homePage/homePage.html'; // Go to homepage
+    window.location.href = 'https://127.0.0.1:5500/homePage/homePage.html'; // Go to homepage
   })
 
   .catch((error)=>{ // If login fails:
@@ -134,7 +134,7 @@ googleLogin.addEventListener("click", function(){
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const user = result.user;
     console.log(user);
-    window.location.href="http://127.0.0.1:5500/homePage/homePage.html";
+    window.location.href="https://127.0.0.1:5500/homePage/homePage.html";
 
   }).catch((error) => {
     const errorCode = error.code;
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function(){
       const accessToken = credential.accessToken;
 
       console.log(user);
-      window.location.href="http://127.0.0.1:5500/homePage/homePage.html";
+      window.location.href="https://127.0.0.1:5500/homePage/homePage.html";
 
     })
     .catch((error) => {
