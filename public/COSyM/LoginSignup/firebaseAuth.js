@@ -141,3 +141,20 @@ resetLink.addEventListener('click', async (e) => {
 //     const errorMessage = error.message;
 //   });
 //  })   
+
+// This single function handles Google login
+const googleAuth = () => {
+  signInWithPopup(auth, new GoogleAuthProvider())
+    .then(() => {
+      window.location.href = '/COSyM/homePage/homePage.html';
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+// Connect to Login Button
+document.getElementById("google-login-btn")?.addEventListener("click", googleAuth);
+
+// Connect to Signup Button 
+document.getElementById("signUpButton")?.addEventListener("click", googleAuth);
