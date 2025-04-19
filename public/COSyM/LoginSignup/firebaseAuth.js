@@ -83,7 +83,7 @@ signIn.addEventListener('click', (event)=>{
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
-    window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html'; // Go to homepage
+    window.location.href = '/COSyM/homePage/homePage.html'; // Go to homepage
   })
 
   .catch((error)=>{ // If login fails:
@@ -124,23 +124,6 @@ resetLink.addEventListener('click', async (e) => {
   }
 });
 
-// google login
-// const googleProvider = new GoogleAuthProvider();
-// const googleLogin = document.getElementById("google-login-btn", "google-login-sign");
-
-// googleLogin.addEventListener("click", function(){
-//   signInWithPopup(auth, googleProvider)
-//   .then((result) => {
-//     const credential = GoogleAuthProvider.credentialFromResult(result);
-//     const user = result.user;
-//     console.log(user);
-//     window.location.href="http://127.0.0.1:5500/public/COSyM/homePage/homePage.html";
-
-//   }).catch((error) => {
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//   });
-//  })   
 
 // This single function handles Google login
 const googleAuth = () => {
