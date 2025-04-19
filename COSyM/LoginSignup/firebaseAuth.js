@@ -126,7 +126,7 @@ resetLink.addEventListener('click', async (e) => {
 
 // google login
 const googleProvider = new GoogleAuthProvider();
-const googleLogin = document.getElementById("google-login-btn");
+const googleLogin = document.getElementById("google-login-btn", "signUpButton");
 
 googleLogin.addEventListener("click", function(){
   signInWithPopup(auth, googleProvider)
