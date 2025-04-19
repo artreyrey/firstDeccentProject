@@ -125,19 +125,33 @@ resetLink.addEventListener('click', async (e) => {
 });
 
 // google login
+// const googleProvider = new GoogleAuthProvider();
+// const googleLogin = document.getElementById("google-login-btn", "google-login-sign");
+
+// googleLogin.addEventListener("click", function(){
+//   signInWithPopup(auth, googleProvider)
+//   .then((result) => {
+//     const credential = GoogleAuthProvider.credentialFromResult(result);
+//     const user = result.user;
+//     console.log(user);
+//     window.location.href="http://127.0.0.1:5500/public/COSyM/homePage/homePage.html";
+
+//   }).catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//   });
+//  })   
 const googleProvider = new GoogleAuthProvider();
-const googleLogin = document.getElementById("google-login-btn", "google-login-sign");
 
-googleLogin.addEventListener("click", function(){
-  signInWithPopup(auth, googleProvider)
-  .then((result) => {
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const user = result.user;
-    console.log(user);
-    window.location.href="http://127.0.0.1:5500/public/COSyM/homePage/homePage.html";
+const googleAuth = () => {
+  signInWithPopup(auth, new GoogleAuthProvider())
+    .then((result) => {
+      window.location.href = '/COSyM/homePage/homePage.html';
+    })
+    .catch((error) => {
+      console.error("Google auth error:", error);
+    });
+};
 
-  }).catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
- })   
+document.getElementById("google-login-btn")?.addEventListener("click", googleAuth);
+document.getElementById("sign-up-button")?.addEventListener("click", googleAuth);
