@@ -142,10 +142,9 @@ googleLogin.addEventListener("click", function(){
   });
  })   
 
+
 // Facebook Login
 const facebookProvider = new FacebookAuthProvider();
-facebookProvider.addScope('email');  
-
 const facebookLogin = document.getElementById("facebook-login-btn");
 
 document.addEventListener("DOMContentLoaded", function(){
