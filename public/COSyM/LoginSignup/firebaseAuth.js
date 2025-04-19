@@ -141,17 +141,3 @@ resetLink.addEventListener('click', async (e) => {
 //     const errorMessage = error.message;
 //   });
 //  })   
-const googleProvider = new GoogleAuthProvider();
-
-const googleAuth = () => {
-  signInWithPopup(auth, new GoogleAuthProvider())
-    .then((result) => {
-      window.location.href = '/COSyM/homePage/homePage.html';
-    })
-    .catch((error) => {
-      console.error("Google auth error:", error);
-    });
-};
-
-document.getElementById("google-login-btn")?.addEventListener("click", googleAuth);
-document.getElementById("sign-up-button")?.addEventListener("click", googleAuth);

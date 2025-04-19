@@ -1,10 +1,10 @@
 //displaying of signup/ login
-const signUpButton=document.getElementById('signUpButton');
+const signUpButton=document.getElementById('sign-up-button');
 const signInButton=document.getElementById('signInButton');
 const signInForm=document.getElementById('signIn');
 const signUpForm=document.getElementById('signup');
 
-signUpButton.addEventListener('click',function(){
+sign-up-button.addEventListener('click',function(){
     signInForm.style.display="none";
     signUpForm.style.display="block";
 })

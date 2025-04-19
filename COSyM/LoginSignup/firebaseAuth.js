@@ -138,4 +138,4 @@ const googleAuth = () => {
 };
 
 document.getElementById("google-login-btn")?.addEventListener("click", googleAuth);
-document.getElementById("sign-up-button")?.addEventListener("click", googleAuth);
+document.getElementById("google-signup-button")?.addEventListener("click", googleAuth);
