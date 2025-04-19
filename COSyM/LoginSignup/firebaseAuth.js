@@ -128,34 +128,31 @@ resetLink.addEventListener('click', async (e) => {
 const googleProvider = new GoogleAuthProvider();
 const googleLogin = document.getElementById("google-login-btn");
 
-if (googleLogin) {  // Check if element exists
-  googleLogin.addEventListener("click", async function() {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      
-      // Save user data to Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        provider: 'google',
-        createdAt: new Date()
-      }, { merge: true });  // Merge if user exists
-      
-      // Redirect to home page (relative path)
-      window.location.href = '/COSyM/homePage/homePage.html';
-      
-    } catch (error) {
-      console.error("Google login error:", error);
-      
-      // Show user-friendly error message
-      const errorMessage = error.code === 'auth/account-exists-with-different-credential' 
-        ? 'An account already exists with this email' 
-        : 'Failed to login with Google';
-      
-      showMessage(errorMessage, 'signInMessage', true);
-    }
+googleLogin.addEventListener("click", function(){
+  signInWithPopup(auth, googleProvider)
+  .then((result) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const user = result.user;
+    console.log(user);
+    window.location.href='/COSyM/homePage/homePage.html';
+
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
   });
-}
+ })
+// google signup
+ const googleSignup = document.getElementById("signUpButton");
+ googleSignup.addEventListener("click", function(){
+  signInWithPopup(auth, googleProvider)
+  .then((result) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const user = result.user;
+    console.log(user);
+    window.location.href='/COSyM/homePage/homePage.html';
+
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+ })   
