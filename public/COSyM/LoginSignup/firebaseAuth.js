@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function(){
       const accessToken = credential.accessToken;
 
       console.log(user);
-      window.location.href="http://127.0.0.1:5500/homePage/homePage.html";
+      window.location.href="https://login-form-783e1.web.app/homePage/homePage.html";
 
     })
     .catch((error) => {
