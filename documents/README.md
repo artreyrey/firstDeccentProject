@@ -58,6 +58,10 @@ April 18, 2025
     = NAV BARS: Dash board, Profile, Members, Funds, Calendar, Reviews.
     = I will create the profile editing first, understand fetching system and create the members.
     = Second one I will create the logic for my Funds as well as fetching of documentation and uploading to firebase.
-  
+
+  April 19:
+  = Project Console: https://console.firebase.google.com/project/login-form-783e1/overview
+  = Hosting URL: https://login-form-783e1.web.app
+
 
   
