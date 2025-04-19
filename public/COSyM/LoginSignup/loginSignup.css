@@ -233,3 +233,98 @@ button:hover{
     opacity:0;
     animation:fadeOut 7s forwards;
 }
+
+/* Add this at the bottom of your existing CSS */
+
+/* Responsive Media Queries */
+@media (max-width: 992px) {
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-top: 100px;
+        margin-bottom: 100px;
+        padding: 1rem;
+    }
+
+    form {
+        margin: 0 1rem;
+    }
+
+    .container .form-title {
+        font-size: 1.4rem;
+        padding: 1rem 0;
+    }
+
+    .input-group {
+        margin-bottom: 1.2rem;
+    }
+
+    button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .icons i {
+        padding: 0.6rem 1rem;
+        font-size: 1.3rem;
+    }
+
+    .icons i:hover {
+        font-size: 2rem;
+    }
+
+    .links {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        width: 95%;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        border-radius: 20px;
+    }
+
+    .container .form-title {
+        font-size: 1.3rem;
+    }
+
+    .input-group input {
+        font-size: 14px;
+    }
+
+    .or::before,
+    .or::after {
+        width: 35%;
+    }
+
+    .recover {
+        font-size: 0.9rem;
+    }
+
+    #signUpButton, #signInButton {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 0.8rem;
+    }
+
+    .icons i {
+        padding: 0.5rem 0.8rem;
+    }
+
+    .input-group {
+        padding: 6px 10px;
+    }
+}
