@@ -1,6 +1,6 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider} 
+  import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup} 
   from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
   import {getFirestore, setDoc, doc} 
   from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -142,27 +142,3 @@ googleLogin.addEventListener("click", function(){
   });
  })   
 
-// Facebook Login
-const facebookProvider = new FacebookAuthProvider();
-const facebookLogin = document.getElementById("facebook-login-btn");
-
-document.addEventListener("DOMContentLoaded", function(){
-  facebookLogin.addEventListener("click", function(event){
-    event.preventDefault();
-    signInWithPopup(auth, facebookProvider)
-    .then((result) =>{
-      const user = result.user;
-
-      const credential = FacebookAuthProvider.credentialFromResult(result);
-      const accessToken = credential.accessToken;
-
-      console.log(user);
-      window.location.href='https://console.firebase.google.com/project/login-form-783e1/overview';
-
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
-  });
-})
