@@ -83,7 +83,7 @@ signIn.addEventListener('click', (event)=>{
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
-    window.location.href = '/COSyM/homePage/homePage.html'; // Go to homepage
+    window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html'; // Go to homepage
   })
 
   .catch((error)=>{ // If login fails:
@@ -129,7 +129,7 @@ resetLink.addEventListener('click', async (e) => {
 const googleAuth = () => {
   signInWithPopup(auth, new GoogleAuthProvider())
     .then(() => {
-      window.location.href = '/COSyM/homePage/homePage.html';
+      window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html';
     })
     .catch((error) => {
       console.error("Error:", error);
