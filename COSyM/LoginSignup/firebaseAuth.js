@@ -83,7 +83,7 @@ signIn.addEventListener('click', (event)=>{
   .then((userCredential)=>{ // If successful:
     showMessage('Login successful!', 'signInMessage'); // Show message
     localStorage.setItem('loggedInUserId', userCredential.user.uid); // Remember user
-    window.location.href = 'http://127.0.0.1:5500/COSyM/homePage/homePage.html'; // Go to homepage
+    window.location.href = '/COSyM/homePage/homePage.html'; // Go to homepage
   })
 
   .catch((error)=>{ // If login fails:
@@ -126,19 +126,36 @@ resetLink.addEventListener('click', async (e) => {
 
 // google login
 const googleProvider = new GoogleAuthProvider();
-const googleLogin = document.getElementById("google-login-btn", "signUpButton");
+const googleLogin = document.getElementById("google-login-btn");
 
-googleLogin.addEventListener("click", function(){
-  signInWithPopup(auth, googleProvider)
-  .then((result) => {
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const user = result.user;
-    console.log(user);
-    window.location.href='http://127.0.0.1:5500/COSyM/homePage/homePage.html';
-
-  }).catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+if (googleLogin) {  // Check if element exists
+  googleLogin.addEventListener("click", async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      
+      // Save user data to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        provider: 'google',
+        createdAt: new Date()
+      }, { merge: true });  // Merge if user exists
+      
+      // Redirect to home page (relative path)
+      window.location.href = '/COSyM/homePage/homePage.html';
+      
+    } catch (error) {
+      console.error("Google login error:", error);
+      
+      // Show user-friendly error message
+      const errorMessage = error.code === 'auth/account-exists-with-different-credential' 
+        ? 'An account already exists with this email' 
+        : 'Failed to login with Google';
+      
+      showMessage(errorMessage, 'signInMessage', true);
+    }
   });
- })   
-
+}
