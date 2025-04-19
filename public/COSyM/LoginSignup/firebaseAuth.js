@@ -157,4 +157,4 @@ const googleAuth = () => {
 document.getElementById("google-login-btn")?.addEventListener("click", googleAuth);
 
 // Connect to Signup Button 
-document.getElementById("signUpButton")?.addEventListener("click", googleAuth);
+document.getElementById("google-signup-btn")?.addEventListener("click", googleAuth);
