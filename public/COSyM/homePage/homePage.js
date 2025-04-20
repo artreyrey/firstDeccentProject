@@ -8,36 +8,63 @@ const eventsButton=document.getElementById('events-button');
 const reviewsButton=document.getElementById('reviews-button');
 
 
-const homeSection=document.getElementById('signIn');
-const profileSection=document.getElementById('signup');
-const signUpForm=document.getElementById('signup');
-const signUpForm=document.getElementById('signup');
-const signUpForm=document.getElementById('signup');
-const signUpForm=document.getElementById('signup');
+const homeSection=document.getElementById('home-section');
+const profileSection=document.getElementById('profile-section');
+const membersSection=document.getElementById('members-section');
+const fundsSection=document.getElementById('funds-section');
+const eventsSection=document.getElementById('events-section');
+const reviewsSection=document.getElementById('reviews-section');
 
-signUpButton.addEventListener('click',function(){
-    signInForm.style.display="none";
-    signUpForm.style.display="block";
+homeSection.addEventListener('click',function(){
+    homeSection.style.display="none"; //show home section
+    profileSection.style.display="block";
+    membersSection.style.display="block";
+    fundsSection.style.display="block";
+    eventsSection.style.display="block";
+    reviewsSection.style.display="block";
 })
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
+profileSection.addEventListener('click', function(){
+    homeSection.style.display="block";
+    profileSection.style.display="none"; //show profile section
+    membersSection.style.display="block";
+    fundsSection.style.display="block";
+    eventsSection.style.display="block";
+    reviewsSection.style.display="block";
 })
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
+membersSection.addEventListener('click', function(){
+    homeSection.style.display="block";
+    profileSection.style.display="block";
+    membersSection.style.display="none"; //show members section
+    fundsSection.style.display="block";
+    eventsSection.style.display="block";
+    reviewsSection.style.display="block";
 })
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
+
+fundsSection.addEventListener('click', function(){
+    homeSection.style.display="block";
+    profileSection.style.display="block";
+    membersSection.style.display="block";
+    fundsSection.style.display="none"; //show funds section
+    eventsSection.style.display="block";
+    reviewsSection.style.display="block";
 })
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
+
+eventsSection.addEventListener('click', function(){
+    homeSection.style.display="block";
+    profileSection.style.display="block";
+    membersSection.style.display="block";
+    fundsSection.style.display="block";
+    eventsSection.style.display="none"; //show events section
+    reviewsSection.style.display="block";
 })
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
+
+reviewsSection.addEventListener('click', function(){
+    homeSection.style.display="block";
+    profileSection.style.display="block";
+    membersSection.style.display="block";
+    fundsSection.style.display="block";
+    eventsSection.style.display="block";
+    reviewsSection.style.display="none"; //show reviews section
 })
 
 
