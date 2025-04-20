@@ -34,3 +34,8 @@
 
     --site-max-width:
 }
+
+.wrapper{
+    display: flex;
+    
+}
