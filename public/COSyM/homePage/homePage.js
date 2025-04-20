@@ -14,6 +14,10 @@ signInButton.addEventListener('click', function(){
     signUpForm.style.display="none";
 })
 
-//profile fetching editing
+//profile set up
 
-//
+//dapat may role muna bago ka makapag navigate ng home and profile 
+//need ng animation para makapagset ng profile
+//after making profile dapat
+
+//if admin or 
