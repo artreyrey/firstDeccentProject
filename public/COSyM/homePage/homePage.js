@@ -1,11 +1,11 @@
 //displaying of signup/ login
 //ibahin pang navigate ng home page.
-const homeButton=document.getElementById('signUpButton');
-const profileButton=document.getElementById('signInButton');
-const membersButton=document.getElementById('signInButton');
-const fundsButton=document.getElementById('signInButton');
-const eventsButton=document.getElementById('signInButton');
-const reviewsButton=document.getElementById('signInButton');
+const homeButton=document.getElementById('home');
+const profileButton=document.getElementById('profile');
+const membersButton=document.getElementById('members');
+const fundsButton=document.getElementById('funds');
+const eventsButton=document.getElementById('events');
+const reviewsButton=document.getElementById('reviews');
 
 
 const signInForm=document.getElementById('signIn');
