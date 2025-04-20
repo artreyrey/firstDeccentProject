@@ -35,11 +35,6 @@
     --site-max-width:
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow-x: hidden; 
-}
 
 .wrapper{
     display: flex;
@@ -131,7 +126,6 @@ html, body {
 
 main {
     margin-left: 250px; 
-    width: calc(100% - 250px); 
     min-height: 100vh;
     padding: 40px; 
     background-color: var(--cream-color);
@@ -141,38 +135,36 @@ main {
 
 /* Home Section */
 .home .home-content {
-    color: var(--cream-color);
-    
-
+    color: var(--gray-color);
 }
 
 /* Profile Section */
 .profile {
-    color: var(--cream-color);
+    color: var(--gray-color);
 
 }
 
 /* Members Section */
 .members .members-content {
-    color: var(--cream-color);
+    color: var(--gray-color);
 
 }
 
 /* Funds Section */
 .funds .funds-content {
-    color: var(--cream-color);
+    color: var(--gray-color);
 
 }
 
 /* Events Section */
 .events .events-content {
-    color: var(--cream-color);
+    color: var(--gray-color);
 
 }
 
 /* Reviews Section */
 .reviews .reviews-content {
-    color: var(--cream-color);
+    color: var(--gray-color);
 
 }
 
