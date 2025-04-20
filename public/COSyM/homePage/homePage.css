@@ -35,7 +35,6 @@
     --site-max-width:
 }
 
-
 .wrapper{
     display: flex;
     position: relative;
@@ -129,41 +128,57 @@ main {
     min-height: 100vh;
     padding: 40px; 
     background-color: var(--cream-color);
-    text-align: center;
-    margin-top: 400px;
 }
 
 /* Home Section */
 .home .home-content {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
     color: var(--gray-color);
 }
 
 /* Profile Section */
 .profile {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
     color: var(--gray-color);
 
 }
 
 /* Members Section */
 .members .members-content {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
     color: var(--gray-color);
 
 }
 
 /* Funds Section */
 .funds .funds-content {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
     color: var(--gray-color);
 
 }
 
 /* Events Section */
 .events .events-content {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
     color: var(--gray-color);
 
 }
 
 /* Reviews Section */
 .reviews .reviews-content {
+text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
     color: var(--gray-color);
 
 }
