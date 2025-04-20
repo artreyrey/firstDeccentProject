@@ -74,6 +74,9 @@
     left: 20px;
 }
 
-.main_content{
-    background-color: var(--cream-color);
+.main_content {
+    width: 100%;
+    margin-left: 250px; /* Match sidebar width */
+    min-height: 100vh; /* Full height */
+    background-color: var(--cream-color); /* Your cream color */
 }
