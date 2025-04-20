@@ -1,7 +1,13 @@
 //displaying of signup/ login
 //ibahin pang navigate ng home page.
-const signUpButton=document.getElementById('signUpButton');
-const signInButton=document.getElementById('signInButton');
+const homeButton=document.getElementById('signUpButton');
+const profileButton=document.getElementById('signInButton');
+const membersButton=document.getElementById('signInButton');
+const fundsButton=document.getElementById('signInButton');
+const eventsButton=document.getElementById('signInButton');
+const reviewsButton=document.getElementById('signInButton');
+
+
 const signInForm=document.getElementById('signIn');
 const signUpForm=document.getElementById('signup');
 
@@ -13,6 +19,7 @@ signInButton.addEventListener('click', function(){
     signInForm.style.display="block";
     signUpForm.style.display="none";
 })
+
 
 //profile set up
 
