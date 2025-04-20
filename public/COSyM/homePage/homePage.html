@@ -11,28 +11,132 @@
             <div class="sidebar">
                 <h2>Nexus.</h2>
                 <ul>
-                    <li><a href="#" id="home"><i class="fas fa-home"></i>Home</a></li>
-                    <li><a href="#" id="profile"><i class="fas fa-user"></i>Profile</a></li>
-                    <li><a href="#" id="members"><i class="fas fa-user-group"></i>Members</a></li>
-                    <li><a href="#" id="shared-fund"><i class="fas fa-piggy-bank"></i>Funds</a></li>
-                    <li><a href="#" id="events"><i class="fas fa-calendar-alt"></i>Events</a></li>
-                    <li><a href="#" id="reviews"><i class="fas fa-star"></i>Reviews</a></li>
-                    <li><a href="#" id="sign-out" button onclick="window.location.href='http://127.0.0.1:5500/public/COSyM/LoginSignup/loginSignup.html'"><i class="fas fa-sign-out"></i>Sign Out</a></li>
+                    <li><a href="#" id="home" class="active"><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="#" id="profile" class="active"><i class="fas fa-user"></i>Profile</a></li>
+                    <li><a href="#" id="members" class="active"><i class="fas fa-user-group"></i>Members</a></li>
+                    <li><a href="#" id="shared-fund" class="active"><i class="fas fa-piggy-bank"></i>Funds</a></li>
+                    <li><a href="#" id="events" class="active"><i class="fas fa-calendar-alt"></i>Events</a></li>
+                    <li><a href="#" id="reviews" class="active"><i class="fas fa-star"></i>Reviews</a></li>
+                    <li><a href="#" id="sign-out" class="active" button onclick="window.location.href='http://127.0.0.1:5500/public/COSyM/LoginSignup/loginSignup.html'"><i class="fas fa-sign-out"></i>Sign Out</a></li>
                 </ul>
-            </div>
-            <div class="main_content">
-                <div class="header"> welcome niggas</div>
-                <div class="info">
-                    <div>CCTE NEGERS</div>
-                </div>
-
             </div>
         </div>
 
-
-
+        <main>
+            <!-- home section -->
+            <section id="home" class="home-section"> 
+                <div class="section-content">
+                    <div class="home-details">
+                        <h2 class="title"> Tired of Missing Out?</h2>
+                        <h3 class="subtitle"> Connect, Explore and Innovate!</h3>
+                        <p class="description"> Discover a whole new ground to share ideas, inspire, and 
+                            be updated to build the CCTE community together.</p>
+                        <div class="buttons">
+                            <a href="#getstart" class="button get-started" button onclick="window.location.href='http://127.0.0.1:5500/public/COSyM/LoginSignup/loginSignup.html'">Get Started</a>
+                        </div>
+                    </div>
+                    <div class="home-image-wraper">
+                        <img src="Images/CCTENexus.png" alt="CCTE Nexus" class="home-image">
+                    </div>
+                </div>
+            </section>
     
-
+            <!-- About section -->
+            <section id="about" class="about-section">
+                <div class="section-content"> 
+                    <div class="about-image-wrapper">
+                    <img src="Images/AboutNexus.png" alt="About" class="about-image">
+                    </div>
+                    <div class="about-details">
+                        <h2 class="section-title">About Nexus</h2>
+                        <p class="text">Where ideas converge and relationships flourish, 
+                            Nexus serves as the vibrant connection point for our CCTE community. 
+                            This dynamic platform bridges students and officers through transparent communication, 
+                            seamless event coordination, and collaborative spirit. Together, we're not just sharing information - 
+                            we're building a stronger, more united department where every voice matters and every interaction sparks progress.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Features section -->
+            <section id="features">
+            <div class="features-content">
+                    <h2 class="features-title">Features</h2>
+    
+                <div class="features-details">
+                <div class="member-directory">
+                    <h2>Member Directory</h2>
+                    <p>Searchable database of all members for easy access.</p>
+                </div>
+    
+                <div class="funds-tracker">
+                    <h2>Funds Tracker</h2>
+                    <p>Transparent logs of event finances, sorted by date and course.</p>
+                </div>
+    
+                <div class="event-calendar">
+                    <h2>Event Calendar</h2>
+                    <p>Schedule, flow, and ratings for each event. Credits organizers.</p>
+                </div>
+    
+                <div class="freedom-wall">
+                    <h2>Freedom Wall</h2>
+                    <p>Anonymous suggestions for school events and activities.</p>
+                </div>
+    
+                <div class="home-dashboard">
+                    <h2>Home Dashboard</h2>
+                    <p>Real-time ratings, updates, and key announcements.</p>
+    
+                </div><div class="own-account">
+                    <h2>Log In/Sign Up</h2>
+                    <p>Your account ensures secure, tailored access to all platform tools.</p>
+                </div>
+    
+            </div>
+            </div>
+            </section>
+    
+            <!-- contacts section -->
+            <section id="contact" class="contact-section">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="section-content">
+                    <ul class="contact-info-list">
+                        <li class="contact-info">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                            <p>G Solis St, Lipa, 4217 Batangas</p>
+                        </li>
+                        <li class="contact-info">
+                            <i class="fa-solid fa-envelope"></i>
+                            <p>ccteNexus@gmail.com</p>
+                        </li>
+                        <li class="contact-info">
+                            <i class="fa-solid fa-phone"></i>
+                            <p>(121) 777-77777</p>
+                        </li>
+                        <li class="contact-info">
+                            <i class="fa-solid fa-clock"></i>
+                            <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                        </li>
+                        <li class="contact-info">
+                            <i class="fa-regular fa-clock"></i>
+                            <p>Saturday - Sunday: Closed</p>
+                        </li>
+                        <li class="contact-info">
+                            <i class="fa-solid fa-globe"></i>
+                            <p>www.cctenexusweb.com</p>
+                        </li>
+                    </ul>
+    
+                    <form action="#" class="contact-form">
+                        <input type="text" placeholder="Your name" class="form-input" required>
+                        <input type="email" placeholder="Your email" class="form-input" required>
+                        <textarea class="form-input" placeholder="Your message" required></textarea>
+                        <button class="submit-button">Submit</button>
+                    </form>
+                </div>
+            </section>
 
     <!-- Latest Font Awesome (v6) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

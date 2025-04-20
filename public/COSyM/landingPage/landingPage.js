@@ -1,4 +1,4 @@
-// Navigation highlight on scroll
+// Navigation when click will go to that id
 const highlightActiveNav = () => {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('header nav a');

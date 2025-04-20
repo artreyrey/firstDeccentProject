@@ -58,6 +58,7 @@
     font-weight: 700;    
     margin-bottom: 25px;
     margin-top: 15px;
+    text-align: center;
 }
 
 /* navigating buttons */
@@ -70,23 +71,37 @@
 .wrapper .sidebar ul li a{
     display: block;
     color: var(--gray-color);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 450;
 }
 
 
 /* Icons */
 .wrapper .sidebar ul li a .fas{
-    width: 25px;
+    width: 30px;
     
 }
 
 /* signout button */
 #sign-out {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 30px;
+    left: 35px;
+}
+
+/* hovering icons & texts */
+.wrapper .sidebar ul li:hover {
+    color: var(--pearl-color);
+    background: var(--orange-color);
+    border-radius: var(--border-radius-m);
+    transform: scale(1.2); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer; 
 }
 
 .main_content {
+    display: block;
     width: 100%;
     margin-left: 250px; /* Match sidebar width */
     min-height: 100vh; /* Full height */
