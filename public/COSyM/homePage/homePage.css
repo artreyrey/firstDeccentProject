@@ -56,7 +56,7 @@
     font-size: 30px;
     margin-left: 20px;
     font-weight: 700;    
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     margin-top: 15px;
     text-align: center;
 }
@@ -73,7 +73,7 @@
     color: var(--gray-color);
     text-decoration: none;
     font-size: 18px;
-    font-weight: 450;
+    font-weight: 500;
     align-items: center;
     transition: all 0.3s;
     padding: 10px 15px;
@@ -94,21 +94,26 @@
 }
 
 /* hovering icons & texts */
-.wrapper .sidebar ul li a:hover, #signout {
+.wrapper .sidebar ul li a:hover {
     color: var(--pearl-color);
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
-    transform: scale(1.2); 
+    transform: scale(1.1); 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     cursor: pointer; 
-    transition: 0.2s ease;
+    transition: 0.3s ease;
     margin-left: 50px;
 }
 
-.main_content {
+.wrapper .sidebar ul li a:active {
+    transform: scale(0.98); /* Subtle "pressed" effect */
+}
+
+main {
     display: block;
     width: 100%;
     margin-left: 250px; /* Match sidebar width */
     min-height: 100vh; /* Full height */
+    color: var(--gray-color);
     background-color: var(--cream-color); /* Your cream color */
 }
