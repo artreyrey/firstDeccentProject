@@ -91,13 +91,14 @@
 }
 
 /* hovering icons & texts */
-.wrapper .sidebar ul li:hover {
+.wrapper .sidebar ul li a:hover {
     color: var(--pearl-color);
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
     transform: scale(1.2); 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     cursor: pointer; 
+    transition: 0.2s ease;
 }
 
 .main_content {
