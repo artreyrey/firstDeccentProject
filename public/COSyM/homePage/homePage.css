@@ -182,3 +182,63 @@ text-align: center;
 }
 
 /* responsiveness */
+/* Mobile Toggle Button (Hidden on Desktop) */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: var(--orange-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    /* Hide sidebar by default on mobile */
+    .wrapper .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    /* Show sidebar when active */
+    .wrapper .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    /* Show toggle button */
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    /* Adjust main content */
+    main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 20px !important;
+    }
+    
+    /* Compact menu items */
+    .wrapper .sidebar ul li {
+        padding: 15px;
+    }
+    
+    /* Reduce hover effects */
+    .wrapper .sidebar ul li a:hover,
+    .wrapper .sidebar ul li a.active {
+        margin-left: 15px;
+        transform: scale(1.05);
+    }
+    
+    /* Adjust sign-out position */
+    #sign-out-button {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        margin-top: 20px;
+    }
+
+}

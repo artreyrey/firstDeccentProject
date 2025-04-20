@@ -1,5 +1,4 @@
-//displaying of signup/ login
-//ibahin pang navigate ng home page.
+//Pag cinlick feature, mashoshow yung certain section
 document.addEventListener('DOMContentLoaded', function() {
     // Get all buttons and sections
     const homeButton = document.getElementById('home-button');
@@ -91,6 +90,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the page
     initializePage();
 });
+
+// responsiveness pagmaliit device
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.querySelector('.sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    
+    toggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+    });
+    
+    // Close sidebar when clicking outside (optional)
+    document.addEventListener('click', function(e) {
+        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+});
+
 
 
 //profile set up
