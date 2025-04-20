@@ -63,17 +63,17 @@
 /* navigating buttons */
 .wrapper .sidebar ul li {
     padding: 25px;
-    color: var(--gray-color);
     
 }
 
 /* Texts*/
 .wrapper .sidebar ul li a{
-    padding: 25px;
     display: block;
-    
+    color: var(--gray-color);
 }
 
+
+/* Icons */
 .wrapper .sidebar ul li a .fas{
     width: 25px;
     
