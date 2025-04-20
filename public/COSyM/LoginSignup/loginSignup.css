@@ -113,6 +113,7 @@ input:not(:placeholder-shown) ~ label {
     text-align: right;
     font-size: 1rem;
     margin-bottom: 1rem;
+    font-weight: 450;
 }
 
 .recover a {
@@ -208,8 +209,8 @@ button:hover{
     color: var(--orange-color);
     border: none;
     background-color: transparent;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 490;
     display: inline-block; 
     transition: transform 0.3s ease;
     cursor: pointer; 

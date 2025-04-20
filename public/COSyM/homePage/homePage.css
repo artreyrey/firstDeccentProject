@@ -35,6 +35,12 @@
     --site-max-width:
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden; 
+}
+
 .wrapper{
     display: flex;
     position: relative;
@@ -101,6 +107,9 @@
     color: var(--pearl-color);
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-left: 45px;
+    transform: scale(1.1); 
 }
 
 .wrapper .sidebar ul li a:hover {
@@ -116,69 +125,54 @@
 }
 
 /* sections */
-section {
-    transition: opacity 0.3s ease;
-}
-section[style*="display: none"] {
-    display: block !important;
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
-}
-section[style*="display: block"] {
-    opacity: 1;
-    height: auto;
-}
 
-html{
-    scroll-behavior: smooth;
-}
-
-main{
-    background-color: var(--cream-color);
-}
 
 /* FEATURES STYLES */
 
+main {
+    margin-left: 250px; 
+    width: calc(100% - 250px); 
+    min-height: 100vh;
+    padding: 40px; 
+    background-color: var(--cream-color);
+    text-align: center;
+    margin-top: 400px;
+}
+
 /* Home Section */
 .home .home-content {
-    background-color: var(--cream-color);
-    color: var(--gray-color);
+    color: var(--cream-color);
+    
 
 }
 
 /* Profile Section */
-.profile .profile-content {
-    background-color: var(--cream-color);
-    color: var(--gray-color);
+.profile {
+    color: var(--cream-color);
 
 }
 
 /* Members Section */
-.membets .members-content {
-    background-color: var(--cream-color);
-    color: var(--gray-color);
+.members .members-content {
+    color: var(--cream-color);
 
 }
 
 /* Funds Section */
 .funds .funds-content {
-    background-color: var(--cream-color);
-    color: var(--gray-color);
+    color: var(--cream-color);
 
 }
 
 /* Events Section */
 .events .events-content {
-    background-color: var(--cream-color);
-    color: var(--gray-color);
+    color: var(--cream-color);
 
 }
 
 /* Reviews Section */
 .reviews .reviews-content {
-    background-color: var(--cream-color);
-    color: var(--gray-color);
+    color: var(--cream-color);
 
 }
 
