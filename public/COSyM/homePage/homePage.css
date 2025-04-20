@@ -213,6 +213,11 @@ text-align: center;
     .sidebar-toggle {
         display: block;
     }
+
+    .sidebar-toggle:active {
+    transform: scale(0.95);
+    opacity: 0.9;
+}
     
     /* Adjust main content */
     main {
