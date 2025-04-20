@@ -56,7 +56,7 @@
     font-size: 30px;
     margin-left: 20px;
     font-weight: 700;    
-    margin-bottom: 25px;
+    margin-bottom: 40px;
     margin-top: 15px;
     text-align: center;
 }
@@ -74,13 +74,16 @@
     text-decoration: none;
     font-size: 18px;
     font-weight: 450;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 10px 15px;
+
 }
 
 
 /* Icons */
 .wrapper .sidebar ul li a .fas{
     width: 30px;
-    
 }
 
 /* signout button */
@@ -91,7 +94,7 @@
 }
 
 /* hovering icons & texts */
-.wrapper .sidebar ul li a:hover {
+.wrapper .sidebar ul li a:hover, #signout {
     color: var(--pearl-color);
     background: var(--orange-color);
     border-radius: var(--border-radius-m);
@@ -99,6 +102,7 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     cursor: pointer; 
     transition: 0.2s ease;
+    margin-left: 50px;
 }
 
 .main_content {
