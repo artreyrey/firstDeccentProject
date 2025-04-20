@@ -1,71 +1,50 @@
 //displaying of signup/ login
 //ibahin pang navigate ng home page.
-const homeButton=document.getElementById('home-button');
-const profileButton=document.getElementById('profile-button');
-const membersButton=document.getElementById('members-button');
-const fundsButton=document.getElementById('funds-button');
-const eventsButton=document.getElementById('events-button');
-const reviewsButton=document.getElementById('reviews-button');
+// Get all buttons and sections
+const homeButton = document.getElementById('home-button');
+const profileButton = document.getElementById('profile-button');
+const membersButton = document.getElementById('members-button'); // Fixed ID to match HTML
+const fundsButton = document.getElementById('funds-button');
+const eventsButton = document.getElementById('events-button');
+const reviewsButton = document.getElementById('reviews-button');
 
+const homeSection = document.getElementById('home-section');
+const profileSection = document.getElementById('profile-section');
+const membersSection = document.getElementById('members-section');
+const fundsSection = document.getElementById('funds-section');
+const eventsSection = document.getElementById('events-section');
+const reviewsSection = document.getElementById('reviews-section');
 
-const homeSection=document.getElementById('home-section');
-const profileSection=document.getElementById('profile-section');
-const membersSection=document.getElementById('members-section');
-const fundsSection=document.getElementById('funds-section');
-const eventsSection=document.getElementById('events-section');
-const reviewsSection=document.getElementById('reviews-section');
+// Hide all sections except home by default
+function initializeSections() {
+    homeSection.style.display = "block";
+    profileSection.style.display = "none";
+    membersSection.style.display = "none";
+    fundsSection.style.display = "none";
+    eventsSection.style.display = "none";
+    reviewsSection.style.display = "none";
+}
 
-homeSection.addEventListener('click',function(){
-    homeSection.style.display="none"; //show home section
-    profileSection.style.display="block";
-    membersSection.style.display="block";
-    fundsSection.style.display="block";
-    eventsSection.style.display="block";
-    reviewsSection.style.display="block";
-})
-profileSection.addEventListener('click', function(){
-    homeSection.style.display="block";
-    profileSection.style.display="none"; //show profile section
-    membersSection.style.display="block";
-    fundsSection.style.display="block";
-    eventsSection.style.display="block";
-    reviewsSection.style.display="block";
-})
-membersSection.addEventListener('click', function(){
-    homeSection.style.display="block";
-    profileSection.style.display="block";
-    membersSection.style.display="none"; //show members section
-    fundsSection.style.display="block";
-    eventsSection.style.display="block";
-    reviewsSection.style.display="block";
-})
+// Show only the selected section
+function showSection(section) {
+    const allSections = [homeSection, profileSection, membersSection, 
+                        fundsSection, eventsSection, reviewsSection];
+    
+    allSections.forEach(sec => {
+        sec.style.display = sec === section ? "block" : "none";
+    });
+}
 
-fundsSection.addEventListener('click', function(){
-    homeSection.style.display="block";
-    profileSection.style.display="block";
-    membersSection.style.display="block";
-    fundsSection.style.display="none"; //show funds section
-    eventsSection.style.display="block";
-    reviewsSection.style.display="block";
-})
+// Add event listeners to buttons
+homeButton.addEventListener('click', () => showSection(homeSection));
+profileButton.addEventListener('click', () => showSection(profileSection));
+membersButton.addEventListener('click', () => showSection(membersSection));
+fundsButton.addEventListener('click', () => showSection(fundsSection));
+eventsButton.addEventListener('click', () => showSection(eventsSection));
+reviewsButton.addEventListener('click', () => showSection(reviewsSection));
 
-eventsSection.addEventListener('click', function(){
-    homeSection.style.display="block";
-    profileSection.style.display="block";
-    membersSection.style.display="block";
-    fundsSection.style.display="block";
-    eventsSection.style.display="none"; //show events section
-    reviewsSection.style.display="block";
-})
-
-reviewsSection.addEventListener('click', function(){
-    homeSection.style.display="block";
-    profileSection.style.display="block";
-    membersSection.style.display="block";
-    fundsSection.style.display="block";
-    eventsSection.style.display="block";
-    reviewsSection.style.display="none"; //show reviews section
-})
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', initializeSections);
 
 
 //profile set up
