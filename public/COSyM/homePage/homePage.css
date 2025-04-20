@@ -67,6 +67,18 @@
     
 }
 
+/* Texts*/
+.wrapper .sidebar ul li a{
+    padding: 25px;
+    display: block;
+    
+}
+
+.wrapper .sidebar ul li a .fas{
+    width: 25px;
+    
+}
+
 /* signout button */
 #sign-out {
     position: absolute;
