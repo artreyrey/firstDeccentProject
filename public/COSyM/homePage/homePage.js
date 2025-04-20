@@ -17,7 +17,9 @@ signInButton.addEventListener('click', function(){
 //profile set up
 
 //dapat may role muna bago ka makapag navigate ng home and profile 
-//need ng animation para makapagset ng profile
+
+//need ng animation sa pprofile muna para makita ng users, dapat required
+
 //after making profile dapat
 
-//if admin or 
+//if admin mashoshow yung ibang buttons if member makikita lang and searching.
