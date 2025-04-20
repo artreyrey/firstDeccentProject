@@ -63,6 +63,7 @@
 /* navigating buttons */
 .wrapper .sidebar ul li {
     padding: 25px;
+    color: var(--gray-color);
     
 }
 
@@ -72,6 +73,7 @@
     bottom: 20px;
     left: 20px;
 }
-#main_content{
-    color: var(--cream-color);
+
+.main_content{
+    background-color: var(--cream-color);
 }
