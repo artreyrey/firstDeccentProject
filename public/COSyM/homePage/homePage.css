@@ -96,6 +96,13 @@
 }
 
 /* hovering icons & texts */
+
+.wrapper .sidebar ul li a.active {
+    color: var(--pearl-color);
+    background: var(--orange-color);
+    border-radius: var(--border-radius-m);
+}
+
 .wrapper .sidebar ul li a:hover {
     color: var(--pearl-color);
     background: var(--orange-color);
@@ -127,19 +134,51 @@ html{
     scroll-behavior: smooth;
 }
 
-/* Home Section */
-.home{
-    background-color: #5c5c5c;
+main{
+    background-color: var(--cream-color);
 }
 
-
-/* Profile Section */
-
-/* Members Section */
+/* FEATURES STYLES */
 
 /* Home Section */
+.home .home-content {
+    background-color: var(--cream-color);
+    color: var(--gray-color);
+
+}
+
+/* Profile Section */
+.profile .profile-content {
+    background-color: var(--cream-color);
+    color: var(--gray-color);
+
+}
+
+/* Members Section */
+.membets .members-content {
+    background-color: var(--cream-color);
+    color: var(--gray-color);
+
+}
 
 /* Funds Section */
+.funds .funds-content {
+    background-color: var(--cream-color);
+    color: var(--gray-color);
+
+}
+
+/* Events Section */
+.events .events-content {
+    background-color: var(--cream-color);
+    color: var(--gray-color);
+
+}
 
 /* Reviews Section */
+.reviews .reviews-content {
+    background-color: var(--cream-color);
+    color: var(--gray-color);
+
+}
 

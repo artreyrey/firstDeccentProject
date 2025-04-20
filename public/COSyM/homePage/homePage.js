@@ -1,50 +1,96 @@
 //displaying of signup/ login
 //ibahin pang navigate ng home page.
-// Get all buttons and sections
-const homeButton = document.getElementById('home-button');
-const profileButton = document.getElementById('profile-button');
-const membersButton = document.getElementById('members-button'); // Fixed ID to match HTML
-const fundsButton = document.getElementById('funds-button');
-const eventsButton = document.getElementById('events-button');
-const reviewsButton = document.getElementById('reviews-button');
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all buttons and sections
+    const homeButton = document.getElementById('home-button');
+    const profileButton = document.getElementById('profile-button');
+    const membersButton = document.getElementById('members-button');
+    const fundsButton = document.getElementById('funds-button');
+    const eventsButton = document.getElementById('events-button');
+    const reviewsButton = document.getElementById('reviews-button');
 
-const homeSection = document.getElementById('home-section');
-const profileSection = document.getElementById('profile-section');
-const membersSection = document.getElementById('members-section');
-const fundsSection = document.getElementById('funds-section');
-const eventsSection = document.getElementById('events-section');
-const reviewsSection = document.getElementById('reviews-section');
+    const homeSection = document.getElementById('home-section');
+    const profileSection = document.getElementById('profile-section');
+    const membersSection = document.getElementById('members-section');
+    const fundsSection = document.getElementById('funds-section');
+    const eventsSection = document.getElementById('events-section');
+    const reviewsSection = document.getElementById('reviews-section');
 
-// Hide all sections except home by default
-function initializeSections() {
-    homeSection.style.display = "block";
-    profileSection.style.display = "none";
-    membersSection.style.display = "none";
-    fundsSection.style.display = "none";
-    eventsSection.style.display = "none";
-    reviewsSection.style.display = "none";
-}
+    const navButtons = [homeButton, profileButton, membersButton, fundsButton, eventsButton, reviewsButton];
+    const sections = [homeSection, profileSection, membersSection, fundsSection, eventsSection, reviewsSection];
 
-// Show only the selected section
-function showSection(section) {
-    const allSections = [homeSection, profileSection, membersSection, 
-                        fundsSection, eventsSection, reviewsSection];
-    
-    allSections.forEach(sec => {
-        sec.style.display = sec === section ? "block" : "none";
+    // 1. Initialize page - show only home section and highlight home button
+    function initializePage() {
+        // Hide all sections
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Show home section
+        homeSection.style.display = 'block';
+        
+        // Remove active class from all buttons
+        navButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+        
+        // Add active class to home button
+        homeButton.classList.add('active');
+    }
+
+    // 2. Function to show a specific section and update active button
+    function showSection(sectionToShow, buttonToActivate) {
+        // Hide all sections
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Show the requested section
+        sectionToShow.style.display = 'block';
+        
+        // Remove active class from all buttons
+        navButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+        
+        // 3. Add active class to clicked button
+        buttonToActivate.classList.add('active');
+    }
+
+    // Set up event listeners for navigation buttons
+    homeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(homeSection, homeButton);
     });
-}
 
-// Add event listeners to buttons
-homeButton.addEventListener('click', () => showSection(homeSection));
-profileButton.addEventListener('click', () => showSection(profileSection));
-membersButton.addEventListener('click', () => showSection(membersSection));
-fundsButton.addEventListener('click', () => showSection(fundsSection));
-eventsButton.addEventListener('click', () => showSection(eventsSection));
-reviewsButton.addEventListener('click', () => showSection(reviewsSection));
+    profileButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(profileSection, profileButton);
+    });
 
-// Initialize on page load
-window.addEventListener('DOMContentLoaded', initializeSections);
+    membersButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(membersSection, membersButton);
+    });
+
+    fundsButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(fundsSection, fundsButton);
+    });
+
+    eventsButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(eventsSection, eventsButton);
+    });
+
+    reviewsButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(reviewsSection, reviewsButton);
+    });
+
+    // Initialize the page
+    initializePage();
+});
 
 
 //profile set up
