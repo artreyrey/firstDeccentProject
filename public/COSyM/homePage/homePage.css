@@ -78,7 +78,7 @@
     align-items: center;
     transition: all 0.3s;
     padding: 10px 15px;
-    letter-spacing: 1.1px;
+    letter-spacing: 1.1bpx;
 
 }
 
@@ -111,9 +111,9 @@
 main {
     display: block;
     width: 100%;
-    margin-left: 250px; /* Match sidebar width */
-    min-height: 100vh; /* Full height */
+    margin-left: 250px; 
+    min-height: 100vh; 
     color: var(--gray-color);
-    background-color: var(--cream-color); /* Your cream color */
+    background-color: var(--cream-color); 
     transition: all 0.3;
 }
