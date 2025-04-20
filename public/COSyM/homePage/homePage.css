@@ -103,11 +103,9 @@
     cursor: pointer; 
     transition: 0.3s ease;
     margin-left: 50px;
+
 }
 
-.wrapper .sidebar ul li a:active {
-    transform: scale(0.98); /* Subtle "pressed" effect */
-}
 
 main {
     display: block;
