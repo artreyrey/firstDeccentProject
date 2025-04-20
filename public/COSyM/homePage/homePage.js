@@ -95,12 +95,21 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.querySelector('.sidebar-toggle');
     const sidebar = document.querySelector('.sidebar');
+    const navLinks = document.querySelectorAll('.sidebar ul li a:not(#sign-out-button)');
     
+    // Toggle sidebar
     toggleBtn.addEventListener('click', function() {
         sidebar.classList.toggle('active');
     });
     
-    // Close sidebar when clicking outside (optional)
+    // Close sidebar when clicking on any nav link (except Sign Out)
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+        });
+    });
+    
+    // Close sidebar when clicking outside
     document.addEventListener('click', function(e) {
         if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
             sidebar.classList.remove('active');

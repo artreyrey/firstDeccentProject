@@ -182,6 +182,7 @@ text-align: center;
 }
 
 /* responsiveness */
+
 /* Mobile Toggle Button (Hidden on Desktop) */
 .sidebar-toggle {
     display: none;
@@ -189,11 +190,8 @@ text-align: center;
     top: 20px;
     left: 20px;
     z-index: 1100;
-    background: var(--orange-color);
-    color: white;
-    border: none;
+    color: var(--orange-color);
     padding: 10px;
-    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -207,23 +205,35 @@ text-align: center;
     /* Show sidebar when active */
     .wrapper .sidebar.active {
         transform: translateX(0);
+        backdrop-filter: blur(5px);
     }
     
     /* Show toggle button */
     .sidebar-toggle {
         display: block;
+        transform: scale(1.8);
+        transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28); /* Add this line */
     }
-
+    
     .sidebar-toggle:active {
-    transform: scale(0.95);
-    opacity: 0.9;
-}
+        transform: scale(1.3);
+        opacity: 0.9;
+        transition: all 0.15s ease-out;
+    }
+    
+    .sidebar-toggle i {
+        font-size: 20px;
+        transition: transform 0.3s ease;
+    }
     
     /* Adjust main content */
     main {
         margin-left: 0 !important;
         width: 100% !important;
         padding: 20px !important;
+    }
+    .wrapper .sidebar h2{
+        margin-top: 40px;
     }
     
     /* Compact menu items */
@@ -245,5 +255,49 @@ text-align: center;
         left: auto;
         margin-top: 20px;
     }
+    
 
+    /* transition */
+
+    /* Sidebar Base Styles */
+.wrapper .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98); /* 98% opaque white */
+    backdrop-filter: blur(5px); /* Optional subtle blur effect */
+    padding: 30px 0;
+    z-index: 1000;
+    
+    /* Initial hidden state */
+    transform: translateX(-100%); /* Starts off-screen */
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+}
+
+/* Active State (Visible) */
+.wrapper .sidebar.active {
+    transform: translateX(0); /* Slides in */
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Optional Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
 }
