@@ -65,5 +65,11 @@ April 18, 2025
 
   April 23 2025:
   = I started coding agin at nightto make my profile  gui's and also my backend code
+  = i am planning to add a feature to my website where in the person can add details in their profile such as course, year, name, and their gmail. what can i do to make that happen using firebase. 
+  = I wanted this to happen:
+      1. add details
+      2. the details will go to the firebase database location
+      3. I can get the data from data base and show it in my html website
+      1. Make gui first then connect java script firebase 
   
   
