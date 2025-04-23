@@ -136,14 +136,6 @@ main {
     color: var(--gray-color);
 }
 
-/* Profile Section */
-.profile {
-    text-align: center;
-    font-size: var(--font-size-xxl);
-    margin-top: 300px;
-    color: var(--gray-color);
-
-}
 
 /* Members Section */
 .members .members-content {
