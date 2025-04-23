@@ -189,7 +189,13 @@ text-align: center;
 
 /* Profile section designs */
 
+.profile {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    margin-top: 300px;
+    color: var(--gray-color);
 
+}
 
 
 /* Mobile Styles of sidebars and main*/
