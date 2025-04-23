@@ -195,7 +195,12 @@ text-align: center;
     cursor: pointer;
 }
 
-/* Mobile Styles */
+/* Profile section designs */
+
+
+
+
+/* Mobile Styles of sidebars and main*/
 @media (max-width: 768px) {
     /* Hide sidebar by default on mobile */
     .wrapper .sidebar {

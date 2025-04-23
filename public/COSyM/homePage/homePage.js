@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //profile set up
-
+// profile fetching
 //dapat may role muna bago ka makapag navigate ng home and profile 
 
 //need ng animation sa pprofile muna para makita ng users, dapat required
