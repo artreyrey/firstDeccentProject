@@ -212,7 +212,7 @@ text-align: center;
     .sidebar-toggle {
         display: block;
         transform: scale(1.8);
-        transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28); /* Add this line */
+        transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     }
     
     .sidebar-toggle:active {
