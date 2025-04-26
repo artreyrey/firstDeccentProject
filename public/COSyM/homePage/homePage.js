@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //profile set up
+//JAVA SCRIPT NG PROFILE
 // profile fetching
 //dapat may role muna bago ka makapag navigate ng home and profile 
 
