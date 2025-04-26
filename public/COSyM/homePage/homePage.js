@@ -145,6 +145,10 @@ saveButton.addEventListener('click', function(){
     displayForm.style.display="none";
 })
 
+cancelButton.addEventListener('click', function(){
+    editForm.style.display="block";
+    displayForm.style.display="none";
+})
 
 
 // profile fetching
