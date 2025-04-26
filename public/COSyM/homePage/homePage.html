@@ -43,6 +43,7 @@
                     <div class="mode-switch">
                         <button id="editButton" class="switch-btn">Switch to Edit Mode</button>
                     </div>
+                    
                     <!-- Display -->
                     <div id="displayMode" class="profile-content">
                         <img src="https://via.placeholder.com/200" alt="Profile Picture" class="profile-picture">
@@ -78,6 +79,54 @@
                     </div>
                 </div>
             
+                    <!-- Edit Mode -->
+        <div id="editMode" class="profile-content edit-form">
+            <img src="https://via.placeholder.com/200" alt="Profile Picture" class="profile-picture">
+            <div class="profile-info">
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="editCourse">Course:</label>
+                    <input type="text" id="editCourse" value="Computer Science">
+                </div>
+                <div class="form-group">
+                    <label for="editYear">Year:</label>
+                    <select id="editYear">
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option selected>3rd Year</option>
+                        <option>4th Year</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editRole">Role:</label>
+                    <select id="editRole">
+                        <option selected>Student</option>
+                        <option>Teacher</option>
+                        <option>Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" value="john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status:</label>
+                    <select id="editStatus">
+                        <option selected>Active</option>
+                        <option>Inactive</option>
+                        <option>On Leave</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button class="cancel-btn" id="cancelEditBtn">Cancel</button>
+                    <button class="save-btn" id="saveProfileBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
             </section>
             
             <!-- members section -->
