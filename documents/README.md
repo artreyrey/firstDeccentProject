@@ -14,7 +14,7 @@ March 30, 2025
   = Callendars next 5th day
   = Freedom wall next 6th day
   = home page 7th day
-  = foucs on day 1's and not general
+  = foucs on day 1's and not general 
   = I will take 3 rest day before starting while brainstorming
   = I need to be more disciplined
 
