@@ -133,13 +133,16 @@ const cancelButton  =document.getElementById('cancelEditBtn');
 const editForm=document.getElementById('editMode');
 const displayForm=document.getElementById('displayMode');
 
-signUpButton.addEventListener('click',function(){
-    signInForm.style.display="none";
-    signUpForm.style.display="block";
+editButton.addEventListener('click',function(){
+    editForm.style.display="none";
+    displayForm.style.display="block";
+
+    
 })
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
+
+saveButton.addEventListener('click', function(){
+    editForm.style.display="block";
+    displayForm.style.display="none";
 })
 
 
