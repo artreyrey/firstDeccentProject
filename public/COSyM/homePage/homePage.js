@@ -116,39 +116,72 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-//Edit Save button
-
 // Firebase configuration 
 
 
 //profile set up
+const editButton = document.getElementById('editButton');
+const saveButton = document.getElementById('saveProfileBtn');
+const cancelButton = document.getElementById('cancelEditBtn');
 
+const editForm = document.getElementById('editMode');
+const displayForm = document.getElementById('displayMode');
 
-//JAVA SCRIPT NG PROFILE
-const editButton=document.getElementById('editProfileBtn');
-const saveButton=document.getElementById('saveProfileBtn');
-const cancelButton  =document.getElementById('cancelEditBtn');
+// Form fields
+const editName = document.getElementById('editName');
+const editCourse = document.getElementById('editCourse');
+const editYear = document.getElementById('editYear');
+const editRole = document.getElementById('editRole');
+const editEmail = document.getElementById('editEmail');
+const editStatus = document.getElementById('editStatus');
 
-const editForm=document.getElementById('editMode');
-const displayForm=document.getElementById('displayMode');
+// Display fields
+const displayName = document.getElementById('displayName');
+const displayCourse = document.getElementById('displayCourse');
+const displayYear = document.getElementById('displayYear');
+const displayRole = document.getElementById('displayRole');
+const displayEmail = document.getElementById('displayEmail');
+const displayStatus = document.getElementById('displayStatus');
 
-editButton.addEventListener('click',function(){
-    editForm.style.display="none";
-    displayForm.style.display="block";
-
+// Edit button click handler
+editButton.addEventListener('click', function() {
+    // Copy current display values to edit form
+    editName.value = displayName.textContent;
+    editCourse.value = displayCourse.textContent;
+    editYear.value = displayYear.textContent;
+    editRole.value = displayRole.textContent;
+    editEmail.value = displayEmail.textContent;
+    editStatus.value = displayStatus.textContent;
     
-})
+    // Switch modes
+    displayForm.style.display = "none";
+    editForm.style.display = "flex";
+});
 
-saveButton.addEventListener('click', function(){
-    editForm.style.display="block";
-    displayForm.style.display="none";
-})
+// Save button click handler
+saveButton.addEventListener('click', function() {
+    // Update display with edited values
+    displayName.textContent = editName.value;
+    displayCourse.textContent = editCourse.value;
+    displayYear.textContent = editYear.value;
+    displayRole.textContent = editRole.value;
+    displayEmail.textContent = editEmail.value;
+    displayStatus.textContent = editStatus.value;
+    
+    // Switch back to display mode
+    displayForm.style.display = "flex";
+    editForm.style.display = "none";
+    
+    // Here you would typically add your Firebase save logic
+    // saveToFirebase();
+});
 
-cancelButton.addEventListener('click', function(){
-    editForm.style.display="block";
-    displayForm.style.display="none";
-})
+// Cancel button click handler
+cancelButton.addEventListener('click', function() {
+    // Just switch back to display mode without saving
+    displayForm.style.display = "flex";
+    editForm.style.display = "none";
+});
 
 
 // profile fetching
