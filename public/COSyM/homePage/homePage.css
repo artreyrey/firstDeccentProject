@@ -191,7 +191,7 @@ text-align: center;
 
 .profile {
     text-align: center;
-    font-size: var(--font-size-xxl);
+    font-size: var(50px);
     margin-top: 300px;
     color: var(--gray-color);
 
