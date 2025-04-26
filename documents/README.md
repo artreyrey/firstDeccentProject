@@ -14,12 +14,12 @@ March 30, 2025
   = Callendars next 5th day
   = Freedom wall next 6th day
   = home page 7th day
-  = foucs on day 1's and not general
+  = foucs on day 1's and not general 
   = I will take 3 rest day before starting while brainstorming
   = I need to be more disciplined
 
 Aprill 1, 2025
-  = We need to make home page first, and then login and sign up now.
+  = We need to make home page first, and then login and sign up now. 
   = wakeup 4 am to code 5 hrs
   = wake up, open visual studio
   = watch youtube tutorial
