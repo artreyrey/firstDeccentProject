@@ -44,7 +44,7 @@ April 2, 2025
   *Done:
   = logo done
   = navbar next code
-  = home page, features, 
+  = home page, features,  
 April 18, 2025
   = Im done with the login/signup page and home pages.
   = Im also done making firebase authentications like signin using google and facebook.
