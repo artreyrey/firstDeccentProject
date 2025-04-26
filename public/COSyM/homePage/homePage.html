@@ -58,19 +58,19 @@
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Year:</span>
-                                <span class="info-value" id="displayYear">3rd Year</span>
+                                <span class="info-value" id="displayYear"></span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Role:</span>
-                                <span class="info-value" id="displayRole">Student</span>
+                                <span class="info-value" id="displayRole"></span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Email:</span>
-                                <span class="info-value" id="displayEmail">john.doe@example.com</span>
+                                <span class="info-value" id="displayEmail"></span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Status:</span>
-                                <span class="info-value" id="displayStatus">Active</span>
+                                <span class="info-value" id="displayStatus"></span>
                             </div>
                             <div class="button-group">
                                 <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
@@ -97,10 +97,11 @@
                 <div class="form-group">
                     <label for="editYear">Year:</label>
                     <select id="editYear">
-                        <option selected>1st Year</option>
+                        <option>1st Year</option>
                         <option>2nd Year</option>
                         <option>3rd Year</option>
                         <option>4th Year</option>
+                        <option selected>N/A</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -112,9 +113,15 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail">
+                </div>
+
+                <div class="form-group">
                     <label for="editStatus">Status:</label>
                     <input type="text" id="editStatus">
                 </div>
+                
                 <div class="button-save">
                     <button class="cancel-btn" id="cancelEditBtn">Cancel</button>
                     <button class="save-btn" id="saveProfileBtn">Save Changes</button>
