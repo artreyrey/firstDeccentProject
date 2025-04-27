@@ -204,8 +204,17 @@ text-align: center;
     padding: 20px;
   
 }
-/* Profile informaiton designs */
-.profile .profile-content
+
+/* Profile picture designs */
+.profile .profile-content .profile-picture{
+    margin-right: 50px;
+    width: 200px; /* Adjust this value to make it smaller */
+    height: 200px; /* Keep same as width for perfect circle */
+    padding: 1px;
+    border-radius: 50%; /* Makes it perfectly circular */
+    border: 7px solid var(--orange-color); /* Proper border syntax */
+    object-fit: cover; /* Ensures image fills circle without distortion */
+}
 
 
 /* button designs */
