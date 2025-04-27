@@ -205,14 +205,11 @@ text-align: center;
   
 }
 /* Profile informaiton designs */
-.profile .profile-content, .profile-content-edit-form {
-
-}
+.profile .profile-content
 
 
 /* button designs */
-
-.profile .profile-content .mode-switch .switch-btn, .button-save .cancel-btn, .button-save .save-btn {
+.profile .profile-content .mode-switch .switch-btn,.cancel-btn, .save-btn {
     cursor: pointer;
     padding: 10px;
     display: block;
@@ -222,16 +219,17 @@ text-align: center;
     transition: all 0.3s;
     padding: 10px 15px;
     letter-spacing: 1.1px;
-
     background-color: transparent;
     border-color: transparent;
-
-    float: right; /* Pushes button to the right */
-
-    padding: 10px;
-    margin-left: 0;;
-
     
+}
+
+/* button position */
+.profile .profile-content .mode-switch .switch-btn, .profile .profile-content .button-save{
+    position: absolute;
+    top: 130px; 
+    right: 140px; 
+    z-index: 100; 
 }
 
 .profile .profile-content i {
@@ -242,6 +240,7 @@ text-align: center;
     transform-origin: center; 
     display: inline-block;
     will-change: transform, color; 
+    
 }
 
 .profile .profile-content i:hover {
