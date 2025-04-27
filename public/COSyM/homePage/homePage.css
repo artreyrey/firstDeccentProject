@@ -210,6 +210,11 @@ text-align: center;
 
 /* button designs */
 
+.profile .profile-content .mode-switch {
+    float: right; /* Pushes button to the right */
+    padding: 10px;
+}
+
 .profile .profile-content .mode-switch .switch-btn,.cancel-btn, .save-btn {
     cursor: pointer;
     padding: 10px;
@@ -223,6 +228,8 @@ text-align: center;
 
     background-color: transparent;
     border-color: transparent;
+
+    margin-left: 0;;
 
     
 }
