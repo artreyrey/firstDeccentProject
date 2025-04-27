@@ -290,17 +290,17 @@ text-align: center;
 }
 /* Profile section designs */
 .profile{
-    padding: 50px;
-    
-}
-.profile .profile-content {
-    background-color: var(--pearl-color);
+    margin-top: 60px;
+    margin-left: 60px;
+    margin-right: 60px;
+    padding: 10px;
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.15);
+    background-color: var(--pearl-color);    
     border-radius: var(--font-size-m);
     padding: 40px;
     
-    
 }
-
+/* Profile title */
 .profile .profile-content .profile-header{
     color: var(--orange-color);
     font-size: var(--font-size-l);
