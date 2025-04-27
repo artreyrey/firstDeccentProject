@@ -188,10 +188,13 @@ text-align: center;
 }
 
 /* Profile section designs */
-
+.profile{
+    padding: 40px;
+}
 .profile .profile-content {
     background-color: var(--pearl-color);
     border-radius: var(--font-size-m);
+    padding: 40px;
 }
 
 .profile .profile-content .profile-header{
@@ -201,7 +204,7 @@ text-align: center;
 }
 
 .profile .profile-content .mode-switch{
-    border-radius: var(--border-radius-m);
+   
 }
 
 
