@@ -174,6 +174,7 @@ saveButton.addEventListener('click', function() {
     
     // Here you would typically add your Firebase save logic
     // saveToFirebase();
+    // save the profile in the firebase too
 });
 
 // Cancel button click handler
