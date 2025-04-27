@@ -203,8 +203,24 @@ text-align: center;
     display: flex;
 }
 
-.profile .profile-content .mode-switch{
-   
+.profile .profile-content .mode-switch .switch-btn,.cancel-btn, .save-btn {
+    cursor: pointer;
+    background-color: var(--gray-color);
+    color: var(--cream-color);
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 550;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 10px 15px;
+    letter-spacing: 1.1px;
+    
+}
+
+.profile .profile-content .mode-switch i{
+    color: var(--cream-color);
 }
 
 
