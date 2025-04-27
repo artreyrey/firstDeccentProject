@@ -213,7 +213,13 @@ text-align: center;
     margin-left: 50px;
 }
 
-
+.profile .profile-content .profile-info .info-row .info-value{
+    color: var(--gray-color);
+    font-size: 21px;
+    font-weight: 560;
+    line-height: 2;
+    margin-left: 5px;
+}
 
 /* button designs */
 .profile .profile-content .mode-switch .switch-btn,.cancel-btn, .save-btn {
