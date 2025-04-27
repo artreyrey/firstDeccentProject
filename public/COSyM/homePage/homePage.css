@@ -333,11 +333,12 @@ text-align: center;
 .profile .profile-content .profile-info .form-group .edit-name, .edit-course, .edit-year, .edit-role, .edit-email{
     background-color: var(--cream-color);
     border-radius: var(--font-size-s);
-    border-color: var(--gray-color);
+    border: 1px solid var(--gray-color);
     font-size: var(--font-size-m);
     color: var(--gray-color);
     text-align: center;
     padding: 1px;
+    
 
 }
 
