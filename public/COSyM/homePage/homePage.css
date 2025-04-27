@@ -304,6 +304,7 @@ text-align: center;
 .profile .profile-content .profile-header{
     color: var(--orange-color);
     font-size: var(--font-size-l);
+    margin-bottom: 25px;
     display: flex;
     padding: 20px;
 }
@@ -311,6 +312,7 @@ text-align: center;
 /* Profile picture designs */
 .profile .profile-content .profile-picture{
     margin-right: 50px;
+    margin-left: 25px;
     width: 200px; 
     height: 200px; 
     border-radius: 50%; 
@@ -324,7 +326,11 @@ text-align: center;
     font-size: 28px;
     font-weight: 600;
     margin-left: 50px;
+    margin-bottom: 50px;
 }
+
+/* Labels and choices design */
+
 
 /* Values design */
 .profile .profile-content .profile-info .info-row .info-value{
