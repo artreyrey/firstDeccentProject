@@ -189,12 +189,19 @@ text-align: center;
 
 /* Profile section designs */
 
-.profile {
-    text-align: center;
-    font-size: var(50px);
-    margin-top: 300px;
-    color: var(--gray-color);
+.profile .profile-content {
+    background-color: var(--pearl-color);
+    border-radius: var(--font-size-m);
+}
 
+.profile .profile-content .profile-header{
+    color: var(--orange-color);
+    font-size: var(--font-size-l);
+    display: flex;
+}
+
+.profile .profile-content{
+    
 }
 
 
