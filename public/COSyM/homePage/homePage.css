@@ -205,17 +205,14 @@ text-align: center;
   
 }
 /* Profile informaiton designs */
+.profile .profile-content, .profile-content-edit-form {
 
+}
 
 
 /* button designs */
 
-.profile .profile-content .mode-switch {
-    float: right; /* Pushes button to the right */
-    padding: 10px;
-}
-
-.profile .profile-content .mode-switch .switch-btn,.cancel-btn, .save-btn {
+.profile .profile-content .mode-switch .switch-btn, .button-save .cancel-btn, .button-save .save-btn {
     cursor: pointer;
     padding: 10px;
     display: block;
@@ -229,6 +226,9 @@ text-align: center;
     background-color: transparent;
     border-color: transparent;
 
+    float: right; /* Pushes button to the right */
+
+    padding: 10px;
     margin-left: 0;;
 
     
