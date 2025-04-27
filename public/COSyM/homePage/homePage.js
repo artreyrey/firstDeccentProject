@@ -116,6 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+// Profile section edit adn display connected to firebase
 // Firebase configuration 
 
 
