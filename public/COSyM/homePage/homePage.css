@@ -173,28 +173,16 @@ text-align: center;
 
 }
 
-/* responsiveness */
-
-/* Mobile Toggle Button (Hidden on Desktop) */
-.sidebar-toggle {
-    display: none;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1100;
-    color: var(--orange-color);
-    padding: 10px;
-    cursor: pointer;
-}
-
 /* Profile section designs */
 .profile{
     padding: 50px;
+    
 }
 .profile .profile-content {
     background-color: var(--pearl-color);
     border-radius: var(--font-size-m);
     padding: 40px;
+    
 }
 
 .profile .profile-content .profile-header{
@@ -202,6 +190,7 @@ text-align: center;
     font-size: var(--font-size-l);
     display: flex;
     padding: 20px;
+    
   
 }
 
@@ -215,6 +204,15 @@ text-align: center;
     border: 7px solid var(--orange-color); /* Proper border syntax */
     object-fit: cover; /* Ensures image fills circle without distortion */
 }
+
+/* profile texts designs */
+.profile .profile-content {
+    color: var(--gray-color);
+    font-size: 28px;
+    font-weight: 600;
+    margin-left: 50px;
+}
+
 
 
 /* button designs */
@@ -265,6 +263,17 @@ text-align: center;
 
 
 /* Mobile Styles of sidebars and main*/
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    color: var(--orange-color);
+    padding: 10px;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     /* Hide sidebar by default on mobile */
     .wrapper .sidebar {
