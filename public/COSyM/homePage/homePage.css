@@ -313,7 +313,6 @@ text-align: center;
     margin-right: 50px;
     width: 200px; 
     height: 200px; 
-    padding: 1px;
     border-radius: 50%; 
     border: 7px solid var(--orange-color);
     object-fit: cover;
@@ -327,6 +326,7 @@ text-align: center;
     margin-left: 50px;
 }
 
+/* Values design */
 .profile .profile-content .profile-info .info-row .info-value{
     color: var(--gray-color);
     font-size: 24px;
