@@ -136,7 +136,6 @@ const editCourse = document.getElementById('editCourse');
 const editYear = document.getElementById('editYear');
 const editRole = document.getElementById('editRole');
 const editEmail = document.getElementById('editEmail');
-const editStatus = document.getElementById('editStatus');
 
 // Display fields
 const displayName = document.getElementById('displayName');
@@ -160,6 +159,7 @@ editButton.addEventListener('click', function() {
     editStatus.value = displayStatus.textContent;
     
     // Switch modes
+    editButton.style.display = "none";
     displayForm.style.display = "none";
     editForm.style.display = "flex";
 });
@@ -177,6 +177,7 @@ saveButton.addEventListener('click', function() {
     // Switch back to display mode
     displayForm.style.display = "flex";
     editForm.style.display = "none";
+    editButton.style.display = "flex";
     
     // Here you would typically add your Firebase save logic
     // saveToFirebase();
@@ -188,6 +189,7 @@ cancelButton.addEventListener('click', function() {
     // Just switch back to display mode without saving
     displayForm.style.display = "flex";
     editForm.style.display = "none";
+    editButton.style.display = "flex";
 });
 
 

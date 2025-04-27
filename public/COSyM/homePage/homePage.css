@@ -189,7 +189,7 @@ text-align: center;
 
 /* Profile section designs */
 .profile{
-    padding: 40px;
+    padding: 50px;
 }
 .profile .profile-content {
     background-color: var(--pearl-color);
@@ -201,12 +201,12 @@ text-align: center;
     color: var(--orange-color);
     font-size: var(--font-size-l);
     display: flex;
+  
 }
 
+/* button designs */
 .profile .profile-content .mode-switch .switch-btn,.cancel-btn, .save-btn {
     cursor: pointer;
-    background-color: var(--gray-color);
-    color: var(--cream-color);
     padding: 10px;
     display: block;
     text-decoration: none;
@@ -216,11 +216,31 @@ text-align: center;
     transition: all 0.3s;
     padding: 10px 15px;
     letter-spacing: 1.1px;
+
+    background-color: transparent;
+    border-color: transparent;
     
 }
 
-.profile .profile-content .mode-switch i{
-    color: var(--cream-color);
+.profile .profile-content i {
+    color: var(--gray-color);
+    font-weight: 550;
+    font-size: xx-large;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    transform-origin: center; 
+    display: inline-block;
+    will-change: transform, color; 
+}
+
+.profile .profile-content i:hover {
+    transform: scale(1.15);
+    color: var(--orange-color);
+}
+
+.profile .profile-content i:active {
+    transform: scale(0.95) translateY(1px); 
+    color: var(--orange-color);
+    transition-duration: 0.1s;
 }
 
 
