@@ -143,7 +143,6 @@ const displayCourse = document.getElementById('displayCourse');
 const displayYear = document.getElementById('displayYear');
 const displayRole = document.getElementById('displayRole');
 const displayEmail = document.getElementById('displayEmail');
-const displayStatus = document.getElementById('displayStatus');
 
 // Edit button click handler
 displayForm.style.display = "flex";
@@ -156,7 +155,6 @@ editButton.addEventListener('click', function() {
     editYear.value = displayYear.textContent;
     editRole.value = displayRole.textContent;
     editEmail.value = displayEmail.textContent;
-    editStatus.value = displayStatus.textContent;
     
     // Switch modes
     editButton.style.display = "none";
@@ -172,7 +170,6 @@ saveButton.addEventListener('click', function() {
     displayYear.textContent = editYear.value;
     displayRole.textContent = editRole.value;
     displayEmail.textContent = editEmail.value;
-    displayStatus.textContent = editStatus.value;
     
     // Switch back to display mode
     displayForm.style.display = "flex";
