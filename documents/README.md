@@ -42,7 +42,7 @@ April 2, 2025
   = 1 logo, navigation, home
 
   *Done:
-  = logo done
+  = logo done 
   = navbar next code
   = home page, features,  
 April 18, 2025
