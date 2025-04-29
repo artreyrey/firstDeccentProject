@@ -341,10 +341,11 @@ text-align: center;
     
 
 }
-.profile .profile-content .profile-info .form-group .last-name-label {
+
+.profile .profile-content .profile-info .form-group .edit-middle-initial{
+    width: 10%;
     display: block;
-    width: 100%;
-    margin-top: 8px;
+    position: relative;
 }
 
 
