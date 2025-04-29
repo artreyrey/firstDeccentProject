@@ -341,9 +341,12 @@ text-align: center;
     
 
 }
-.profile .profile-content .profile-info .form-group .label-last-name{
-    padding-top: 500px;
+.profile .profile-content .profile-info .form-group .last-name-label {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
 }
+
 
 /* Values design */
 .profile .profile-content .profile-info {
