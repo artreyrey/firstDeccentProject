@@ -229,9 +229,9 @@ saveButton.addEventListener('click', function() {
 cancelButton.addEventListener('click', function() {
 
     // Switch back to display mode
-    editButton.style.display = "none";
-    displayForm.style.display = "none";
-    editForm.style.display = "flex";
+    displayForm.style.display = "flex";
+    editForm.style.display = "none";
+    editButton.style.display = "flex";
 });
 
 
