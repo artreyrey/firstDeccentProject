@@ -15,7 +15,7 @@
     projectId: "login-form-783e1",
     storageBucket: "login-form-783e1.firebasestorage.app",
     messagingSenderId: "598925515666",
-    appId: "1:598925515666:web:b16534b6158c7232a47f4b"
+    appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
   };
 
 const app = initializeApp(firebaseConfig);

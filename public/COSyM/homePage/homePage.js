@@ -226,6 +226,15 @@ saveButton.addEventListener('click', function() {
     // save the profile in the firebase too
 });
 
+cancelButton.addEventListener('click', function() {
+
+    // Switch back to display mode
+    editButton.style.display = "none";
+    displayForm.style.display = "none";
+    editForm.style.display = "flex";
+});
+
+
 
 
 

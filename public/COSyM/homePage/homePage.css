@@ -318,6 +318,7 @@ text-align: center;
     border-radius: 50%; 
     border: 7px solid var(--orange-color);
     object-fit: cover;
+    margin-top: -10px;
 }
 
 /* profile texts designs */
@@ -328,7 +329,7 @@ text-align: center;
     margin-left: 50px;
     margin-bottom: 60px;
 }
-.profile .profile-content .info-row{
+.profile .profile-content .info-row .info-label{
     color: var(--orange-color);
 }
 
@@ -356,7 +357,7 @@ text-align: center;
     line-height: 2.3;
     margin-left: 50px;
     letter-spacing: 0.1px;
-    margin-top: -50px;
+    margin-top: -23px;
 }
 
 /* button designs */
