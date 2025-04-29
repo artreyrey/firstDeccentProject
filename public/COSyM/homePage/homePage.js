@@ -253,15 +253,4 @@ cancelButton.addEventListener('click', function() {
 });
 
 
-
-
-
-
-// profile fetching
-//dapat may role muna bago ka makapag navigate ng home and profile 
-
-//need ng animation sa pprofile muna para makita ng users, dapat required
-
-//after making profile dapat
-
-//if admin mashoshow yung ibang buttons if member makikita lang and searching.
+//profile picture
