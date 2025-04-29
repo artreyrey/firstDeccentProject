@@ -330,7 +330,7 @@ text-align: center;
 }
 
 /* Labels and choices design */
-.profile .profile-content .profile-info .form-group .edit-first-name,.edit-middle-name, .edit-lastname, .edit-course, .edit-year, .edit-role, .edit-email, .edit-password{
+.profile .profile-content .profile-info .form-group .edit-first-name, .edit-middle-initial, .edit-last-name, .edit-course, .edit-year, .edit-role, .edit-email, .edit-password{
     background-color: var(--cream-color);
     border-radius: var(--font-size-s);
     border: 1px solid var(--gray-color);

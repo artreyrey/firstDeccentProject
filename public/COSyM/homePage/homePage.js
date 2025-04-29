@@ -130,12 +130,15 @@ const cancelButton = document.getElementById('cancelEditBtn');
 const editForm = document.getElementById('editMode');
 const displayForm = document.getElementById('displayMode');
 
-// Form fields
-const editName = document.getElementById('editName');
+// Edit form fields
+const editFirstName = document.getElementById('editFirstName');
+const editMiddleInitial = document.getElementById('editMiddleInitial');
+const editLastName = document.getElementById('editLastName'); 
 const editCourse = document.getElementById('editCourse');
 const editYear = document.getElementById('editYear');
 const editRole = document.getElementById('editRole');
 const editEmail = document.getElementById('editEmail');
+const editPass = document.getElementById('editPass');
 
 // Display fields
 const displayName = document.getElementById('displayName');
@@ -144,17 +147,52 @@ const displayYear = document.getElementById('displayYear');
 const displayRole = document.getElementById('displayRole');
 const displayEmail = document.getElementById('displayEmail');
 
-// Edit button click handler
+// Initialize modes
 displayForm.style.display = "flex";
 editForm.style.display = "none";
 
+// Helper function to combine name parts
+function combineName(first, middle, last) {
+    return `${first} ${middle ? middle + ' ' : ''}${last}`;
+}
+
+// Helper function to split full name into parts
+function splitName(fullName) {
+    const parts = fullName.split(' ');
+    if (parts.length === 3) {
+        return {
+            first: parts[0],
+            middle: parts[1],
+            last: parts[2]
+        };
+    } else if (parts.length === 2) {
+        return {
+            first: parts[0],
+            middle: '',
+            last: parts[1]
+        };
+    }
+    return {
+        first: fullName,
+        middle: '',
+        last: ''
+    };
+}
+
+// Edit button click handler
 editButton.addEventListener('click', function() {
+    // Split the display name into parts for the edit form
+    const nameParts = splitName(displayName.textContent);
+    
     // Copy current display values to edit form
-    editName.value = displayName.textContent;
+    editFirstName.value = nameParts.first;
+    editMiddleInitial.value = nameParts.middle;
+    editLastName.value = nameParts.last;
     editCourse.value = displayCourse.textContent;
     editYear.value = displayYear.textContent;
     editRole.value = displayRole.textContent;
     editEmail.value = displayEmail.textContent;
+    editPass.value = ''; // Clear password field for security
     
     // Switch modes
     editButton.style.display = "none";
@@ -164,8 +202,15 @@ editButton.addEventListener('click', function() {
 
 // Save button click handler
 saveButton.addEventListener('click', function() {
+    // Combine name parts for display
+    const fullName = combineName(
+        editFirstName.value.trim(),
+        editMiddleInitial.value.trim(),
+        editLastName.value.trim()
+    );
+    
     // Update display with edited values
-    displayName.textContent = editName.value;
+    displayName.textContent = fullName;
     displayCourse.textContent = editCourse.value;
     displayYear.textContent = editYear.value;
     displayRole.textContent = editRole.value;
@@ -181,13 +226,8 @@ saveButton.addEventListener('click', function() {
     // save the profile in the firebase too
 });
 
-// Cancel button click handler
-cancelButton.addEventListener('click', function() {
-    // Just switch back to display mode without saving
-    displayForm.style.display = "flex";
-    editForm.style.display = "none";
-    editButton.style.display = "flex";
-});
+
+
 
 
 // profile fetching
