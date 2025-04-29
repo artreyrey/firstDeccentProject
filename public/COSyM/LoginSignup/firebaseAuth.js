@@ -125,7 +125,7 @@ resetLink.addEventListener('click', async (e) => {
 });
 
 
-// This single function handles Google login
+// Google login
 const googleAuth = () => {
   signInWithPopup(auth, new GoogleAuthProvider())
     .then(() => {
