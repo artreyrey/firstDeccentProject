@@ -253,4 +253,4 @@ cancelButton.addEventListener('click', function() {
 });
 
 
-//profile picture
+//profile
