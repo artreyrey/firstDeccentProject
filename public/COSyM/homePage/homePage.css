@@ -304,7 +304,7 @@ text-align: center;
 .profile .profile-content .profile-header{
     color: var(--orange-color);
     font-size: var(--font-size-l);
-    margin-bottom: 25px;
+    margin-bottom: 55px;
     display: flex;
     padding: 20px;
 }
@@ -328,6 +328,9 @@ text-align: center;
     margin-left: 50px;
     margin-bottom: 60px;
 }
+.profile .profile-content .info-row{
+    color: var(--orange-color);
+}
 
 /* Labels and choices design */
 .profile .profile-content .profile-info .form-group .edit-first-name, .edit-middle-initial, .edit-last-name, .edit-course, .edit-year, .edit-role, .edit-email, .edit-password{
@@ -338,14 +341,10 @@ text-align: center;
     color: var(--gray-color);
     text-align: center;
     padding: 1px;
-    
-
 }
 
 .profile .profile-content .profile-info .form-group .edit-middle-initial{
-    width: 10%;
-    display: block;
-    position: relative;
+    width: 7%;
 }
 
 
@@ -357,6 +356,7 @@ text-align: center;
     line-height: 2.3;
     margin-left: 50px;
     letter-spacing: 0.1px;
+    margin-top: -50px;
 }
 
 /* button designs */
