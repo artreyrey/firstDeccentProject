@@ -119,7 +119,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Profile section edit adn display connected to firebase data base
-// Firebase configuration 
+// Only these Firebase imports are needed for document updates:
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getFirestore, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+// Your Firebase config (unchanged)
+const firebaseConfig = {
+  apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
+  authDomain: "login-form-783e1.firebaseapp.com",
+  projectId: "login-form-783e1",
+  storageBucket: "login-form-783e1.appspot.com",
+  messagingSenderId: "598925515666",
+  appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
+};
+
+// Initialize services
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(); // Firestore instance
 
 //profile set up
 const editButton = document.getElementById('editButton');
@@ -203,7 +219,7 @@ editButton.addEventListener('click', function() {
     editYear.value = displayYear.textContent;
     editRole.value = displayRole.textContent;
     editEmail.value = displayEmail.textContent;
-    editPass.value = ''; // Clear password field for security
+    editPass.value = ''; 
     
     // Switch modes
     editButton.style.display = "none";
