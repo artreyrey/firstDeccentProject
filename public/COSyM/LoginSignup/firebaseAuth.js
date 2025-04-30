@@ -91,7 +91,7 @@ signIn.addEventListener('click', (event)=>{
       showMessage('Wrong email/password', 'signInMessage');
     } else {
       showMessage('Login failed', 'signInMessage');
-    }
+    } 
   })
   
 })
