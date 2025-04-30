@@ -126,18 +126,44 @@ resetLink.addEventListener('click', async (e) => {
 
 
 // Google login
-const googleAuth = () => {
-  signInWithPopup(auth, new GoogleAuthProvider())
-    .then(() => {
-      window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html';
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+const googleAuth = async () => {
+  const provider = new GoogleAuthProvider();
+  
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    
+    // Prepare user data for Firestore
+    const userData = {
+      email: user.email,
+      firstName: user.displayName?.split(' ')[0] || '', // Extract first name
+      lastName: user.displayName?.split(' ')[1] || '',  // Extract last name
+      profilePicture: user.photoURL || '',
+      course: "", // Initialize empty fields
+      year: "",
+      role: "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      profileComplete: false,
+      provider: 'google' // Track sign-in method
+    };
+
+    // Save user data to Firestore
+    await setDoc(doc(db, "users", user.uid), userData);
+    
+    // Store user ID and redirect
+    localStorage.setItem('loggedInUserId', user.uid);
+    window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html';
+    
+  } catch (error) {
+    console.error("Google Auth Error:", error);
+    const errorDiv = document.getElementById('signInMessage') || document.getElementById('signUpMessage');
+    if (errorDiv) {
+      showMessage('Google sign-in failed: ' + error.message, errorDiv.id);
+    }
+  }
 };
 
-// Connect to Login Button
+// Connect to both Login and Signup Google Buttons
 document.getElementById("google-login-btn")?.addEventListener("click", googleAuth);
-
-// Connect to Signup Button 
 document.getElementById("google-signup-btn")?.addEventListener("click", googleAuth);
