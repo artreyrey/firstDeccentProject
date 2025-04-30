@@ -47,9 +47,18 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   .then((userCredential)=>{
     const user = userCredential.user;
     const userData = { // Prepare user data to save
-      email: email,
-      firstName: firstName,
-      lastName: lastName
+      email: user.email,
+      profilePicture: user.photoURL || '',
+      firstName: user.displayName?.split(' ')[0] || '', // Extract first name
+      middleName:'',
+      lastName: user.displayName?.split(' ')[1] || '',  // Extract last name
+      course: "", // Initialize empty fields
+      year: "",
+      role: "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      profileComplete: false,
+      provider: 'google' // Track sign-in method
     };
     showMessage('Account Created!', 'signUpMessage'); 
     
@@ -136,9 +145,10 @@ const googleAuth = async () => {
     // Prepare user data for Firestore
     const userData = {
       email: user.email,
-      firstName: user.displayName?.split(' ')[0] || '', // Extract first name
-      lastName: user.displayName?.split(' ')[1] || '',  // Extract last name
       profilePicture: user.photoURL || '',
+      firstName: user.displayName?.split(' ')[0] || '', // Extract first name
+      middleName:'',
+      lastName: user.displayName?.split(' ')[1] || '',  // Extract last name
       course: "", // Initialize empty fields
       year: "",
       role: "",
