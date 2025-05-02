@@ -139,9 +139,10 @@ saveButton.addEventListener('click', function() {//prompt: if they clicked save 
     switchToDisplayMode();
     
     // Here you would typically add your Firebase save logic
-    // saveToFirebase();
 
     //put an updaet class here.
+    
+
 });
 
 // Cancel button click handler
