@@ -118,7 +118,7 @@ async function initializeProfileEditor() {
             console.error("No user signed in");
             return;
         }
-
+ 
         try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
             if (userDoc.exists()) {
