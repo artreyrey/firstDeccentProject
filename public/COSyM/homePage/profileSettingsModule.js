@@ -1,12 +1,12 @@
-
-// Profile section edit adn display connected to firebase data base
+// Profile section edit and display connected to firebase database
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { 
     getFirestore, 
     doc, 
     setDoc, 
     updateDoc,
-    getDoc
+    getDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
     getAuth,
@@ -61,27 +61,24 @@ const splitName = (fullName) => {
         : { first: fullName, middle: '', last: '' };
 };
 
-// Initialize profile
+// Initialize profile - FIXED
 async function initializeUserProfile(user) {
     const userRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(userRef);
-    
-    if (!docSnap.exists()) {
-        await setDoc(userRef, {
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            email: user.email,
-            course: '',
-            year: '',
-            role: '',
-            profileComplete: false,
-            createdAt: new Date()
-        }, { merge: true });  // Use merge to prevent overwriting
-    }
+    await setDoc(userRef, {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: user.email,
+        course: 'Not specified',
+        year: 'Not specified',
+        role: 'Not specified',
+        profileComplete: false,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+    });
 }
 
-// Profile management
+// Profile management - FIXED
 async function displayUserProfile(user) {
     try {
         console.log(`Loading profile for: ${user.uid}`);
@@ -92,21 +89,27 @@ async function displayUserProfile(user) {
             console.log("Retrieved user data:", userData);
             
             updateDisplay({
-                name: combineName(userData.firstName, userData.middleName, userData.lastName),
+                name: combineName(
+                    userData.firstName || '',
+                    userData.middleName || '',
+                    userData.lastName || ''
+                ),
                 email: userData.email || user.email,
-                course: userData.course,
-                year: userData.year,
-                role: userData.role
+                course: userData.course || 'Not specified',
+                year: userData.year || 'Not specified',
+                role: userData.role || 'Not specified'
             });
         } else {
             console.log("No document found, creating new one");
             await initializeUserProfile(user);
+            // Get fresh data after creation
+            const newDoc = await getDoc(doc(db, "users", user.uid));
             updateDisplay({
                 name: "User",
                 email: user.email,
-                course: "Not specified",
-                year: "Not specified",
-                role: "Not specified"
+                course: newDoc.data().course || 'Not specified',
+                year: newDoc.data().year || 'Not specified',
+                role: newDoc.data().role || 'Not specified'
             });
         }
     } catch (error) {
@@ -118,36 +121,53 @@ async function displayUserProfile(user) {
 function updateDisplay({name, email, course, year, role}) {
     displayName.textContent = name;
     displayEmail.textContent = email;
-    displayCourse.textContent = course || "Not specified";
-    displayYear.textContent = year || "Not specified";
-    displayRole.textContent = role || "Not specified";
+    displayCourse.textContent = course;
+    displayYear.textContent = year;
+    displayRole.textContent = role;
 }
 
-// Save profile to Firebase
+// Save profile to Firebase - FIXED
 async function saveProfile() {
     const user = auth.currentUser;
-    if (!user) return false;
+    if (!user) {
+        alert("No user signed in");
+        return false;
+    }
 
     try {
+        // Get current data first
+        const currentDoc = await getDoc(doc(db, "users", user.uid));
+        const currentData = currentDoc.exists() ? currentDoc.data() : {};
+        
         const updates = {
-            firstName: editFirstName.value.trim(),
-            middleName: editMiddleInitial.value.trim(),
-            lastName: editLastName.value.trim(),
-            course: editCourse.value.trim(),
-            year: editYear.value.trim(),
-            role: editRole.value.trim(),
+            firstName: editFirstName.value.trim() || currentData.firstName || '',
+            middleName: editMiddleInitial.value.trim() || currentData.middleName || '',
+            lastName: editLastName.value.trim() || currentData.lastName || '',
+            course: editCourse.value.trim() || currentData.course || 'Not specified',
+            year: editYear.value.trim() || currentData.year || 'Not specified',
+            role: editRole.value.trim() || currentData.role || 'Not specified',
             profileComplete: true,
-            updatedAt: new Date()
+            updatedAt: serverTimestamp()
         };
 
         if (!updates.firstName || !updates.lastName) {
             throw new Error("First and last names are required");
         }
 
+        console.log("Saving updates:", updates);
         await updateDoc(doc(db, "users", user.uid), updates);
+        
+        // Verify the save
+        const savedDoc = await getDoc(doc(db, "users", user.uid));
+        console.log("Verified save:", savedDoc.data());
+        
         return true;
     } catch (error) {
-        console.error("Save error:", error);
+        console.error("Save error:", {
+            message: error.message,
+            code: error.code,
+            stack: error.stack
+        });
         alert(`Save failed: ${error.message}`);
         return false;
     }
@@ -179,8 +199,6 @@ function startEditing() {
 
     setEditMode(true);
 }
-
-// Editing
 
 async function finishEditing(save) {
     if (save) {
@@ -217,16 +235,33 @@ async function finishEditing(save) {
         setEditMode(false);
     }
 }
+
 // Event listeners
 editButton.addEventListener('click', startEditing);
 saveButton.addEventListener('click', () => finishEditing(true));
 cancelButton.addEventListener('click', () => finishEditing(false));
 
-// Auth state listener
-onAuthStateChanged(auth, (user) => {
+// Auth state listener - FIXED
+onAuthStateChanged(auth, async (user) => {
     if (user) {
-        displayUserProfile(user);
+        console.log("User signed in:", user.uid);
+        try {
+            // First ensure document exists
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            
+            if (!docSnap.exists()) {
+                console.log("Creating new profile document");
+                await initializeUserProfile(user);
+            }
+            
+            // Then display profile
+            await displayUserProfile(user);
+        } catch (error) {
+            console.error("Auth state change error:", error);
+        }
     } else {
+        console.log("User signed out");
         updateDisplay({
             name: "",
             email: "",

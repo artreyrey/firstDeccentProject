@@ -142,25 +142,6 @@ const googleAuth = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     
-    // Prepare user data for Firestore
-    const userData = {
-      profilePicture: user.photoURL || '',
-      firstName: user.displayName?.split(' ')[0] || '', // Extract first name
-      middleName:'',
-      lastName: user.displayName?.split(' ')[1] || '',  // Extract last name
-      course: "", // Initialize empty fields
-      year: "",
-      role: "",
-      email: user.email,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      profileComplete: false,
-      provider: 'google' // Track sign-in method
-    };
-
-    // Save user data to Firestore
-    await setDoc(doc(db, "users", user.uid), userData);
-    
     // Store user ID and redirect
     localStorage.setItem('loggedInUserId', user.uid);
     window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html';
