@@ -76,7 +76,7 @@ async function displayUserProfile(user) {
                 role: userData.role
             });
         } else {
-            await initializeUserProfile(user);
+            await initializeUserProfile(user); 
             updateDisplay({
                 name: "User",
                 email: user.email,
