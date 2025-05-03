@@ -89,6 +89,7 @@ function splitName(fullName) {
 }
 // Initial display of profile
 
+//prompt: I wanted the details of the user current signed in in my website to be shown in the screen by getting the information from the document in the firebase.
 
 
 
@@ -134,6 +135,9 @@ saveButton.addEventListener('click', function() {//prompt: if they clicked save 
     displayCourse.textContent = editCourse.value;
     displayYear.textContent = editYear.value;
     displayRole.textContent = editRole.value;
+
+
+
     // how to display an item from ducument in firebase website 
 
     
