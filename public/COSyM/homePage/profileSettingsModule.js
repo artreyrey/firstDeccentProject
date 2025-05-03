@@ -121,7 +121,7 @@ editButton.addEventListener('click', function() {//prompt: When the user clicked
 });
 
 // Save button click handler
-saveButton.addEventListener('click', function() {//prompt: if they clicked save after editing their information, the users document in the firebase would be edited. In order to save and finish the edit, the user should input their password, if it is right then it will be saved and in return will be the new display. 
+saveButton.addEventListener('click', function() {//prompt: if they clicked save after editing their information, the users document in the firebase would be edited. then it will be saved and in return will be the new display. 
     // Combine name parts for display
     const fullName = combineName(
         editFirstName.value.trim(),
@@ -166,5 +166,4 @@ function switchToDisplayMode() { //prompt: I wanted the details of the user curr
     editForm.style.display = "none";
     editButton.style.display = "flex";
 }
-//prompt:when all details are completed, the profileComplete in the firebase document should be true
 
