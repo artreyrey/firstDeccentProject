@@ -47,6 +47,7 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   .then((userCredential)=>{
     const user = userCredential.user;
     const userData = { // Prepare user data to save
+      email: user.email,
       profilePicture: user.photoURL || '',
       firstName: user.displayName?.split(' ')[0] || '', // Extract first name
       middleName:'',
@@ -54,7 +55,6 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
       course: "", // Initialize empty fields
       year: "",
       role: "",
-      email: user.email,
       createdAt: new Date(),
       updatedAt: new Date(),
       profileComplete: false,
@@ -142,7 +142,8 @@ const googleAuth = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     
-    // Store user ID and redirect
+    // Prepare user data for Firestore
+
     localStorage.setItem('loggedInUserId', user.uid);
     window.location.href = 'http://127.0.0.1:5500/public/COSyM/homePage/homePage.html';
     
