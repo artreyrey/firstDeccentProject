@@ -81,29 +81,33 @@ async function initializeUserProfile(user) {
     }
 }
 
-
 // Profile management
-
 async function displayUserProfile(user) {
     try {
+        console.log(`Loading profile for: ${user.uid}`);
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        displayName.textContent = "Loading...";
+        
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            if (userData.profileComplete) {
-                updateDisplay({
-                    name: combineName(userData.firstName, userData.middleName, userData.lastName),
-                    email: userData.email || user.email,
-                    course: userData.course,
-                    year: userData.year,
-                    role: userData.role
-                });
-            } else {
-                // Handle incomplete profile
-                await initializeUserProfile(user);
-            }
+            console.log("Retrieved user data:", userData);
+            
+            updateDisplay({
+                name: combineName(userData.firstName, userData.middleName, userData.lastName),
+                email: userData.email || user.email,
+                course: userData.course,
+                year: userData.year,
+                role: userData.role
+            });
         } else {
+            console.log("No document found, creating new one");
             await initializeUserProfile(user);
+            updateDisplay({
+                name: "User",
+                email: user.email,
+                course: "Not specified",
+                year: "Not specified",
+                role: "Not specified"
+            });
         }
     } catch (error) {
         console.error("Profile load error:", error);
@@ -112,8 +116,8 @@ async function displayUserProfile(user) {
 }
 
 function updateDisplay({name, email, course, year, role}) {
-    displayName.textContent = name || "Not specified";
-    displayEmail.textContent = email || "";
+    displayName.textContent = name;
+    displayEmail.textContent = email;
     displayCourse.textContent = course || "Not specified";
     displayYear.textContent = year || "Not specified";
     displayRole.textContent = role || "Not specified";
