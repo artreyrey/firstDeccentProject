@@ -83,10 +83,11 @@ async function initializeUserProfile(user) {
 
 
 // Profile management
+
 async function displayUserProfile(user) {
     try {
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        
+        displayName.textContent = "Loading...";
         if (userDoc.exists()) {
             const userData = userDoc.data();
             if (userData.profileComplete) {
