@@ -11,7 +11,8 @@ import {
 import {
     getAuth,
     reauthenticateWithCredential,
-    EmailAuthProvider
+    EmailAuthProvider,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -88,7 +89,7 @@ function splitName(fullName) {
         last: ''
     };
 }
-
+// Initial display of profile
 
 
 // Edit button click handler
