@@ -110,8 +110,6 @@ editButton.addEventListener('click', function() {//prompt: When the user clicked
     editCourse.value = displayCourse.textContent;
     editYear.value = displayYear.textContent;
     editRole.value = displayRole.textContent;
-    editEmail.value = displayEmail.textContent;
-    editPass.value = ''; 
     
     // Switch modes
     editButton.style.display = "none";
@@ -133,7 +131,6 @@ saveButton.addEventListener('click', function() {//prompt: if they clicked save 
     displayCourse.textContent = editCourse.value;
     displayYear.textContent = editYear.value;
     displayRole.textContent = editRole.value;
-    displayEmail.textContent = editEmail.value;
     
     // Switch back to display mode
     switchToDisplayMode();
