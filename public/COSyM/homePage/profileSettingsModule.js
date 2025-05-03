@@ -10,8 +10,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
     getAuth,
-    reauthenticateWithCredential,
-    EmailAuthProvider,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
@@ -89,7 +87,7 @@ function splitName(fullName) {
 }
 // Initial display of profile
 
-//prompt: I wanted the details of the user current signed in in my website to be shown in the screen by getting the information from the document in the firebase.
+//prompt: I logged in as a user, I wanted the details of the user current signed in in my website to be shown in the screen by getting the information from the document in the firebase.
 
 
 
