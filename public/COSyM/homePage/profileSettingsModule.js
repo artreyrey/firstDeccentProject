@@ -61,13 +61,37 @@ const splitName = (fullName) => {
         : { first: fullName, middle: '', last: '' };
 };
 
+// Initialize profile
+async function initializeUserProfile(user) {
+    const userRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(userRef);
+    
+    if (!docSnap.exists()) {
+        await setDoc(userRef, {
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email: user.email,
+            course: '',
+            year: '',
+            role: '',
+            profileComplete: false,
+            createdAt: new Date()
+        }, { merge: true });  // Use merge to prevent overwriting
+    }
+}
+
+
 // Profile management
 async function displayUserProfile(user) {
     try {
+        console.log(`Loading profile for: ${user.uid}`);
         const userDoc = await getDoc(doc(db, "users", user.uid));
         
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            console.log("Retrieved user data:", userData);
+            
             updateDisplay({
                 name: combineName(userData.firstName, userData.middleName, userData.lastName),
                 email: userData.email || user.email,
@@ -76,7 +100,8 @@ async function displayUserProfile(user) {
                 role: userData.role
             });
         } else {
-            await initializeUserProfile(user); 
+            console.log("No document found, creating new one");
+            await initializeUserProfile(user);
             updateDisplay({
                 name: "User",
                 email: user.email,
@@ -89,20 +114,6 @@ async function displayUserProfile(user) {
         console.error("Profile load error:", error);
         alert("Failed to load profile. Please try again.");
     }
-}
-
-async function initializeUserProfile(user) {
-    await setDoc(doc(db, "users", user.uid), {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email: user.email,
-        course: '',
-        year: '',
-        role: '',
-        profileComplete: false,
-        createdAt: new Date()
-    });
 }
 
 function updateDisplay({name, email, course, year, role}) {
