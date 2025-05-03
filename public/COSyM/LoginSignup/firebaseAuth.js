@@ -47,7 +47,6 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
   .then((userCredential)=>{
     const user = userCredential.user;
     const userData = { // Prepare user data to save
-      email: user.email,
       profilePicture: user.photoURL || '',
       firstName: user.displayName?.split(' ')[0] || '', // Extract first name
       middleName:'',
@@ -55,6 +54,7 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
       course: "", // Initialize empty fields
       year: "",
       role: "",
+      email: user.email,
       createdAt: new Date(),
       updatedAt: new Date(),
       profileComplete: false,
@@ -144,7 +144,6 @@ const googleAuth = async () => {
     
     // Prepare user data for Firestore
     const userData = {
-      email: user.email,
       profilePicture: user.photoURL || '',
       firstName: user.displayName?.split(' ')[0] || '', // Extract first name
       middleName:'',
@@ -152,6 +151,7 @@ const googleAuth = async () => {
       course: "", // Initialize empty fields
       year: "",
       role: "",
+      email: user.email,
       createdAt: new Date(),
       updatedAt: new Date(),
       profileComplete: false,
