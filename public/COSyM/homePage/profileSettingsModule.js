@@ -87,8 +87,6 @@ function splitName(fullName) {
 }
 // Initial display of profile
 
-//prompt: I logged in as a user, I wanted the details of the user current signed in in my website to be shown in the screen by getting the information from the document in the firebase.
-
 
 
 // Edit button click handler
