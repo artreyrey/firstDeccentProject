@@ -45,8 +45,6 @@ const editLastName = document.getElementById('editLastName');
 const editCourse = document.getElementById('editCourse');
 const editYear = document.getElementById('editYear');
 const editRole = document.getElementById('editRole');
-const editEmail = document.getElementById('editEmail');
-const editPass = document.getElementById('editPass');
 
 // Display fields
 const displayName = document.getElementById('displayName');
@@ -92,6 +90,8 @@ function splitName(fullName) {
 // Initial display of profile
 
 
+
+
 // Edit button click handler
 editButton.addEventListener('click', function() {//prompt: When the user clicked the edit button they would be allowed to edit their information. 
     // Store current values before editing
@@ -134,7 +134,6 @@ saveButton.addEventListener('click', function() {//prompt: if they clicked save 
     displayCourse.textContent = editCourse.value;
     displayYear.textContent = editYear.value;
     displayRole.textContent = editRole.value;
-    displayEmail.textContent = editEmail.value;
     // how to display an item from ducument in firebase website 
 
     
