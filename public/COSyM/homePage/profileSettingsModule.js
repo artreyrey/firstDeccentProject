@@ -6,11 +6,12 @@ import {
     doc, 
     setDoc, 
     updateDoc,
-    getDoc
+    getDoc,
+    serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
     getAuth,
-    onAuthStateChanged
+    onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -62,71 +63,89 @@ const splitName = (fullName) => {
 };
 
 // Initialize profile
-async function initializeUserProfile(user) {
-    const userRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(userRef);
+
+async function displayUserProfile(user) {
+        try {
+            console.log(`Loading profile for: ${user.uid}`);
+            
+            // Force fetch from server (bypass cache)
+            const userDoc = await getDoc(doc(db, "users", user.uid), { source: 'server' });
+            
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                console.log("Retrieved user data:", userData);
+                
+                // Ensure all fields exist in the document
+                const completeUserData = {
+                    firstName: userData.firstName || '',
+                    middleName: userData.middleName || '',
+                    lastName: userData.lastName || '',
+                    email: userData.email || user.email,
+                    course: userData.course || 'Not specified',
+                    year: userData.year || 'Not specified',
+                    role: userData.role || 'Not specified',
+                    profileComplete: userData.profileComplete || false
+                };
+                
+                // Update the document if any critical fields are missing
+                if (!userData.course || !userData.year || !userData.role) {
+                    await updateDoc(doc(db, "users", user.uid), {
+                        course: completeUserData.course,
+                        year: completeUserData.year,
+                        role: completeUserData.role
+                    });
+                }
+                
+                updateDisplay(completeUserData);
+            } else {
+                console.log("No document found, creating new one");
+                await initializeUserProfile(user);
+                updateDisplay({
+                    name: "User",
+                    email: user.email,
+                    course: "Not specified",
+                    year: "Not specified",
+                    role: "Not specified"
+                });
+            }
+        } catch (error) {
+            console.error("Profile load error:", error);
+            alert("Failed to load profile. Please try again.");
+        }
+    }
     
-    if (!docSnap.exists()) {
+    // Modified initializeUserProfile to include all fields
+    async function initializeUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
         await setDoc(userRef, {
             firstName: '',
             middleName: '',
             lastName: '',
             email: user.email,
-            course: '',
-            year: '',
-            role: '',
+            course: 'Not specified',
+            year: 'Not specified',
+            role: 'Not specified',
             profileComplete: false,
-            createdAt: new Date()
-        }, { merge: true });  // Use merge to prevent overwriting
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        }, { merge: true });
     }
-}
-
-// Profile management
-async function displayUserProfile(user) {
-    try {
-        console.log(`Loading profile for: ${user.uid}`);
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            console.log("Retrieved user data:", userData);
-            
-            updateDisplay({
-                name: combineName(userData.firstName, userData.middleName, userData.lastName),
-                email: userData.email || user.email,
-                course: userData.course,
-                year: userData.year,
-                role: userData.role
-            });
-        } else {
-            console.log("No document found, creating new one");
-            await initializeUserProfile(user);
-            updateDisplay({
-                name: "User",
-                email: user.email,
-                course: "Not specified",
-                year: "Not specified",
-                role: "Not specified"
-            });
-        }
-    } catch (error) {
-        console.error("Profile load error:", error);
-        alert("Failed to load profile. Please try again.");
+    
+    function updateDisplay({name, email, course, year, role}) {
+        displayName.textContent = name;
+        displayEmail.textContent = email;
+        displayCourse.textContent = course;
+        displayYear.textContent = year;
+        displayRole.textContent = role;
     }
-}
-
-function updateDisplay({name, email, course, year, role}) {
-    displayName.textContent = name;
-    displayEmail.textContent = email;
-    displayCourse.textContent = course || "Not specified";
-    displayYear.textContent = year || "Not specified";
-    displayRole.textContent = role || "Not specified";
-}
 
 // Save profile to Firebase
 async function saveProfile() {
     const user = auth.currentUser;
-    if (!user) return false;
+    if (!user) {
+        alert("No user signed in");
+        return false;
+    }
 
     try {
         const updates = {
@@ -137,17 +156,27 @@ async function saveProfile() {
             year: editYear.value.trim(),
             role: editRole.value.trim(),
             profileComplete: true,
-            updatedAt: new Date()
+            updatedAt: serverTimestamp()  // Using server timestamp
         };
 
         if (!updates.firstName || !updates.lastName) {
             throw new Error("First and last names are required");
         }
 
+        console.log("Attempting to save:", updates);
         await updateDoc(doc(db, "users", user.uid), updates);
+        
+        // Verify the save
+        const savedDoc = await getDoc(doc(db, "users", user.uid));
+        console.log("Verified save:", savedDoc.data());
+        
         return true;
     } catch (error) {
-        console.error("Save error:", error);
+        console.error("Save error details:", {
+            message: error.message,
+            code: error.code,
+            stack: error.stack
+        });
         alert(`Save failed: ${error.message}`);
         return false;
     }
