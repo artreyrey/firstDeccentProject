@@ -89,24 +89,6 @@ function splitName(fullName) {
     };
 }
 
-async function displayUserProfile(userId) {
-    const userDoc = await getDoc(doc(db, "users", userId));
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-      
-      // Then use the same display code as above
-      const fullName = combineName(
-        userData.firstName.trim(),
-        userData.middleName.trim(),
-        userData.lastName.trim()
-      );
-      
-      displayName.textContent = fullName;
-      displayCourse.textContent = userData.course || "Not specified";
-      displayEmail.textContent = userData.email;
-      // etc...
-    }
-  }
 
 
 // Edit button click handler
