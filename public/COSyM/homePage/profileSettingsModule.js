@@ -89,6 +89,26 @@ function splitName(fullName) {
     };
 }
 
+async function displayUserProfile(userId) {
+    const userDoc = await getDoc(doc(db, "users", userId));
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      
+      // Then use the same display code as above
+      const fullName = combineName(
+        userData.firstName.trim(),
+        userData.middleName.trim(),
+        userData.lastName.trim()
+      );
+      
+      displayName.textContent = fullName;
+      displayCourse.textContent = userData.course || "Not specified";
+      displayEmail.textContent = userData.email;
+      // etc...
+    }
+  }
+
+
 // Edit button click handler
 editButton.addEventListener('click', function() {//prompt: When the user clicked the edit button they would be allowed to edit their information. 
     // Store current values before editing
@@ -131,6 +151,9 @@ saveButton.addEventListener('click', function() {//prompt: if they clicked save 
     displayCourse.textContent = editCourse.value;
     displayYear.textContent = editYear.value;
     displayRole.textContent = editRole.value;
+    displayEmail.textContent = editEmail.value;
+    // how to display an item from ducument in firebase website 
+
     
     // Switch back to display mode
     switchToDisplayMode();
