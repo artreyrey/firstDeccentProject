@@ -170,13 +170,21 @@ function startEditing() {
     setEditMode(true);
 }
 
+// Editing
+
 async function finishEditing(save) {
     if (save) {
         saveButton.disabled = true;
         saveButton.textContent = "Saving...";
         
-        const success = await saveProfile();
-        if (success) {
+        try {
+            const success = await saveProfile();
+            if (!success) {
+                // If save failed, stay in edit mode
+                return;
+            }
+            
+            // Only update UI after successful save
             updateDisplay({
                 name: combineName(
                     editFirstName.value.trim(),
@@ -184,18 +192,21 @@ async function finishEditing(save) {
                     editLastName.value.trim()
                 ),
                 email: displayEmail.textContent,
-                course: editCourse.value,
-                year: editYear.value,
-                role: editRole.value
+                course: editCourse.value || "Not specified",
+                year: editYear.value || "Not specified",
+                role: editRole.value || "Not specified"
             });
+        } finally {
+            saveButton.disabled = false;
+            saveButton.textContent = "Save";
+            setEditMode(false);
         }
-        saveButton.disabled = false;
     } else {
+        // Cancel operation
         updateDisplay(originalValues);
+        setEditMode(false);
     }
-    setEditMode(false);
 }
-
 // Event listeners
 editButton.addEventListener('click', startEditing);
 saveButton.addEventListener('click', () => finishEditing(true));
