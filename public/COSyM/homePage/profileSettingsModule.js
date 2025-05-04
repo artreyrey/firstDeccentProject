@@ -253,6 +253,43 @@ function startEditing() {
     setEditMode(true);
 }
 
+// add validator to show if complete or not
+function validateProfileForm() {
+    const firstName = editFirstName.value.trim();
+    const lastName = editLastName.value.trim();
+    const course = editCourse.value.trim();
+    const year = editYear.value.trim();
+    const role = editRole.value.trim();
+
+    if (!firstName) {
+        alert("First name is required");
+        editFirstName.focus();
+        return false;
+    }
+    if (!lastName) {
+        alert("Last name is required");
+        editLastName.focus();
+        return false;
+    }
+    if (!course || course === "Not specified") {
+        alert("Course is required");
+        editCourse.focus();
+        return false;
+    }
+    if (!year || year === "Not specified") {
+        alert("Year is required");
+        editYear.focus();
+        return false;
+    }
+    if (!role || role === "Not specified") {
+        alert("Role is required");
+        editRole.focus();
+        return false;
+    }
+
+    return true;
+}
+
 async function finishEditing(save) {
     if (save) {
         saveButton.disabled = true;
