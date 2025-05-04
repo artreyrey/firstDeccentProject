@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Show home section
-        homeSection.style.display = 'block';
+        profileSection.style.display = 'block';
         
         // Remove active class from all buttons
         navButtons.forEach(button => {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Add active class to home button
-        homeButton.classList.add('active');
+        profileButton.classList.add('active');
     }
 
     // 2. Function to show a specific section and update active button
