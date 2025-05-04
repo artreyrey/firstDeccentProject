@@ -106,7 +106,8 @@ async function displayUserProfile(user) {
                 email: userData.email || user.email,
                 course: userData.course || 'Not specified',
                 year: userData.year || 'Not specified',
-                role: userData.role || 'Not specified'
+                role: userData.role || 'Not specified',
+                photoURL: userData.photoURL || user.photoURL // Use stored URL or auth URL
             });
         } else {
             console.log("No document found, creating new one");
@@ -118,7 +119,8 @@ async function displayUserProfile(user) {
                 email: user.email,
                 course: newDoc.data().course || 'Not specified',
                 year: newDoc.data().year || 'Not specified',
-                role: newDoc.data().role || 'Not specified'
+                role: newDoc.data().role || 'Not specified',
+                photoURL: user.photoURL // Use Google's photoURL directly
             });
         }
     } catch (error) {
@@ -127,12 +129,23 @@ async function displayUserProfile(user) {
     }
 }
 
-function updateDisplay({name, email, course, year, role}) {
+function updateDisplay({name, email, course, year, role, photoURL}) {
     displayName.textContent = name;
     displayEmail.textContent = email;
     displayCourse.textContent = course;
     displayYear.textContent = year;
     displayRole.textContent = role;
+    
+    // Update profile picture if available
+    if (photoURL) {
+        profilePictureDisplay.src = photoURL;
+        profilePictureEdit.src = photoURL;
+    } else {
+        // Fallback to default image
+        const defaultImage = "https://cdn-icons-png.flaticon.com/512/10928/10928539.png";
+        profilePictureDisplay.src = defaultImage;
+        profilePictureEdit.src = defaultImage;
+    }
 }
 
 // Save profile to Firebase - FIXED
@@ -253,7 +266,7 @@ cancelButton.addEventListener('click', () => finishEditing(false));
 // Auth state listener - FIXED
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        console.log("User signed in:", user.uid);
+        console.log("User signed in:", user);
         try {
             // First ensure document exists
             const docRef = doc(db, "users", user.uid);
@@ -264,7 +277,7 @@ onAuthStateChanged(auth, async (user) => {
                 await initializeUserProfile(user);
             }
             
-            // Then display profile
+            // Then display profile with photo
             await displayUserProfile(user);
         } catch (error) {
             console.error("Auth state change error:", error);
@@ -276,7 +289,8 @@ onAuthStateChanged(auth, async (user) => {
             email: "",
             course: "",
             year: "",
-            role: ""
+            role: "",
+            photoURL: ""
         });
     }
 });
