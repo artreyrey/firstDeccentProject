@@ -80,7 +80,7 @@ signUp.addEventListener('click', (event)=>{ // When clicked:
 const signIn = document.getElementById('submitSignIn'); // Get login button
 signIn.addEventListener('click', (event)=>{ 
   event.preventDefault(); // Stop page refresh
-  
+   
   // Get login credentials
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
