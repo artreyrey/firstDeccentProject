@@ -77,11 +77,11 @@ async function initializeUserProfile(user) {
         middleName: '',
         lastName: '',
         email: user.email,
-        photoURL: user.photoURL || null, // Store Google profile picture URL
-        course: 'Not specified',
-        year: 'Not specified',
-        role: 'Not specified',
-        profileComplete: false,
+        photoURL: user.photoURL || null,
+        course: '',
+        year: '',
+        role: '',
+        profileComplete: false, // Initialize as false
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
     });
@@ -107,8 +107,12 @@ async function displayUserProfile(user) {
                 course: userData.course || 'Not specified',
                 year: userData.year || 'Not specified',
                 role: userData.role || 'Not specified',
-                photoURL: userData.photoURL || user.photoURL // Use stored URL or auth URL
+                photoURL: userData.photoURL || user.photoURL,
+                profileComplete: userData.profileComplete || false
             });
+
+            // Show edit button if profile is incomplete
+            editButton.style.display = userData.profileComplete ? "none" : "flex";
         } else {
             console.log("No document found, creating new one");
             await initializeUserProfile(user);
@@ -120,8 +124,11 @@ async function displayUserProfile(user) {
                 course: newDoc.data().course || 'Not specified',
                 year: newDoc.data().year || 'Not specified',
                 role: newDoc.data().role || 'Not specified',
-                photoURL: user.photoURL // Use Google's photoURL directly
+                photoURL: user.photoURL,
+                profileComplete: false
             });
+            // Show edit button for new profiles
+            editButton.style.display = "flex";
         }
     } catch (error) {
         console.error("Profile load error:", error);
@@ -129,7 +136,8 @@ async function displayUserProfile(user) {
     }
 }
 
-function updateDisplay({name, email, course, year, role, photoURL}) {
+// update display
+function updateDisplay({name, email, course, year, role, photoURL, profileComplete}) {
     displayName.textContent = name;
     displayEmail.textContent = email;
     displayCourse.textContent = course;
@@ -146,6 +154,15 @@ function updateDisplay({name, email, course, year, role, photoURL}) {
         profilePictureDisplay.src = defaultImage;
         profilePictureEdit.src = defaultImage;
     }
+
+    // Update UI based on completion status
+    if (profileComplete) {
+        // Profile is complete - you could add visual indicators here
+        console.log("Profile is complete");
+    } else {
+        // Profile is incomplete - you could add visual indicators here
+        console.log("Profile is incomplete");
+    }
 }
 
 // Save profile to Firebase - FIXED
@@ -161,20 +178,34 @@ async function saveProfile() {
         const currentDoc = await getDoc(doc(db, "users", user.uid));
         const currentData = currentDoc.exists() ? currentDoc.data() : {};
         
+        // Trim all input values
+        const firstName = editFirstName.value.trim();
+        const middleName = editMiddleInitial.value.trim();
+        const lastName = editLastName.value.trim();
+        const course = editCourse.value.trim();
+        const year = editYear.value.trim();
+        const role = editRole.value.trim();
+
+        // Validate all required fields
+        if (!firstName) throw new Error("First name is required");
+        if (!lastName) throw new Error("Last name is required");
+        if (!course || course === "Not specified") throw new Error("Course is required");
+        if (!year || year === "Not specified") throw new Error("Year is required");
+        if (!role || role === "Not specified") throw new Error("Role is required");
+
+        // Determine if profile is complete (all fields filled)
+        const isProfileComplete = firstName && lastName && course && year && role;
+
         const updates = {
-            firstName: editFirstName.value.trim() || currentData.firstName || '',
-            middleName: editMiddleInitial.value.trim() || currentData.middleName || '',
-            lastName: editLastName.value.trim() || currentData.lastName || '',
-            course: editCourse.value.trim() || currentData.course || 'Not specified',
-            year: editYear.value.trim() || currentData.year || 'Not specified',
-            role: editRole.value.trim() || currentData.role || 'Not specified',
-            profileComplete: true,
+            firstName: firstName,
+            middleName: middleName, // Middle name is optional
+            lastName: lastName,
+            course: course,
+            year: year,
+            role: role,
+            profileComplete: isProfileComplete, // Set based on validation
             updatedAt: serverTimestamp()
         };
-
-        if (!updates.firstName || !updates.lastName) {
-            throw new Error("First and last names are required");
-        }
 
         console.log("Saving updates:", updates);
         await updateDoc(doc(db, "users", user.uid), updates);
