@@ -35,15 +35,23 @@ const cancelButton = document.getElementById('cancelEditBtn');
 const editForm = document.getElementById('editMode');
 const displayForm = document.getElementById('displayMode');
 
-// Form fields
-const [editFirstName, editMiddleInitial, editLastName, editCourse, editYear, editRole] = [
-    'editFirstName', 'editMiddleInitial', 'editLastName', 'editCourse', 'editYear', 'editRole'
-].map(id => document.getElementById(id));
-
-// Display fields
-const [displayName, displayCourse, displayYear, displayRole, displayEmail] = [
-    'displayName', 'displayCourse', 'displayYear', 'displayRole', 'displayEmail'
-].map(id => document.getElementById(id));
+// Display fields (including profile picture display)
+const [
+    displayName, displayCourse, displayYear, displayRole, displayEmail, 
+    profilePictureDisplay
+  ] = [
+    'displayName', 'displayCourse', 'displayYear', 'displayRole', 'displayEmail',
+    'profilePictureDisplay'
+  ].map(id => document.getElementById(id));
+  
+  // Form edit fields (including profile picture edit)
+  const [
+    editFirstName, editMiddleInitial, editLastName, editCourse, editYear, editRole,
+    profilePictureEdit
+  ] = [
+    'editFirstName', 'editMiddleInitial', 'editLastName', 'editCourse', 'editYear', 'editRole',
+    'profilePictureEdit'
+  ].map(id => document.getElementById(id));
 
 // Initialize UI
 displayForm.style.display = "flex";
@@ -69,6 +77,7 @@ async function initializeUserProfile(user) {
         middleName: '',
         lastName: '',
         email: user.email,
+        photoURL: user.photoURL || null, // Store Google profile picture URL
         course: 'Not specified',
         year: 'Not specified',
         role: 'Not specified',
