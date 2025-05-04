@@ -290,8 +290,14 @@ function validateProfileForm() {
     return true;
 }
 
+// finish edit
 async function finishEditing(save) {
     if (save) {
+        // Validate form before saving
+        if (!validateProfileForm()) {
+            return; // Don't proceed if validation fails
+        }
+
         saveButton.disabled = true;
         saveButton.textContent = "Saving...";
         
@@ -310,9 +316,10 @@ async function finishEditing(save) {
                     editLastName.value.trim()
                 ),
                 email: displayEmail.textContent,
-                course: editCourse.value || "Not specified",
-                year: editYear.value || "Not specified",
-                role: editRole.value || "Not specified"
+                course: editCourse.value,
+                year: editYear.value,
+                role: editRole.value,
+                profileComplete: true // Now we know it's complete
             });
         } finally {
             saveButton.disabled = false;
