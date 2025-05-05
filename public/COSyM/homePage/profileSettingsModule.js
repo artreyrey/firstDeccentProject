@@ -193,14 +193,6 @@ function updateDisplay({name, email, course, year, role, photoURL, profileComple
         profilePictureEdit.src = defaultImage;
     }
 
-    // Update UI based on completion status
-    if (profileComplete) {
-        console.log("Profile is complete");
-        editButton.textContent = "Edit Profile";
-    } else {
-        console.log("Profile is incomplete");
-        editButton.textContent = "Complete Profile";
-    }
 }
 
 // Save profile to Firebase
