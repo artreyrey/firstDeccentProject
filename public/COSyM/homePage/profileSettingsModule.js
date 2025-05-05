@@ -10,14 +10,15 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
     getAuth,
-    onAuthStateChanged
+    onAuthStateChanged,
+    GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
     authDomain: "login-form-783e1.firebaseapp.com",
     projectId: "login-form-783e1",
-    storageBucket: "login-form-783e1.firebasestorage.app",
+    storageBucket: "login-form-783e1.appspot.com",
     messagingSenderId: "598925515666",
     appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
 };
@@ -39,19 +40,19 @@ const displayForm = document.getElementById('displayMode');
 const [
     displayName, displayCourse, displayYear, displayRole, displayEmail, 
     profilePictureDisplay
-  ] = [
+] = [
     'displayName', 'displayCourse', 'displayYear', 'displayRole', 'displayEmail',
     'profilePictureDisplay'
-  ].map(id => document.getElementById(id));
+].map(id => document.getElementById(id));
   
-  // Form edit fields (including profile picture edit)
-  const [
+// Form edit fields (including profile picture edit)
+const [
     editFirstName, editMiddleInitial, editLastName, editCourse, editYear, editRole,
     profilePictureEdit
-  ] = [
+] = [
     'editFirstName', 'editMiddleInitial', 'editLastName', 'editCourse', 'editYear', 'editRole',
     'profilePictureEdit'
-  ].map(id => document.getElementById(id));
+].map(id => document.getElementById(id));
 
 // Initialize UI
 displayForm.style.display = "flex";
@@ -69,25 +70,47 @@ const splitName = (fullName) => {
         : { first: fullName, middle: '', last: '' };
 };
 
-// Initialize profile - FIXED
+// Initialize profile
 async function initializeUserProfile(user) {
     const userRef = doc(db, "users", user.uid);
+    const profileComplete = isProfileComplete({
+        firstName: user.displayName?.split(' ')[0] || '',
+        lastName: user.displayName?.split(' ').slice(1).join(' ') || '',
+        email: user.email,
+        photoURL: user.photoURL,
+        course: '',
+        year: '',
+        role: ''
+    });
+    
     await setDoc(userRef, {
-        firstName: '',
+        firstName: user.displayName?.split(' ')[0] || '',
         middleName: '',
-        lastName: '',
+        lastName: user.displayName?.split(' ').slice(1).join(' ') || '',
         email: user.email,
         photoURL: user.photoURL || null,
         course: '',
         year: '',
         role: '',
-        profileComplete: false, // Initialize as false
+        profileComplete: profileComplete,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
     });
 }
 
-// Profile management - FIXED
+// Check if profile is complete
+function isProfileComplete(userData) {
+    return !!(
+        userData.firstName && 
+        userData.lastName && 
+        userData.email && 
+        userData.course && 
+        userData.year && 
+        userData.role
+    );
+}
+
+// Profile management
 async function displayUserProfile(user) {
     try {
         console.log(`Loading profile for: ${user.uid}`);
@@ -96,6 +119,9 @@ async function displayUserProfile(user) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             console.log("Retrieved user data:", userData);
+            
+            // Use Google photoURL if available, otherwise use stored one
+            const photoURL = user.photoURL || userData.photoURL;
             
             updateDisplay({
                 name: combineName(
@@ -107,26 +133,33 @@ async function displayUserProfile(user) {
                 course: userData.course || 'Not specified',
                 year: userData.year || 'Not specified',
                 role: userData.role || 'Not specified',
-                photoURL: userData.photoURL || user.photoURL,
+                photoURL: photoURL,
                 profileComplete: userData.profileComplete || false
             });
 
-            // Show edit button if profile is incomplete
-            editButton.style.display = userData.profileComplete ? "none" : "flex";
+            // Show edit button based on profile completion
+            editButton.style.display = userData.profileComplete ? "flex" : "flex";
         } else {
             console.log("No document found, creating new one");
             await initializeUserProfile(user);
             // Get fresh data after creation
             const newDoc = await getDoc(doc(db, "users", user.uid));
+            const newData = newDoc.data();
+            
             updateDisplay({
-                name: "User",
+                name: combineName(
+                    newData.firstName || '',
+                    newData.middleName || '',
+                    newData.lastName || ''
+                ),
                 email: user.email,
-                course: newDoc.data().course || 'Not specified',
-                year: newDoc.data().year || 'Not specified',
-                role: newDoc.data().role || 'Not specified',
-                photoURL: user.photoURL,
-                profileComplete: false
+                course: newData.course || 'Not specified',
+                year: newData.year || 'Not specified',
+                role: newData.role || 'Not specified',
+                photoURL: user.photoURL || newData.photoURL,
+                profileComplete: newData.profileComplete || false
             });
+            
             // Show edit button for new profiles
             editButton.style.display = "flex";
         }
@@ -144,10 +177,15 @@ function updateDisplay({name, email, course, year, role, photoURL, profileComple
     displayYear.textContent = year;
     displayRole.textContent = role;
     
-    // Update profile picture if available
+    // Update profile picture - prioritize Google photo if available
     if (photoURL) {
-        profilePictureDisplay.src = photoURL;
-        profilePictureEdit.src = photoURL;
+        // Ensure the URL is secure and add size parameter for Google photos
+        let processedUrl = photoURL;
+        if (photoURL.includes('googleusercontent.com') && !photoURL.includes('=')) {
+            processedUrl = photoURL.replace(/(\/[^/]+)$/, '/s200$1');
+        }
+        profilePictureDisplay.src = processedUrl;
+        profilePictureEdit.src = processedUrl;
     } else {
         // Fallback to default image
         const defaultImage = "https://cdn-icons-png.flaticon.com/512/10928/10928539.png";
@@ -157,15 +195,15 @@ function updateDisplay({name, email, course, year, role, photoURL, profileComple
 
     // Update UI based on completion status
     if (profileComplete) {
-        // Profile is complete - you could add visual indicators here
         console.log("Profile is complete");
+        editButton.textContent = "Edit Profile";
     } else {
-        // Profile is incomplete - you could add visual indicators here
         console.log("Profile is incomplete");
+        editButton.textContent = "Complete Profile";
     }
 }
 
-// Save profile to Firebase - FIXED
+// Save profile to Firebase
 async function saveProfile() {
     const user = auth.currentUser;
     if (!user) {
@@ -174,10 +212,6 @@ async function saveProfile() {
     }
 
     try {
-        // Get current data first
-        const currentDoc = await getDoc(doc(db, "users", user.uid));
-        const currentData = currentDoc.exists() ? currentDoc.data() : {};
-        
         // Trim all input values
         const firstName = editFirstName.value.trim();
         const middleName = editMiddleInitial.value.trim();
@@ -193,34 +227,33 @@ async function saveProfile() {
         if (!year || year === "Not specified") throw new Error("Year is required");
         if (!role || role === "Not specified") throw new Error("Role is required");
 
-        // Determine if profile is complete (all fields filled)
-        const isProfileComplete = firstName && lastName && course && year && role;
+        // Check if profile is complete
+        const profileComplete = isProfileComplete({
+            firstName,
+            lastName,
+            email: user.email,
+            course,
+            year,
+            role
+        });
 
         const updates = {
-            firstName: firstName,
-            middleName: middleName, // Middle name is optional
-            lastName: lastName,
-            course: course,
-            year: year,
-            role: role,
-            profileComplete: isProfileComplete, // Set based on validation
+            firstName,
+            middleName, // Middle name is optional
+            lastName,
+            course,
+            year,
+            role,
+            profileComplete,
             updatedAt: serverTimestamp()
         };
 
         console.log("Saving updates:", updates);
         await updateDoc(doc(db, "users", user.uid), updates);
         
-        // Verify the save
-        const savedDoc = await getDoc(doc(db, "users", user.uid));
-        console.log("Verified save:", savedDoc.data());
-        
         return true;
     } catch (error) {
-        console.error("Save error:", {
-            message: error.message,
-            code: error.code,
-            stack: error.stack
-        });
+        console.error("Save error:", error);
         alert(`Save failed: ${error.message}`);
         return false;
     }
@@ -253,7 +286,7 @@ function startEditing() {
     setEditMode(true);
 }
 
-// add validator to show if complete or not
+// Validate profile form
 function validateProfileForm() {
     const firstName = editFirstName.value.trim();
     const lastName = editLastName.value.trim();
@@ -309,24 +342,33 @@ async function finishEditing(save) {
             }
             
             // Only update UI after successful save
+            const user = auth.currentUser;
             updateDisplay({
                 name: combineName(
                     editFirstName.value.trim(),
                     editMiddleInitial.value.trim(),
                     editLastName.value.trim()
                 ),
-                email: displayEmail.textContent,
+                email: user.email,
                 course: editCourse.value,
                 year: editYear.value,
                 role: editRole.value,
-                profileComplete: true // Now we know it's complete
+                photoURL: user.photoURL || profilePictureDisplay.src,
+                profileComplete: isProfileComplete({
+                    firstName: editFirstName.value.trim(),
+                    lastName: editLastName.value.trim(),
+                    email: user.email,
+                    course: editCourse.value,
+                    year: editYear.value,
+                    role: editRole.value
+                })
             });
         } finally {
             saveButton.disabled = false;
             saveButton.textContent = "Save";
             setEditMode(false);
         }
-    } else {
+    } else {    
         // Cancel operation
         updateDisplay(originalValues);
         setEditMode(false);
@@ -338,7 +380,7 @@ editButton.addEventListener('click', startEditing);
 saveButton.addEventListener('click', () => finishEditing(true));
 cancelButton.addEventListener('click', () => finishEditing(false));
 
-// Auth state listener - FIXED
+// Auth state listener
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         console.log("User signed in:", user);
