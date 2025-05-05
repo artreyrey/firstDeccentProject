@@ -1,119 +1,140 @@
-//Pag cinlick feature, mashoshow yung certain section
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all buttons and sections
-    const homeButton = document.getElementById('home-button');
-    const profileButton = document.getElementById('profile-button');
-    const membersButton = document.getElementById('members-button');
-    const fundsButton = document.getElementById('funds-button');
-    const eventsButton = document.getElementById('events-button');
-    const reviewsButton = document.getElementById('reviews-button');
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        // Dynamically import Firebase modules
+        const [{ auth, db }, firestore] = await Promise.all([
+            import('./profileSettingsModule.js'),
+            import('https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js')
+        ]);
+        const { doc, getDoc, onSnapshot } = firestore;
 
-    const homeSection = document.getElementById('home-section');
-    const profileSection = document.getElementById('profile-section');
-    const membersSection = document.getElementById('members-section');
-    const fundsSection = document.getElementById('funds-section');
-    const eventsSection = document.getElementById('events-section');
-    const reviewsSection = document.getElementById('reviews-section');
+        // DOM Elements
+        const navButtons = {
+            home: document.getElementById('home-button'),
+            profile: document.getElementById('profile-button'),
+            members: document.getElementById('members-button'),
+            funds: document.getElementById('funds-button'),
+            events: document.getElementById('events-button'),
+            reviews: document.getElementById('reviews-button')
+        };
 
-    const navButtons = [homeButton, profileButton, membersButton, fundsButton, eventsButton, reviewsButton];
-    const sections = [homeSection, profileSection, membersSection, fundsSection, eventsSection, reviewsSection];
+        const sections = {
+            home: document.getElementById('home-section'),
+            profile: document.getElementById('profile-section'),
+            members: document.getElementById('members-section'),
+            funds: document.getElementById('funds-section'),
+            events: document.getElementById('events-section'),
+            reviews: document.getElementById('reviews-section')
+        };
 
-    // 1. Initialize page - show only home section and highlight home button
-    function initializePage() {
-        // Hide all sections
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-        
-        // Show home section
-        profileSection.style.display = 'block';
-        
-        // Remove active class from all buttons
-        navButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-        
-        // Add active class to home button
-        profileButton.classList.add('active');
-    }
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.id = 'profile-notification';
+        document.body.appendChild(notification);
 
-    // 2. Function to show a specific section and update active button
-    function showSection(sectionToShow, buttonToActivate) {
-        // Hide all sections
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-        
-        // Show the requested section
-        sectionToShow.style.display = 'block';
-        
-        // Remove active class from all buttons
-        navButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-        
-        // 3. Add active class to clicked button
-        buttonToActivate.classList.add('active');
-    }
+        // Track current section
+        let currentSection = null;
 
-    // Set up event listeners for navigation buttons
-    homeButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showSection(homeSection, homeButton);
-    });
-
-    profileButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showSection(profileSection, profileButton);
-    });
-
-    membersButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showSection(membersSection, membersButton);
-    });
-
-    fundsButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showSection(fundsSection, fundsButton);
-    });
-
-    eventsButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showSection(eventsSection, eventsButton);
-    });
-
-    reviewsButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        showSection(reviewsSection, reviewsButton);
-    });
-
-    // Initialize the page
-    initializePage();
-});
-
-// responsiveness pagmaliit device
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.querySelector('.sidebar-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const navLinks = document.querySelectorAll('.sidebar ul li a:not(#sign-out-button)');
-    
-    // Toggle sidebar
-    toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-    });
-    
-    // Close sidebar when clicking on any nav link (except Sign Out)
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            sidebar.classList.remove('active');
-        });
-    });
-    
-    // Close sidebar when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
-            sidebar.classList.remove('active');
+        // 1. Initialize page - force profile section first
+        function initializePage() {
+            // Hide all sections
+            Object.values(sections).forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show profile section by default
+            showSection('profile');
         }
-    });
-});
 
+        // 2. Check profile completion
+        async function isProfileComplete() {
+            const user = auth.currentUser;
+            if (!user) return false;
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                return userDoc.exists() && userDoc.data().profileComplete === true;
+            } catch (error) {
+                console.error("Profile check error:", error);
+                return false;
+            }
+        }
+
+        // 3. Show section with completion check
+        async function showSection(sectionName) {
+            const isComplete = await isProfileComplete();
+            
+            // Always allow profile section
+            if (sectionName !== 'profile' && !isComplete) {
+                showNotification('Please complete your profile first');
+                return showSection('profile'); // Force profile section
+            }
+            
+            // Hide current section
+            if (currentSection) {
+                sections[currentSection].style.display = 'none';
+                navButtons[currentSection].classList.remove('active');
+            }
+            
+            // Show new section
+            sections[sectionName].style.display = 'block';
+            navButtons[sectionName].classList.add('active');
+            currentSection = sectionName;
+            
+            // Update navigation buttons
+            updateNavigationAccess(isComplete);
+        }
+
+        // 4. Update navigation buttons
+        function updateNavigationAccess(isComplete) {
+            Object.entries(navButtons).forEach(([name, button]) => {
+                if (name !== 'profile') {
+                    button.classList.toggle('disabled', !isComplete);
+                }
+            });
+        }
+
+        // 5. Show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+        // Event listeners for navigation
+        Object.entries(navButtons).forEach(([sectionName, button]) => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection(sectionName);
+            });
+        });
+
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                initializePage();
+                isProfileComplete().then(updateNavigationAccess);
+                
+                // Real-time listener for profile changes
+                const userDocRef = doc(db, "users", user.uid);
+                const unsubscribe = onSnapshot(userDocRef, (doc) => {
+                    const isComplete = doc.exists() && doc.data().profileComplete === true;
+                    updateNavigationAccess(isComplete);
+                });
+
+                // Watch for profile form submissions
+                const profileForm = document.getElementById('editProfileForm');
+                if (profileForm) {
+                    profileForm.addEventListener('submit', () => {
+                        setTimeout(() => isProfileComplete().then(updateNavigationAccess), 500);
+                    });
+                }
+            } else {
+                // Handle sign-out if needed
+            }
+        });
+
+    } catch (error) {
+        console.error("Initialization error:", error);
+        alert("Failed to initialize application. Please refresh the page.");
+    }
+});

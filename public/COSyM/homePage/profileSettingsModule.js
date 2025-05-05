@@ -23,6 +23,9 @@ const firebaseConfig = {
     appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
 };
 
+// exports
+export { auth, db };
+
 // Initialize services
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
@@ -357,7 +360,6 @@ async function finishEditing(save) {
             });
         } finally {
             saveButton.disabled = false;
-            saveButton.textContent = "Save";
             setEditMode(false);
         }
     } else {    
