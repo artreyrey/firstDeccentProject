@@ -431,7 +431,9 @@ text-align: center;
 
 
 
-/* Section Designs */#members-section.profile {
+/* Section Designs */
+
+#members-section.profile {
     margin-top: 60px;
     margin-left: 60px;
     margin-right: 60px;
@@ -451,7 +453,7 @@ text-align: center;
 .members-content{
     margin-left: 50px;
     margin-right: 50px;
-    margin-top: 90px;
+    margin-top: 50px;
 }
 /* Filter section styles */
 .members .members-content .member-filters {
@@ -531,6 +533,7 @@ text-align: center;
     background-color: var(--gray-color);
     color: var(--pearl-color);
     font-size: 20px;
+    padding-left: 60px;
 }
 
 .members-list {
@@ -543,7 +546,7 @@ text-align: center;
 .member-item {
     display: flex;
     padding: 15px 25px;
-    border-bottom: 1px solid var(--cream-color);
+    border-bottom: 1.6px solid var(--cream-color);
     transition: background-color 0.2s;
     
 }
@@ -576,4 +579,29 @@ text-align: center;
     width: 30px;
     text-align: right;
     padding-right: 25px;
+}
+
+
+/* Print Button */
+.members .members-content i {
+    color: var(--gray-color);
+    font-weight: 550;
+    font-size: var(--font-size-xl);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    transform-origin: center; 
+    display: inline-block;
+    will-change: transform, color; 
+    background-color: transparent;
+    border: none;
+}
+
+.members .members-content i:hover {
+    transform: scale(1.15);
+    color: var(--orange-color);
+}
+
+.members .members-content i:active {
+    transform: scale(0.95) translateY(1px); 
+    color: var(--orange-color);
+    transition-duration: 0.1s;
 }

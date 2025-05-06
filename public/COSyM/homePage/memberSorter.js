@@ -74,11 +74,14 @@ async function loadAllMembers() {
             // Determine if member is an officer
             const isOfficer = role.toLowerCase().includes('officer');
             
+            // Capitalize first letter of each name part
+            const capitalize = (str) => str && str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            
             return {
                 id: doc.id,
-                firstName: data.firstName || '',
-                middleName: data.middleName || '',
-                lastName: data.lastName || '',
+                firstName: capitalize(data.firstName) || '',
+                middleName: capitalize(data.middleName) || '',
+                lastName: capitalize(data.lastName) || '',
                 course: data.course || '',
                 year: data.year || '',
                 role: role,
@@ -167,7 +170,7 @@ function displayMembers(members) {
             const memberElement = document.createElement('div');
             memberElement.className = 'member-item';
             
-            // Format name as "Lastname, Firstname M."
+            // Format name as "Lastname, Firstname M." with proper capitalization
             const formattedName = `${member.lastName}, ${member.firstName}${member.middleName ? ' ' + member.middleName.charAt(0) + '.' : ''}`;
             
             memberElement.innerHTML = `
