@@ -136,16 +136,6 @@ main {
     color: var(--gray-color);
 }
 
-
-/* Members Section */
-.members .members-content {
-    text-align: center;
-    font-size: var(--font-size-xxl);
-    margin-top: 300px;
-    color: var(--gray-color);
-
-}
-
 /* Funds Section */
 .funds .funds-content {
     text-align: center;
@@ -451,19 +441,23 @@ text-align: center;
     border-radius: var(--font-size-m);
 }
 
-.member-title h1 {
+.members .members-content .member-title {
+    font-size: var(--font-size-xl);
     color: var(--orange-color);
-    font-size: var(--font-size-l);
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    
 }
 
 /* Filter section styles */
-.member-filters {
+.members .members-content .member-filters {
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
     margin-bottom: 40px;
     align-items: flex-end;
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--gray-color);
 }
 
 .filter-group {
@@ -520,11 +514,6 @@ text-align: center;
     margin-top: 20px;
 }
 
-.member-title{
-    color: var(--orange-color);
-    top: 10px;
-    left: 10px;
-}
 .members-list-header {
     display: flex;
     background-color: var(--cream-color);
