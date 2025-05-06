@@ -71,14 +71,21 @@ async function loadAllMembers() {
             const role = data.role || '';
             const normalizedRole = role.replace(/ /g, ':');
             
+            // Determine if member is an officer
+            const isOfficer = role.toLowerCase().includes('officer');
+            
             return {
                 id: doc.id,
                 firstName: data.firstName || '',
+                middleName: data.middleName || '',
                 lastName: data.lastName || '',
                 course: data.course || '',
                 year: data.year || '',
                 role: role,
-                normalizedRole: normalizedRole
+                normalizedRole: normalizedRole,
+                isOfficer: isOfficer,
+                // Create sortable name for alphabetical sorting
+                sortName: `${data.lastName || ''}, ${data.firstName || ''} ${data.middleName ? data.middleName.charAt(0) + '.' : ''}`.trim()
             };
         });
         
@@ -86,7 +93,7 @@ async function loadAllMembers() {
     } catch (error) {
         console.error("Error loading members:", error);
         showErrorMessage(`Failed to load members: ${error.message}`);
-        throw error; // Re-throw to be caught by init
+        throw error;
     }
 }
 
@@ -100,13 +107,25 @@ function applyFilters() {
         console.log(`Applying filters - Course: ${courseFilter}, Year: ${yearFilter}, Role: ${roleFilter}`);
         
         // Filter members
-        const filteredMembers = allMembers.filter(member => {
+        let filteredMembers = allMembers.filter(member => {
             const courseMatch = !courseFilter || member.course === courseFilter;
             const yearMatch = !yearFilter || member.year === yearFilter;
-            const roleMatch = !roleFilter || member.normalizedRole === roleFilter;
+            
+            // Special handling for "Officer" filter
+            let roleMatch;
+            if (roleFilter === 'Officer') {
+                roleMatch = member.isOfficer;
+            } else if (!roleFilter) {
+                roleMatch = true;
+            } else {
+                roleMatch = member.normalizedRole === roleFilter;
+            }
             
             return courseMatch && yearMatch && roleMatch;
         });
+        
+        // Sort members alphabetically by last name, then first name
+        filteredMembers.sort((a, b) => a.sortName.localeCompare(b.sortName));
         
         console.log(`Found ${filteredMembers.length} matching members`);
         displayMembers(filteredMembers);
@@ -129,20 +148,34 @@ function displayMembers(members) {
             return;
         }
         
-        members.forEach(member => {
+        // Create header row (only if it doesn't exist)
+        if (!document.querySelector('.members-list-header')) {
+            const headerRow = document.createElement('div');
+            headerRow.className = 'members-list-header';
+            headerRow.innerHTML = `
+                <div class="header-number">#</div>
+                <div class="header-name">Name</div>
+                <div class="header-course">Course</div>
+                <div class="header-year">Year</div>
+                <div class="header-role">Role</div>
+            `;
+            membersList.appendChild(headerRow);
+        }
+        
+        // Add each member with numbering
+        members.forEach((member, index) => {
             const memberElement = document.createElement('div');
             memberElement.className = 'member-item';
             
-            const fullName = `${member.firstName} ${member.lastName}`.trim();
-            const course = member.course || 'Not specified';
-            const year = member.year || 'Not specified';
-            const role = member.role || 'Not specified';
+            // Format name as "Lastname, Firstname M."
+            const formattedName = `${member.lastName}, ${member.firstName}${member.middleName ? ' ' + member.middleName.charAt(0) + '.' : ''}`;
             
             memberElement.innerHTML = `
-                <div class="member-name">${fullName}</div>
-                <div class="member-course">${course}</div>
-                <div class="member-year">${year}</div>
-                <div class="member-role">${role}</div>
+                <div class="member-number">${index + 1}</div>
+                <div class="member-name">${formattedName}</div>
+                <div class="member-course">${member.course || 'Not specified'}</div>
+                <div class="member-year">${member.year || 'Not specified'}</div>
+                <div class="member-role">${member.role || 'Not specified'}</div>
             `;
             
             membersList.appendChild(memberElement);

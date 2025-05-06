@@ -451,7 +451,7 @@ text-align: center;
 .members-content{
     margin-left: 50px;
     margin-right: 50px;
-    margin-top: 110px;
+    margin-top: 90px;
 }
 /* Filter section styles */
 .members .members-content .member-filters {
@@ -545,6 +545,7 @@ text-align: center;
     padding: 15px 25px;
     border-bottom: 1px solid var(--cream-color);
     transition: background-color 0.2s;
+    
 }
 
 .member-item:hover {
@@ -556,13 +557,13 @@ text-align: center;
 }
 
 .header-name, .member-name {
-    flex: 3;
+    flex: 3.8;
 }
 
 .header-course, .member-course, 
 .header-year, .member-year, 
 .header-role, .member-role {
-    flex: 1;
+    flex: 2;
 }
 
 .no-members {
@@ -574,5 +575,5 @@ text-align: center;
 .member-number {
     width: 30px;
     text-align: right;
-    padding-right: 10px;
+    padding-right: 25px;
 }
