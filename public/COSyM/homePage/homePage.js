@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         // Dynamically import Firebase modules
-        const [{ auth, db }, firestore] = await Promise.all([
+        const [{ auth, db, onAuthStateChanged }, firestore] = await Promise.all([
             import('./profileSettingsModule.js'),
             import('https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js')
         ]);
@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Track current section
         let currentSection = null;
+        let unsubscribeProfileListener = null;
 
         // 1. Initialize page - force profile section first
         function initializePage() {
@@ -45,14 +46,22 @@ document.addEventListener('DOMContentLoaded', async function() {
             showSection('profile');
         }
 
-        // 2. Check profile completion
-        async function isProfileComplete() {
-            const user = auth.currentUser;
+        // 2. Check profile completion - improved with better error handling
+        async function isProfileComplete(user) {
             if (!user) return false;
 
             try {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                return userDoc.exists() && userDoc.data().profileComplete === true;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (!userDoc.exists()) {
+                    console.log("User document doesn't exist");
+                    return false;
+                }
+                
+                const profileComplete = userDoc.data().profileComplete;
+                console.log("Profile completion status:", profileComplete);
+                return profileComplete === true;
             } catch (error) {
                 console.error("Profile check error:", error);
                 return false;
@@ -61,7 +70,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // 3. Show section with completion check
         async function showSection(sectionName) {
-            const isComplete = await isProfileComplete();
+            const user = auth.currentUser;
+            const isComplete = await isProfileComplete(user);
+            
+            console.log(`Attempting to show ${sectionName}, profile complete: ${isComplete}`);
             
             // Always allow profile section
             if (sectionName !== 'profile' && !isComplete) {
@@ -109,15 +121,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         // Auth state listener
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
+                console.log("User authenticated:", user.uid);
+                
+                // Clean up previous listener if exists
+                if (unsubscribeProfileListener) {
+                    unsubscribeProfileListener();
+                }
+                
                 initializePage();
-                isProfileComplete().then(updateNavigationAccess);
+                const complete = await isProfileComplete(user);
+                updateNavigationAccess(complete);
                 
                 // Real-time listener for profile changes
                 const userDocRef = doc(db, "users", user.uid);
-                const unsubscribe = onSnapshot(userDocRef, (doc) => {
+                unsubscribeProfileListener = onSnapshot(userDocRef, (doc) => {
                     const isComplete = doc.exists() && doc.data().profileComplete === true;
+                    console.log("Real-time profile update - complete:", isComplete);
                     updateNavigationAccess(isComplete);
                 });
 
@@ -125,11 +146,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const profileForm = document.getElementById('editProfileForm');
                 if (profileForm) {
                     profileForm.addEventListener('submit', () => {
-                        setTimeout(() => isProfileComplete().then(updateNavigationAccess), 500);
+                        setTimeout(async () => {
+                            const updatedComplete = await isProfileComplete(user);
+                            updateNavigationAccess(updatedComplete);
+                        }, 500);
                     });
                 }
             } else {
+                console.log("User signed out");
                 // Handle sign-out if needed
+                if (unsubscribeProfileListener) {
+                    unsubscribeProfileListener();
+                    unsubscribeProfileListener = null;
+                }
             }
         });
 
