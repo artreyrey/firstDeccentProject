@@ -413,35 +413,3 @@ text-align: center;
     cursor: not-allowed;
 }
 
-/* Notification styling */
-/* Add to your stylesheet */
-#profile-notification {
-    display: none;
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ff4444;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
-/* Hide all sections by default */
-.section {
-    display: none;
-}
-
-/* Only show active section */
-.section.active {
-    display: block;
-}
