@@ -132,7 +132,57 @@
             <!-- members section -->
             <section id="members-section" class="members">
             <div class="members-content">
-                <h1> members</h1>
+                <h1>Members</h1>
+        
+                <!-- Filter Controls -->
+                <div class="member-filters">
+                    <div class="filter-group">
+                        <label for="course-select">Course:</label>
+                        <select id="course-select" class="filter-select">
+                            <option value="all">All Courses</option>
+                            <option value="CE">BS Computer Engineering</option>
+                            <option value="CS">BS Computer Science</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="year-select">Year:</label>
+                        <select id="year-select" class="filter-select">
+                            <option value="all">All Years</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                            <option value="na">N/A</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="role-select">Role:</label>
+                        <select id="role-select" class="filter-select">
+                            <option value="student">Students</option>
+                            <option value="teacher">Teachers</option>
+                            <option value="officer">Officers</option>
+                        </select>
+                    </div>
+                    
+                    <button id="filter-button" class="filter-button">Filter Members</button>
+                </div>
+                
+                <!-- Members Display Area -->
+                <div class="members-display">
+                    <div class="members-list-header">
+                        <div class="header-name">Name</div>
+                        <div class="header-course">Course</div>
+                        <div class="header-year">Year</div>
+                        <div class="header-role">Role</div>
+                    </div>
+                    
+                    <div id="members-list" class="members-list">
+                        <!-- Members will be displayed here dynamically -->
+                        <div class="no-members">Select filters and click "Filter Members" to display results</div>
+                    </div>
+                </div>
             </div>
             </section>
 
