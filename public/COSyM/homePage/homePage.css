@@ -485,6 +485,8 @@ text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     transform: translateY(0);
     cursor: pointer;
+    will-change: transform, box-shadow; 
+    backface-visibility: hidden; 
 }
 
 /* Hover Animation */
@@ -507,13 +509,6 @@ text-align: center;
     transform: translateY(1px);
     transition-duration: 0.1s;
 }
-
-/* Optional: Add a smooth dropdown arrow animation */
-.filter-select {
-    will-change: transform, box-shadow; /* Hint to browser for optimization */
-    backface-visibility: hidden; /* Prevent flickering in some browsers */
-}
-
 
 
 /* Members display styles */

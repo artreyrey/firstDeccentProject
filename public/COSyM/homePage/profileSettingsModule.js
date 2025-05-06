@@ -11,7 +11,6 @@ import {
 import {
     getAuth,
     onAuthStateChanged,
-    GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -24,7 +23,7 @@ const firebaseConfig = {
 };
 
 // exports
-export { auth, db };
+export { db };
 
 // Initialize services
 const app = initializeApp(firebaseConfig);

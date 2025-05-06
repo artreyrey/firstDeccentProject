@@ -1,89 +1,81 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { db } from './profileSettingsModule.js';
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { collection, query, where, getDocs,getFirestore  } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import {
+    getAuth
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-// DOM Elements
-const courseSelect = document.getElementById('course-select');
-const yearSelect = document.getElementById('year-select');
-const roleSelect = document.getElementById('role-select');
-const membersList = document.getElementById('members-list');
+const firebaseConfig = {
+    apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
+    authDomain: "login-form-783e1.firebaseapp.com",
+    projectId: "login-form-783e1",
+    storageBucket: "login-form-783e1.appspot.com",
+    messagingSenderId: "598925515666",
+    appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
+};
+// Initialize Firebase (do this once in your app)
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-// Initialize the members module
+// Cache for loaded members to reduce Firestore reads
+let allMembers = [];
+
 export async function initMembersModule() {
-    // Load initial members (all members)
-    await filterMembers();
+    // Load all members initially
+    await loadAllMembers();
     
-    // Add event listeners for filter changes
+    // Set up event listeners
     courseSelect.addEventListener('change', filterMembers);
     yearSelect.addEventListener('change', filterMembers);
     roleSelect.addEventListener('change', filterMembers);
 }
 
-// Filter members based on selected criteria
-async function filterMembers() {
+async function loadAllMembers() {
     try {
-        // Get selected filter values
-        const courseFilter = courseSelect.value;
-        const yearFilter = yearSelect.value;
-        const roleFilter = roleSelect.value;
-        
-        // Create a query that filters based on selections
-        let membersQuery = query(collection(db, "users"));
-        
-        // Add filters only if they're not set to "all" or default
-        if (courseFilter && courseFilter !== "all") {
-            membersQuery = query(membersQuery, where("course", "==", courseFilter));
-        }
-        
-        if (yearFilter && yearFilter !== "all") {
-            membersQuery = query(membersQuery, where("year", "==", yearFilter));
-        }
-        
-        if (roleFilter && roleFilter !== "all") {
-            membersQuery = query(membersQuery, where("role", "==", roleFilter));
-        }
-        
-        // Execute the query
-        const querySnapshot = await getDocs(membersQuery);
-        
-        // Clear existing members
-        membersList.innerHTML = '';
-        
-        if (querySnapshot.empty) {
-            membersList.innerHTML = '<div class="no-members">No members match your filters</div>';
-            return;
-        }
-        
-        // Process and display each member
-        querySnapshot.forEach((doc) => {
-            const member = doc.data();
-            displayMember(member);
-        });
-        
+        const querySnapshot = await getDocs(collection(db, "users"));
+        allMembers = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        applyFilters();
     } catch (error) {
-        console.error("Error filtering members:", error);
-        membersList.innerHTML = '<div class="error-message">Error loading members</div>';
+        console.error("Error loading members:", error);
+        showErrorMessage();
     }
 }
 
-// Display a single member in the list
-function displayMember(member) {
-    const memberElement = document.createElement('div');
-    memberElement.className = 'member-item';
+function applyFilters() {
+    const courseFilter = courseSelect.value;
+    const yearFilter = yearSelect.value;
+    const roleFilter = roleSelect.value;
     
-    // Combine first and last name
-    const fullName = `${member.firstName} ${member.lastName}`;
+    const filtered = allMembers.filter(member => {
+        return (!courseFilter || courseFilter === "all" || member.course === courseFilter) &&
+               (!yearFilter || yearFilter === "all" || member.year === yearFilter) &&
+               (!roleFilter || roleFilter === "all" || member.role === roleFilter);
+    });
     
-    memberElement.innerHTML = `
-        <div class="member-name">${fullName}</div>
-        <div class="member-course">${member.course || 'Not specified'}</div>
-        <div class="member-year">${member.year || 'Not specified'}</div>
-        <div class="member-role">${member.role || 'Not specified'}</div>
-    `;
-    
-    membersList.appendChild(memberElement);
+    displayMembers(filtered);
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    initMembersModule().catch(console.error);
-});
+function displayMembers(members) {
+    membersList.innerHTML = '';
+    
+    if (members.length === 0) {
+        membersList.innerHTML = '<div class="no-members">No members match your filters</div>';
+        return;
+    }
+    
+    members.forEach(member => {
+        const memberElement = document.createElement('div');
+        memberElement.className = 'member-item';
+        memberElement.innerHTML = `
+            <div class="member-name">${member.firstName} ${member.lastName}</div>
+            <div class="member-course">${member.course || 'Not specified'}</div>
+            <div class="member-year">${member.year || 'Not specified'}</div>
+            <div class="member-role">${member.role || 'Not specified'}</div>
+        `;
+        membersList.appendChild(memberElement);
+    });
+}
