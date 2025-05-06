@@ -463,12 +463,12 @@ text-align: center;
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 10px;
 }
 
 .filter-select {
     background-color: var(--cream-color);
-    border-radius: var(--font-size-m);
+    border-radius: 50px;
     border: 1px solid var(--gray-color);
     font-size: var(--font-size-m);
     color: var(--gray-color);
@@ -476,13 +476,15 @@ text-align: center;
     min-width: 220px;
 }
 
+
+
 /* Members display styles */
 .members-display {
     color: var(--gray-color);
     font-size: var(--font-size-m);
     font-weight: 560;
     line-height: 1.6;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.1px; 
     margin-top: 20px;
 }
 
@@ -493,6 +495,7 @@ text-align: center;
     font-weight: bold;
     border-bottom: 2px solid var(--orange-color);
     border-radius: var(--font-size-s) var(--font-size-s) 0 0;
+    
 }
 
 .members-list {
