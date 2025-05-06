@@ -571,3 +571,8 @@ text-align: center;
     color: var(--gray-color-light);
     font-size: var(--font-size-m);
 }
+.member-number {
+    width: 30px;
+    text-align: right;
+    padding-right: 10px;
+}

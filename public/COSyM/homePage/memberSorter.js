@@ -43,6 +43,7 @@ async function loadAllMembers() {
         allMembers = querySnapshot.docs.map(doc => ({
             id: doc.id,
             firstName: doc.data().firstName || '',
+            middleName: doc.data().middleName || '',
             lastName: doc.data().lastName || '',
             course: doc.data().course || '',
             year: doc.data().year || '',
@@ -53,6 +54,15 @@ async function loadAllMembers() {
         console.error("Error loading members:", error);
         showErrorMessage();
     }
+}
+
+// Format name as "Lastname, Firstname M."
+function formatName(member) {
+    let firstName = member.firstName || '';
+    let middleInitial = member.middleName ? `${member.middleName.charAt(0)}.` : '';
+    let lastName = member.lastName || '';
+    
+    return `${lastName}, ${firstName} ${middleInitial}`.trim();
 }
 
 // Apply filters based on current selections
@@ -80,7 +90,7 @@ function applyFilters() {
     displayMembers(filteredMembers);
 }
 
-// Display filtered members
+// Display filtered members with numbering
 function displayMembers(members) {
     membersList.innerHTML = '';
     
@@ -89,11 +99,12 @@ function displayMembers(members) {
         return;
     }
     
-    members.forEach(member => {
+    members.forEach((member, index) => {
         const memberElement = document.createElement('div');
         memberElement.className = 'member-item';
         memberElement.innerHTML = `
-            <div class="member-name">${member.firstName} ${member.lastName}</div>
+            <div class="member-number">${index + 1}.</div>
+            <div class="member-name">${formatName(member)}</div>
             <div class="member-course">${member.course || 'Not specified'}</div>
             <div class="member-year">${member.year || 'Not specified'}</div>
             <div class="member-role">${member.role || 'Not specified'}</div>
