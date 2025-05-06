@@ -138,7 +138,7 @@ function applyFilters() {
     }
 }
 
-// Display filtered members
+// Display filtered members itulog next time
 function displayMembers(members) {
     try {
         membersList.innerHTML = '';
@@ -208,3 +208,70 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // print
+document.getElementById('printButton').addEventListener('click', function() {
+    // Get the current filtered members
+    const filteredMembers = getCurrentFilteredMembers(); // You'll need to implement this
+    
+    // Create a print-friendly HTML string
+    const printContent = `
+        <html>
+            <head>
+                <title>Members List</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    h1 { color: #333; text-align: center; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th { background-color: #f5f5f5; text-align: left; padding: 8px; }
+                    td { padding: 8px; border-bottom: 1px solid #eee; }
+                    .print-date { text-align: right; margin-bottom: 20px; }
+                </style>
+            </head>
+            <body>
+                <h1>Members List</h1>
+                <div class="print-date">Printed on ${new Date().toLocaleDateString()}</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Year</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filteredMembers.map((member, index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${member.lastName}, ${member.firstName} ${member.middleName ? member.middleName.charAt(0) + '.' : ''}</td>
+                                <td>${member.course || 'N/A'}</td>
+                                <td>${member.year || 'N/A'}</td>
+                                <td>${member.role || 'N/A'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </body>
+        </html>
+    `;
+
+    // Open print window
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Wait for content to load before printing
+    setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+    }, 500);
+});
+
+// Helper function to get current filtered members
+function getCurrentFilteredMembers() {
+    // Implement this based on your existing filter logic
+    // Should return the currently displayed members array
+    return allMembers.filter(member => {
+        // Your existing filter logic from applyFilters()
+    });
+}
