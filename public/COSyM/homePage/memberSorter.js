@@ -42,7 +42,11 @@ async function loadAllMembers() {
         const querySnapshot = await getDocs(collection(db, "users"));
         allMembers = querySnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data()
+            firstName: doc.data().firstName || '',
+            lastName: doc.data().lastName || '',
+            course: doc.data().course || '',
+            year: doc.data().year || '',
+            role: doc.data().role || ''
         }));
         applyFilters(); // Display initial results
     } catch (error) {
@@ -57,13 +61,20 @@ function applyFilters() {
     const yearFilter = yearSelect.value;
     const roleFilter = roleSelect.value;
     
-    // Filter members based on selections
-    const filteredMembers = allMembers.filter(member => {
+    // Filter members based on exact matches
+    let filteredMembers = allMembers.filter(member => {
         const matchesCourse = !courseFilter || member.course === courseFilter;
-        const matchesYear = !yearFilter || String(member.year) === yearFilter;
+        const matchesYear = !yearFilter || member.year === yearFilter;
         const matchesRole = !roleFilter || member.role === roleFilter;
         
         return matchesCourse && matchesYear && matchesRole;
+    });
+    
+    // Sort members alphabetically by last name, then first name
+    filteredMembers.sort((a, b) => {
+        const nameA = `${a.lastName} ${a.firstName}`.toUpperCase();
+        const nameB = `${b.lastName} ${b.firstName}`.toUpperCase();
+        return nameA.localeCompare(nameB);
     });
     
     displayMembers(filteredMembers);
@@ -82,34 +93,13 @@ function displayMembers(members) {
         const memberElement = document.createElement('div');
         memberElement.className = 'member-item';
         memberElement.innerHTML = `
-            <div class="member-name">${member.firstName || ''} ${member.lastName || ''}</div>
-            <div class="member-course">${getCourseDisplayName(member.course)}</div>
-            <div class="member-year">${getYearDisplayName(member.year)}</div>
+            <div class="member-name">${member.firstName} ${member.lastName}</div>
+            <div class="member-course">${member.course || 'Not specified'}</div>
+            <div class="member-year">${member.year || 'Not specified'}</div>
             <div class="member-role">${member.role || 'Not specified'}</div>
         `;
         membersList.appendChild(memberElement);
     });
-}
-
-// Helper function to display course names properly
-function getCourseDisplayName(courseCode) {
-    switch(courseCode) {
-        case 'CE': return 'Bachelor of Science in Computer Engineering';
-        case 'CS': return 'Bachelor of Science in Computer Science';
-        default: return courseCode || 'Not specified';
-    }
-}
-
-// Helper function to display year names properly
-function getYearDisplayName(year) {
-    switch(year) {
-        case '1': return '1st Year';
-        case '2': return '2nd Year';
-        case '3': return '3rd Year';
-        case '4': return '4th Year';
-        case 'na': return 'N/A';
-        default: return year || 'Not specified';
-    }
 }
 
 // Show error message
