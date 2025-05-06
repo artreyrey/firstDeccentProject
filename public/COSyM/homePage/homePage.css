@@ -463,45 +463,17 @@ text-align: center;
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 1px;
 }
 
 .filter-select {
     background-color: var(--cream-color);
-    border-radius: var(--font-size-s);
+    border-radius: var(--font-size-m);
     border: 1px solid var(--gray-color);
     font-size: var(--font-size-m);
     color: var(--gray-color);
     padding: 10px 15px;
     min-width: 220px;
-}
-
-.filter-select:focus {
-    outline: 2px solid var(--orange-color);
-}
-
-.filter-button {
-    cursor: pointer;
-    padding: 12px 25px;
-    font-weight: 550;
-    letter-spacing: 1.1px;
-    background-color: var(--orange-color);
-    color: white;
-    border: none;
-    border-radius: var(--font-size-s);
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.filter-button:hover {
-    background-color: var(--orange-color-dark);
-    transform: translateY(-2px);
-}
-
-.filter-button:active {
-    transform: translateY(0);
 }
 
 /* Members display styles */
