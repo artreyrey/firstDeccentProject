@@ -593,14 +593,15 @@ text-align: center;
 
 .edit-member-btn{
     border-color: transparent;
-    margin-left: -20px;
+    margin-left: -170px;
     margin-top: -5px;
-    margin-right: 50px;
+    padding-left: 90px;
     cursor: pointer;
     font-size: 1px;
     display: flex;
-    transform: scale(0.7);
+    transform: scale(0.8);
     transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    background-color: white;
 
 }
 .members .members-content i {

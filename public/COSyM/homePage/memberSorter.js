@@ -102,7 +102,7 @@ async function loadAllMembers() {
 }
 
 // Apply filters based on current selections
-function applyFilters() {
+async function applyFilters() {
     try {
         const courseFilter = courseSelect.value;
         const yearFilter = yearSelect.value;
@@ -132,7 +132,7 @@ function applyFilters() {
         filteredMembers.sort((a, b) => a.sortName.localeCompare(b.sortName));
         
         console.log(`Found ${filteredMembers.length} matching members`);
-        displayMembers(filteredMembers);
+        await displayMembers(filteredMembers);
     } catch (error) {
         console.error("Error applying filters:", error);
         showErrorMessage(`Filtering error: ${error.message}`);
@@ -140,7 +140,7 @@ function applyFilters() {
 }
 
 // Display filtered members itulog next time
-function displayMembers(members) {
+async function displayMembers(members) {
     try {
         membersList.innerHTML = '';
         
@@ -152,6 +152,9 @@ function displayMembers(members) {
             return;
         }
         
+        // Check admin status once at the start
+        const isAdmin = await isAdminUser();
+        
         // Create header row (only if it doesn't exist)
         if (!document.querySelector('.members-list-header')) {
             const headerRow = document.createElement('div');
@@ -162,7 +165,7 @@ function displayMembers(members) {
                 <div class="header-course">Course</div>
                 <div class="header-year">Year</div>
                 <div class="header-role">Role</div>
-                ${isAdminUser() ? '<div class="header-actions">Actions</div>' : ''}
+                ${isAdmin ? '<div class="header-actions">Actions</div>' : ''}
             `;
             membersList.appendChild(headerRow);
         }
@@ -181,7 +184,7 @@ function displayMembers(members) {
                 <div class="member-course">${member.course || 'Not specified'}</div>
                 <div class="member-year">${member.year || 'Not specified'}</div>
                 <div class="member-role">${member.role || 'Not specified'}</div>
-                ${isAdminUser() ? 
+                ${isAdmin ? 
                     `<div class="member-actions">
                         <button class="edit-member-btn" data-member-id="${member.id}">
                             <i class="fa-solid fa-edit"></i>
@@ -194,7 +197,7 @@ function displayMembers(members) {
         });
 
         // Add event listeners to edit buttons if they exist
-        if (isAdminUser()) {
+        if (isAdmin) {
             document.querySelectorAll('.edit-member-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const memberId = e.currentTarget.getAttribute('data-member-id');
@@ -219,13 +222,16 @@ function showErrorMessage(message = 'Error loading members. Please try again.') 
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     console.log("DOM fully loaded, initializing members module");
-    initMembersModule().catch(error => {
+    try {
+        // Wait for auth to be ready before initializing
+        await auth.authStateReady();
+        await initMembersModule();
+    } catch (error) {
         console.error("Unhandled error in members module:", error);
-    });
+    }
 });
-
 // print
 document.getElementById('printButton').addEventListener('click', function() {
     // Get the current filtered members
@@ -315,13 +321,13 @@ async function isAdminUser() {
         }
         
         const userData = userDoc.data();
-        const userRole = userData.role || '';
+        const userRole = (userData.role || '').toLowerCase().trim();
         
         // Return true if user is not a student
-        return userRole.toLowerCase() !== 'student';
+        return userRole !== 'student';
     } catch (error) {
         console.error("Error checking user role:", error);
-        return false; // Default to false if there's an error
+        return false;
     }
 }
 
