@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { collection, getDocs, getFirestore, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { collection, getDocs, getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
@@ -142,6 +142,7 @@ async function applyFilters() {
 // Display filtered members itulog next time
 async function displayMembers(members) {
     try {
+        console.log("Displaying members...");
         membersList.innerHTML = '';
         
         if (members.length === 0) {
@@ -152,30 +153,15 @@ async function displayMembers(members) {
             return;
         }
         
-        // Check admin status once at the start
-        const isAdmin = await isAdminUser();
-        
-        // Create header row (only if it doesn't exist)
-        if (!document.querySelector('.members-list-header')) {
-            const headerRow = document.createElement('div');
-            headerRow.className = 'members-list-header';
-            headerRow.innerHTML = `
-                <div class="header-number">#</div>
-                <div class="header-name">Name</div>
-                <div class="header-course">Course</div>
-                <div class="header-year">Year</div>
-                <div class="header-role">Role</div>
-                ${isAdmin ? '<div class="header-actions">Actions</div>' : ''}
-            `;
-            membersList.appendChild(headerRow);
-        }
+        // Check edit privileges once at the start
+        const canEdit = await hasEditPrivileges();
+        console.log("User can edit:", canEdit);
         
         // Add each member with numbering
         members.forEach((member, index) => {
             const memberElement = document.createElement('div');
             memberElement.className = 'member-item';
             
-            // Format name as "Lastname, Firstname M." with proper capitalization
             const formattedName = `${member.lastName}, ${member.firstName}${member.middleName ? ' ' + member.middleName.charAt(0) + '.' : ''}`;
             
             memberElement.innerHTML = `
@@ -184,7 +170,7 @@ async function displayMembers(members) {
                 <div class="member-course">${member.course || 'Not specified'}</div>
                 <div class="member-year">${member.year || 'Not specified'}</div>
                 <div class="member-role">${member.role || 'Not specified'}</div>
-                ${isAdmin ? 
+                ${canEdit ? 
                     `<div class="member-actions">
                         <button class="edit-member-btn" data-member-id="${member.id}">
                             <i class="fa-solid fa-edit"></i>
@@ -197,7 +183,7 @@ async function displayMembers(members) {
         });
 
         // Add event listeners to edit buttons if they exist
-        if (isAdmin) {
+        if (canEdit) {
             document.querySelectorAll('.edit-member-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const memberId = e.currentTarget.getAttribute('data-member-id');
@@ -292,7 +278,7 @@ document.getElementById('printButton').addEventListener('click', function() {
     }, 500);
 });
 
-// Helper function to get current filtered members
+// Helper function to get current filtered members to print
 function getCurrentFilteredMembers() {
     // Implement this based on your existing filter logic
     // Should return the currently displayed members array
@@ -304,6 +290,9 @@ function getCurrentFilteredMembers() {
 // check if the user is no student
 async function isAdminUser() {
     try {
+        // Wait for auth state to be initialized
+        await auth.authStateReady();
+        
         const user = auth.currentUser;
         
         if (!user) {
@@ -313,7 +302,7 @@ async function isAdminUser() {
         
         // Get the user document from Firestore
         const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
+        const userDoc = await getDoc(userDocRef); // This now works because we imported getDoc
         
         if (!userDoc.exists()) {
             console.log("User document not found");
@@ -323,8 +312,10 @@ async function isAdminUser() {
         const userData = userDoc.data();
         const userRole = (userData.role || '').toLowerCase().trim();
         
-        // Return true if user is not a student
-        return userRole !== 'student';
+        console.log("Current user role:", userRole);
+        
+        // Return true if user is admin or has elevated privileges
+        return ['admin', 'officer', 'moderator'].includes(userRole);
     } catch (error) {
         console.error("Error checking user role:", error);
         return false;
@@ -335,7 +326,7 @@ async function isAdminUser() {
 async function editMember(memberId) {
     try {
         // First check if user has permission to edit
-        const canEdit = await isAdminUser();
+        const canEdit = await hasEditPrivileges();
         if (!canEdit) {
             alert("You don't have permission to edit members");
             return;
@@ -348,16 +339,41 @@ async function editMember(memberId) {
         }
         
         console.log("Editing member:", member);
-        
-        // Here you would typically:
-        // 1. Open a modal/dialog
-        // 2. Populate a form with member data
-        // 3. Handle form submission to update Firestore
-        
-        // Example implementation:
-        openEditModal(member);
+        openEditModal(member); // You'll need to implement this function
     } catch (error) {
         console.error("Error editing member:", error);
         showErrorMessage("Failed to edit member");
+    }
+}
+
+// Check if user has editing privileges (not a student)
+async function hasEditPrivileges() {
+    try {
+        await auth.authStateReady();
+        const user = auth.currentUser;
+        
+        if (!user) {
+            console.log("No user logged in");
+            return false;
+        }
+        
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (!userDoc.exists()) {
+            console.log("User document not found");
+            return false;
+        }
+        
+        const userData = userDoc.data();
+        const userRole = (userData.role || '').toLowerCase().trim();
+        
+        console.log("Current user role:", userRole);
+        
+        // Return true if user is NOT a student
+        return userRole !== 'student';
+    } catch (error) {
+        console.error("Error checking user role:", error);
+        return false;
     }
 }
