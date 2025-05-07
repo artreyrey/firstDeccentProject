@@ -154,15 +154,6 @@ main {
 
 }
 
-/* Reviews Section */
-.reviews .reviews-content {
-text-align: center;
-    font-size: var(--font-size-xxl);
-    margin-top: 300px;
-    color: var(--gray-color);
-
-}
-
 /* Mobile Styles of */
 .sidebar-toggle {
     display: none;
@@ -572,9 +563,19 @@ text-align: center;
 .header-year, .member-year, 
 .header-role, .member-role {
     flex: 2;
-    margin-left: 10px;
+    
 }
 
+.header-course, .header-role, .header-year{
+    margin-left: -40px;
+}
+
+.header-course{
+    margin-left: -80px;
+}
+.header-name{
+    margin-left: -14px;
+}
 .no-members {
     padding: 40px;
     text-align: center;
@@ -630,3 +631,18 @@ text-align: center;
     color: var(--orange-color);
     transition-duration: 0.1s;
 }
+
+/* Members responsiveness */
+
+/* Funds Designs */
+
+/* Events Designs */
+
+/* Reviews Designs */
+.reviews .reviews-content {
+    text-align: center;
+        font-size: var(--font-size-xxl);
+        margin-top: 300px;
+        color: var(--gray-color);
+    
+    }
