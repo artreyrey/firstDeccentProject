@@ -583,10 +583,22 @@ text-align: center;
 
 
 /* Member Buttons */
+
 .print-btn{
-    padding-left: 130px;
-    padding-top: -20px;
+    margin-left: 130px;
+    margin-top: -20px;
     cursor: pointer;
+    border-color: transparent;
+}
+
+.member-edit-btn{
+    border-color: transparent;
+    margin-left: 130px;
+    margin-top: -20px;
+    cursor: pointer;
+    font-size: 1px;
+    display: flex;
+
 }
 .members .members-content i {
     color: var(--gray-color);

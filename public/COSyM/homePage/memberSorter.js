@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { collection, getDocs, getFirestore } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
+import { collection, getDocs, getFirestore, doc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
     authDomain: "login-form-783e1.firebaseapp.com",
@@ -13,6 +13,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 // DOM Elements
 const courseSelect = document.getElementById('course-select');
@@ -161,6 +162,7 @@ function displayMembers(members) {
                 <div class="header-course">Course</div>
                 <div class="header-year">Year</div>
                 <div class="header-role">Role</div>
+                ${isAdminUser() ? '<div class="header-actions">Actions</div>' : ''}
             `;
             membersList.appendChild(headerRow);
         }
@@ -179,10 +181,27 @@ function displayMembers(members) {
                 <div class="member-course">${member.course || 'Not specified'}</div>
                 <div class="member-year">${member.year || 'Not specified'}</div>
                 <div class="member-role">${member.role || 'Not specified'}</div>
+                ${isAdminUser() ? 
+                    `<div class="member-actions">
+                        <button class="edit-member-btn" data-member-id="${member.id}">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                    </div>` 
+                    : ''}
             `;
             
             membersList.appendChild(memberElement);
         });
+
+        // Add event listeners to edit buttons if they exist
+        if (isAdminUser()) {
+            document.querySelectorAll('.edit-member-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const memberId = e.currentTarget.getAttribute('data-member-id');
+                    editMember(memberId);
+                });
+            });
+        }
     } catch (error) {
         console.error("Error displaying members:", error);
         showErrorMessage(`Display error: ${error.message}`);
@@ -274,4 +293,65 @@ function getCurrentFilteredMembers() {
     return allMembers.filter(member => {
         // Your existing filter logic from applyFilters()
     });
+}
+
+// check if the user is no student
+async function isAdminUser() {
+    try {
+        const user = auth.currentUser;
+        
+        if (!user) {
+            console.log("No user logged in");
+            return false;
+        }
+        
+        // Get the user document from Firestore
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (!userDoc.exists()) {
+            console.log("User document not found");
+            return false;
+        }
+        
+        const userData = userDoc.data();
+        const userRole = userData.role || '';
+        
+        // Return true if user is not a student
+        return userRole.toLowerCase() !== 'student';
+    } catch (error) {
+        console.error("Error checking user role:", error);
+        return false; // Default to false if there's an error
+    }
+}
+
+// Edit member function
+async function editMember(memberId) {
+    try {
+        // First check if user has permission to edit
+        const canEdit = await isAdminUser();
+        if (!canEdit) {
+            alert("You don't have permission to edit members");
+            return;
+        }
+        
+        const member = allMembers.find(m => m.id === memberId);
+        if (!member) {
+            console.log("Member not found");
+            return;
+        }
+        
+        console.log("Editing member:", member);
+        
+        // Here you would typically:
+        // 1. Open a modal/dialog
+        // 2. Populate a form with member data
+        // 3. Handle form submission to update Firestore
+        
+        // Example implementation:
+        openEditModal(member);
+    } catch (error) {
+        console.error("Error editing member:", error);
+        showErrorMessage("Failed to edit member");
+    }
 }

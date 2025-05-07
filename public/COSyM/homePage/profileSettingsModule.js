@@ -402,3 +402,5 @@ onAuthStateChanged(auth, async (user) => {
         });
     }
 });
+
+// member edit if not a student
