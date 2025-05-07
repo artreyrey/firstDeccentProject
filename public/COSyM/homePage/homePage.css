@@ -640,9 +640,7 @@ main {
 
 /* Reviews Designs */
 .reviews .reviews-content {
-    text-align: center;
-        font-size: var(--font-size-xxl);
-        margin-top: 300px;
+        font-size: var(--font-size-s);
         color: var(--gray-color);
     
     }
