@@ -639,8 +639,273 @@ main {
 /* Events Designs */
 
 /* Reviews Designs */
-.reviews .reviews-content {
-        font-size: var(--font-size-s);
-        color: var(--gray-color);
-    
-    }
+
+
+.padding {
+    padding: 3rem;
+}
+
+.reviews-container{
+    background-color: var(--pearl-color);
+    border-radius: var(--border-radius-m);
+    margin-top: 80px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: transparent;
+    border-bottom: 3px solid var(--gray-color);
+    border-radius: 50px ;
+}
+
+.card-header .card-title {
+    padding: 0;
+    border: none;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: -2px;
+}
+
+h4.card-title {
+    font-family: "Poppins", sans-serif;
+    color: var(--orange-color);
+    font-size: 35px;
+    margin-top: -10px;
+    font-weight: 700;
+}
+
+
+/* chat background color */
+.chat-background{
+    padding: 10px;
+    margin-top: 10px;
+    overflow-y: scroll; height:400px;
+    color: var(--gray-color);
+    background-color: var(--cream-color);
+    border-radius: var(--border-radius-m);
+}
+
+.card-title {
+    font-family: "Poppins", sans-serif;
+    line-height: 1.5;
+    margin-bottom: 0;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--gray-color);
+    border-radius: 2px;
+}
+
+.media-chat {
+    padding-right: 64px;
+    margin-bottom: 0;
+}
+
+/* message design */
+
+.media {
+    padding: 16px 12px;
+    transition: background-color .2s linear;
+}
+
+.time-stamp{
+    display: flex;
+    text-align: center;
+}
+
+/* profile picture */
+.avatar {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 100%;
+    background-color: #f5f6f7;
+    text-transform: uppercase;
+}
+
+.media-chat .media-body {
+    -webkit-box-flex: initial;
+    flex: initial;
+    display: table;
+}
+
+.media-body {
+    min-width: 0;
+}
+
+/* message design */
+.media-chat .media-body p {
+    position: relative;
+    padding: 6px 8px;
+    margin: 4px 0;
+    background-color: var(--pearl-color);
+    border-radius: 3px;
+    font-weight: 100;
+    color: var(--gray-color);
+}
+
+.media>* {
+    margin: 0 8px;
+}
+
+.media-chat .media-body p.meta {
+    background-color: transparent !important;
+    padding: 0;
+    opacity: .8;
+}
+
+.media-meta-day {
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-bottom: 0;
+    color: #8b95a5;
+    opacity: .8;
+    font-weight: 400;
+}
+
+.media {
+    padding: 16px 12px;
+    -webkit-transition: background-color .2s linear;
+    transition: background-color .2s linear;
+}
+
+.media-meta-day::before {
+    margin-right: 16px;
+}
+
+.media-meta-day::before, .media-meta-day::after {
+    content: '';
+    -webkit-box-flex: 1;
+    flex: 1 1;
+    border-top: 1px solid #ebebeb;
+}
+
+.media-meta-day::after {
+    content: '';
+    -webkit-box-flex: 1;
+    flex: 1 1;
+    border-top: 1px solid #ebebeb;
+}
+
+.media-meta-day::after {
+    margin-left: 16px;
+}
+
+.media-chat.media-chat-reverse {
+    padding-right: 12px;
+    padding-left: 64px;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    flex-direction: row-reverse;
+}
+
+.media-chat {
+    padding-right: 64px;
+    margin-bottom: 0;
+}
+
+.media {
+    padding: 16px 12px;
+    -webkit-transition: background-color .2s linear;
+    transition: background-color .2s linear;
+}
+
+.media-chat.media-chat-reverse .media-body p {
+    float: right;
+    clear: right;
+    background-color: #48b0f7;
+    color: #fff;
+}
+
+.media-chat .media-body p {
+    position: relative;
+    padding: 6px 8px;
+    margin: 4px 0;
+    background-color: #f5f6f7;
+    border-radius: 3px;
+}
+
+
+.border-light {
+    border-color: #f1f2f3 !important;
+}
+
+.bt-1 {
+    border-top: 1px solid #ebebeb !important;
+}
+
+.publisher {
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #f9fafb;
+}
+
+.publisher>*:first-child {
+    margin-left: 0;
+}
+
+.publisher>* {
+    margin: 0 8px;
+}
+
+.publisher-input {
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    border: none;
+    outline: none !important;
+    background-color: transparent;
+}
+
+button, input, optgroup, select, textarea {
+    font-family: Roboto,sans-serif;
+    font-weight: 300;
+}
+
+.publisher-btn {
+    background-color: transparent;
+    border: none;
+    color: #8b95a5;
+    font-size: 16px;
+    cursor: pointer;
+    overflow: -moz-hidden-unscrollable;
+    -webkit-transition: .2s linear;
+    transition: .2s linear;
+}
+
+.file-group {
+    position: relative;
+    overflow: hidden;
+} 
+
+.publisher-btn {
+    background-color: transparent;
+    border: none;
+    color: #cac7c7;
+    font-size: 16px;
+    cursor: pointer;
+    overflow: -moz-hidden-unscrollable;
+    -webkit-transition: .2s linear;
+    transition: .2s linear;
+} 
+
+.file-group input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    z-index: -1; 
+    width: 20px;
+}
+
+.text-info {
+    color: #48b0f7 !important;
+}
