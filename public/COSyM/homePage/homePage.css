@@ -582,9 +582,8 @@ text-align: center;
 }
 
 
-/* Print Button */
-
-.print-btn{
+/* Member Buttons */
+.print-btn, .member-edit-btn{
     border-color: transparent;
     padding-left: 130px;
     padding-top: -20px;
@@ -597,7 +596,7 @@ text-align: center;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     transform-origin: center; 
     display: inline-block;
-    background-color: transparent;
+    background-color: var(--cream-color);
     border: none;
 }
 
