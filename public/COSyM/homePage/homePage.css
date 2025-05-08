@@ -838,6 +838,14 @@ h4.card-title {
     color: var(--pearl-color);
 }
 
+/* placeholder design in the input box */
+.publisher-input::placeholder {
+    color: #ff6f00; /* Orange color */
+    font-style: italic;
+    opacity: 1;
+}
+
+
 button, input, optgroup, select, textarea {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
@@ -855,21 +863,84 @@ button, input, optgroup, select, textarea {
 }
 
 /* star design */
-.publisher-btn-star-one, .publisher-btn-star-two, .publisher-btn-star-three, .publisher-btn-star-four, .publisher-btn-star-five{
+.publisher-btn-star-one, 
+.publisher-btn-star-two, 
+.publisher-btn-star-three, 
+.publisher-btn-star-four, 
+.publisher-btn-star-five {
     background-color: transparent;
     border: none;
     color: #cac7c7;
     font-size: 20px;
     cursor: pointer;
     overflow: -moz-hidden-unscrollable;
-    transition: .2s linear;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: scale(1);
 }
+
+/* Reversed hover colors - now orange to yellow */
+.publisher-btn-star-one:hover { color: #ff6f00; } /* Darkest orange */
+.publisher-btn-star-two:hover { color: #ff8f00; }
+.publisher-btn-star-three:hover { color: #ffa000; }
+.publisher-btn-star-four:hover { color: #ffb300; }
+.publisher-btn-star-five:hover { color: #ffc107; } /* Brightest yellow */
+
+/* Common hover effects */
+.publisher-btn-star-one:hover, 
+.publisher-btn-star-two:hover, 
+.publisher-btn-star-three:hover, 
+.publisher-btn-star-four:hover, 
+.publisher-btn-star-five:hover {
+    transform: scale(1.15) rotate(5deg);
+    text-shadow: 0 0 8px currentColor;
+}
+
+/* Reversed active colors */
+.publisher-btn-star-one:active { color: #ff5d00; }
+.publisher-btn-star-two:active { color: #ff7b00; }
+.publisher-btn-star-three:active { color: #ff8c00; }
+.publisher-btn-star-four:active { color: #ff9e00; }
+.publisher-btn-star-five:active { color: #ffab00; }
+
+/* Common active effects */
+.publisher-btn-star-one:active, 
+.publisher-btn-star-two:active, 
+.publisher-btn-star-three:active, 
+.publisher-btn-star-four:active, 
+.publisher-btn-star-five:active {
+    transform: scale(0.95);
+    transition: all 0.1s ease-out;
+}
+
+/* Selected state animation */
+.publisher-btn-star-one.selected, 
+.publisher-btn-star-two.selected, 
+.publisher-btn-star-three.selected, 
+.publisher-btn-star-four.selected, 
+.publisher-btn-star-five.selected {
+    animation: starSelected 0.6s ease-out;
+}
+
+@keyframes starSelected {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.25) rotate(-5deg); }
+    50% { transform: scale(1.15) rotate(5deg); }
+    75% { transform: scale(1.2) rotate(-3deg); }
+    100% { transform: scale(1.1) rotate(0); }
+}
+
+/* Reversed selected colors */
+.publisher-btn-star-one.selected { color: #ff6f00; }
+.publisher-btn-star-two.selected { color: #ff8f00; }
+.publisher-btn-star-three.selected { color: #ffa000; }
+.publisher-btn-star-four.selected { color: #ffb300; }
+.publisher-btn-star-five.selected { color: #ffc107; }
 
 
 .file-group {
     position: relative;
     overflow: hidden;
-} 
+}
 
 .publisher-btn {
     background-color: transparent;
