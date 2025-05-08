@@ -215,52 +215,38 @@
             <section id="reviews-section" class="reviews">
                 <div class="reviews-container" id="page-content">
                     <div class="padding">
-                        <div class="row container d-flex justify-content-center">
-                                <h4 class="card-title">Freedom Wall</h4>
-                              </div>
-                
-                              <div class="chat-background" id="chat-content">
-                                <div class="media media-chat">
-                                    <p class="replier-first-name" id="replierFirstName">Luis</p>
-                                  <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/10928/10928539.png">
-                                  <div class="media-body">
-                                    <p class="replier-message">Hi</p>
-                                    <p class="time-stamp"><time datetime="2018">23:58</time></p>
-                                  </div>
-                                </div>
-                
-                                <div class="media media-meta-day">Today</div>
-                
-                                <div class="media media-chat media-chat-reverse">
-                                  <div class="media-body">
-                                    <p class="upcoming-message">Hiii, I'm good.</p>
-                                    <p class="time-stamp"><time datetime="2018">00:06</time></p>
-                                  </div>
-                                </div>
-                
-                              <div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;"></div></div>
-                
-                             <div class="publisher bt-1 border-light">
-                                <img class="avatar avatar-xs" src="https://cdn-icons-png.flaticon.com/512/10928/10928539.png" alt="...">
-                                <input class="publisher-input" id="message" type="text" placeholder="Write something">
-                                
-                                <span class="publisher-btn file-group">
-                                  <i class="fa fa-paperclip file-browser"></i>
-                                  <input type="file">
-                                </span>
-                                <a class="publisher-btn-star-one" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                                <a class="publisher-btn-star-two" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                                <a class="publisher-btn-star-three" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                                <a class="publisher-btn-star-four" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                                <a class="publisher-btn-star-five" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                                <a class="publisher-btn-text-info" id="submitButton" href="#" data-abc="true"><i class="fa fa-paper-plane"></i></a>
-                              </div>
-                
-                             </div>
-                          </div>
-                        </div>
+                      <div class="row container d-flex justify-content-center">
+                        <h4 class="card-title">Freedom Wall</h4>
+                      </div>
+                  
+                      <!-- Changed id to "messages-container" for clarity -->
+                      <div class="chat-background" id="chat-content" style="overflow-y: scroll; height: 400px;">
+                        <div class="media media-meta-day" id="current-date">Today</div>
+                      </div>
+                  
+                      <div class="publisher bt-1 border-light">
+                        <img class="avatar avatar-xs" src="https://cdn-icons-png.flaticon.com/512/10928/10928539.png" alt="...">
+                        <input class="publisher-input" id="message" type="text" placeholder="Write something">
+                        
+                        <span class="publisher-btn file-group">
+                          <i class="fa fa-paperclip file-browser"></i>
+                          <input type="file">
+                        </span>
+                        
+                        <!-- Star rating buttons (unchanged) -->
+                        <a class="publisher-btn-star-one" href="#" data-abc="true"><i class="fa fa-star"></i></a>
+                        <a class="publisher-btn-star-two" href="#" data-abc="true"><i class="fa fa-star"></i></a>
+                        <a class="publisher-btn-star-three" href="#" data-abc="true"><i class="fa fa-star"></i></a>
+                        <a class="publisher-btn-star-four" href="#" data-abc="true"><i class="fa fa-star"></i></a>
+                        <a class="publisher-btn-star-five" href="#" data-abc="true"><i class="fa fa-star"></i></a>
+                        
+                        <!-- Changed to button to prevent default anchor behavior -->
+                        <button class="publisher-btn-text-info" id="submitButton" data-abc="true">
+                          <i class="fa fa-paper-plane"></i>
+                        </button>
+                      </div>
                     </div>
-                </div>
+                  </div>
                 <script type="module" src="reviewsChatSystem.js"></script>
                 </section>
         </main>

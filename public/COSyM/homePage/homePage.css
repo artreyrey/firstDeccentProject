@@ -877,12 +877,12 @@ button, input, optgroup, select, textarea {
     transform: scale(1);
 }
 
-/* Reversed hover colors - now orange to yellow */
-.publisher-btn-star-one:hover { color: #ff6f00; } /* Darkest orange */
-.publisher-btn-star-two:hover { color: #ff8f00; }
-.publisher-btn-star-three:hover { color: #ffa000; }
-.publisher-btn-star-four:hover { color: #ffb300; }
-.publisher-btn-star-five:hover { color: #ffc107; } /* Brightest yellow */
+/* Base colors - white to orange */
+.publisher-btn-star-one:hover { color: #ffffff; } /* White */
+.publisher-btn-star-two:hover { color: #ffe0b2; }
+.publisher-btn-star-three:hover { color: #ffcc80; }
+.publisher-btn-star-four:hover { color: #ffb74d; }
+.publisher-btn-star-five:hover { color: #ff9800; } /* Bright orange */
 
 /* Common hover effects */
 .publisher-btn-star-one:hover, 
@@ -894,12 +894,13 @@ button, input, optgroup, select, textarea {
     text-shadow: 0 0 8px currentColor;
 }
 
-/* Reversed active colors */
-.publisher-btn-star-one:active { color: #ff5d00; }
-.publisher-btn-star-two:active { color: #ff7b00; }
-.publisher-btn-star-three:active { color: #ff8c00; }
-.publisher-btn-star-four:active { color: #ff9e00; }
-.publisher-btn-star-five:active { color: #ffab00; }
+/* Active colors - even darker orange */
+.publisher-btn-star-one:active { color: #ffffff; } /* White */
+.publisher-btn-star-two:active { color: #ffe0b2; }
+.publisher-btn-star-three:active { color: #ffcc80; }
+.publisher-btn-star-four:active { color: #ffb74d; }
+.publisher-btn-star-five:active { color: #ff9800; } /* Bright orange */
+
 
 /* Common active effects */
 .publisher-btn-star-one:active, 
@@ -928,12 +929,12 @@ button, input, optgroup, select, textarea {
     100% { transform: scale(1.1) rotate(0); }
 }
 
-/* Reversed selected colors */
-.publisher-btn-star-one.selected { color: #ff6f00; }
-.publisher-btn-star-two.selected { color: #ff8f00; }
-.publisher-btn-star-three.selected { color: #ffa000; }
-.publisher-btn-star-four.selected { color: #ffb300; }
-.publisher-btn-star-five.selected { color: #ffc107; }
+/* Selected colors - same as hover */
+.publisher-btn-star-one.selected { color: #ffb74d; }
+.publisher-btn-star-two.selected { color: #ffa726; }
+.publisher-btn-star-three.selected { color: #ff9800; }
+.publisher-btn-star-four.selected { color: #fb8c00; }
+.publisher-btn-star-five.selected { color: #f57c00; }
 
 /* file button */
 .file-group {
@@ -984,6 +985,9 @@ button, input, optgroup, select, textarea {
     font-size: 20px;
     transition: all 0.3s ease;
     display: inline-block; /* Required for transform effects */
+    background-color: transparent;
+    border-color: transparent;
+    cursor: pointer;
 }
 
 /* Hover - Color shift & slight grow */
@@ -998,3 +1002,49 @@ button, input, optgroup, select, textarea {
     color: #ff6f00; /* Deeper orange */
     transform: scale(0.98);
 }
+
+/* delete button */
+.delete-btn {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    background: none;
+    border: none;
+    color: #ff6f00;
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .media-chat:hover .delete-btn,
+  .media-chat-reverse:hover .delete-btn {
+    opacity: 1;
+  }
+
+  /* Add to your existing CSS */
+#messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Animation for new messages */
+  .media {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Better scrollbar for chat */
+  .chat-background::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .chat-background::-webkit-scrollbar-thumb {
+    background-color: var(--orange-color);
+    border-radius: 4px;
+  }

@@ -1,49 +1,163 @@
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import {getAuth} 
-  from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-  import {getFirestore, set, ref, push, child, onValue} 
-  from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getDatabase, ref, push, set, onChildAdded } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
+  authDomain: "login-form-783e1.firebaseapp.com",
+  databaseURL: "https://login-form-783e1-default-rtdb.firebaseio.com",
+  projectId: "login-form-783e1",
+  storageBucket: "login-form-783e1.appspot.com",
+  messagingSenderId: "598925515666",
+  appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
+};
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
-    authDomain: "login-form-783e1.firebaseapp.com",
-    projectId: "login-form-783e1",
-    storageBucket: "login-form-783e1.firebasestorage.app",
-    messagingSenderId: "598925515666",
-    appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
-  };
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore();
 const database = getDatabase(app);
-auth.languageCode = 'en';
 
-// button
-const submitButton = document.getElementById("submitButton").value;
+// DOM elements
+const messageInput = document.getElementById('message');
+const submitButton = document.getElementById('submitButton');
+const messagesContainer = document.getElementById('chat-content'); // Changed to match your HTML
+const currentDateElement = document.getElementById('date'); // Changed to match your HTML
 
-submitButton.addEventListener('click',(e)=>{
-  // elements 
-    var message = document.getElementById('message').value;
-    var username = document.getElementById('username').value;
-    var time = document.getElementById('time').value;
-    var date = document.getElementById('date').value;
-    var userProfile = document.getElementById('userProfile').value;
+// Generate random anonymous name
+const getRandomName = () => {
+  const adjectives = ["Happy", "Funny", "Clever", "Brave", "Gentle", "Lucky", "Wise"];
+  const nouns = ["Penguin", "Tiger", "Dolphin", "Owl", "Fox", "Koala", "Panda"];
+  return `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${nouns[Math.floor(Math.random() * nouns.length)]}`;
+};
 
-    const id =push(child(ref(database), 'messages')).key;
+// Store user's random name in sessionStorage
+let username = sessionStorage.getItem('anonymousName') || getRandomName();
+sessionStorage.setItem('anonymousName', username);
 
-    set(ref(database, 'messages/' + id), {
-      username: username,
-      message: message
-    });
+// Update the displayed name in the HTML
+document.getElementById('replierFirstName').textContent = username;
 
-    alert('message sent');
+// Update current date display
+const updateCurrentDate = () => {
+  const today = new Date();
+  currentDateElement.textContent = today.toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+};
+updateCurrentDate();
 
+// Send message function
+const sendMessage = () => {
+  const messageText = messageInput.value.trim();
+  if (!messageText) {
+    alert('Please enter a message');
+    return;
+  }
+
+  console.log('Attempting to send message:', messageText);
+
+  const timestamp = Date.now();
+  const timeString = new Date(timestamp).toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+
+  const messagesRef = ref(database, 'messages');
+  const newMessageRef = push(messagesRef);
+  
+  console.log('New message reference:', newMessageRef.key);
+
+  set(newMessageRef, {
+    message: messageText,
+    sender: username,
+    time: timeString,
+    timestamp: timestamp
+  }).then(() => {
+    console.log('Message successfully written to database');
+    messageInput.value = '';
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }).catch((error) => {
+    console.error("Error sending message:", error);
+    alert('Failed to send message. Error: ' + error.message);
+  });
+};
+
+// Display messages
+const displayMessage = (messageData) => {
+  try {
+    console.log('Received message data:', messageData);
+    
+    // Add validation for required fields
+    if (!messageData || !messageData.sender || !messageData.message) {
+      console.error('Invalid message data:', messageData);
+      return;
+    }
+
+  const messageDiv = document.createElement('div');
+  const isCurrentUser = messageData.sender === username;
+  messageDiv.className = `media ${isCurrentUser ? 'media-chat media-chat-reverse' : 'media media-chat'}`;
+
+  // Format the time
+  const timeElement = `<time datetime="${new Date(messageData.timestamp).toISOString()}">${messageData.time}</time>`;
+
+  if (isCurrentUser) {
+    messageDiv.innerHTML = `
+      <div class="media-body">
+        <p class="upcoming-message">${messageData.message}</p>
+        <p class="time-stamp">${timeElement}</p>
+      </div>
+    `;
+  } else {
+    messageDiv.innerHTML = `
+      <p class="replier-first-name">${messageData.sender}</p>
+      <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/10928/10928539.png">
+      <div class="media-body">
+        <p class="replier-message">${messageData.message}</p>
+        <p class="time-stamp">${timeElement}</p>
+      </div>
+    `;
+  }
+
+  // Add date separator if needed
+  const lastMessage = messagesContainer.lastElementChild;
+  if (!lastMessage || lastMessage.className.includes('media-meta-day')) {
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'media media-meta-day';
+    dateDiv.textContent = new Date(messageData.timestamp).toLocaleDateString();
+    messagesContainer.appendChild(dateDiv);
+  }
+
+  messagesContainer.appendChild(messageDiv);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+  } catch (error) {
+    console.error('Error displaying message:', error);
+  }
+};
+  
+
+// Event listeners
+submitButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  sendMessage();
 });
 
+messageInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendMessage();
+  }
+});
 
+// Listen for new messages
+onChildAdded(ref(database, 'messages'), (snapshot) => {
+  displayMessage(snapshot.val());
+});
+
+// Initial load - clear the container except for the date element
+while (messagesContainer.children.length > 1) {
+  messagesContainer.removeChild(messagesContainer.lastChild);
+}
+
+// try to see mistakes
