@@ -702,7 +702,6 @@ h4.card-title {
 }
 
 /* message design */
-
 .media {
     padding: 16px 12px;
     transition: background-color .2s linear;
@@ -710,7 +709,8 @@ h4.card-title {
 
 /* profile picture */
 .avatar {
-    position: relative;
+    margin-bottom: -45px;
+    position:relative;
     display: inline-block;
     width: 35px;
     height: 35px;
@@ -719,6 +719,7 @@ h4.card-title {
     border-radius: 100%;
     background-color: #f5f6f7;
     text-transform: uppercase;
+    margin-left: -10px;
 }
 
 .media-chat .media-body {
@@ -731,18 +732,27 @@ h4.card-title {
     min-width: 0;
 }
 
+/* name of replier */
+.media-chat .replier-first-name {
+    background: none;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    color: #67686b;
+    margin-left: 45px;
+    margin-bottom: -20px;
+
+}
 /* message from others design */
-.media-chat .media-body p  {
+.media-chat .media-body p{
+    margin-left: 40px;
     position: relative;
     padding: 6px 8px;
-    margin: 4px 0;
     background-color: var(--gray-color);
     border-radius: 15px;
     font-size: 19px;
     font-weight: 600;
     color: var(--pearl-color);
-    border-color: var(--gray-color);
-    border-width: 2px;
 }
 
 /* time */
@@ -752,6 +762,7 @@ h4.card-title {
     margin: 0;
     font-size: 16px;
     color: #67686b;
+    margin-left: 40px;
   }
 
   /* day */
@@ -763,8 +774,9 @@ h4.card-title {
     font-weight: 500;
 }
 
+/* position of the chat */
 .media-chat.media-chat-reverse {
-    padding-left: 1200px;   
+    padding-left: 1110px;   
     flex-direction: row-reverse;
 }
 
@@ -784,7 +796,7 @@ h4.card-title {
 }
 
 .border-light {
-    border-color: #f1f2f3 !important;
+    border-color: var(--gray-color);
 }
 
 .bt-1 {
