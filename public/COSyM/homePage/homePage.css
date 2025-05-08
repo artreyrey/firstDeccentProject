@@ -731,7 +731,7 @@ h4.card-title {
     min-width: 0;
 }
 
-/* message design */
+/* message from others design */
 .media-chat .media-body p  {
     position: relative;
     padding: 6px 8px;
@@ -768,14 +768,14 @@ h4.card-title {
     flex-direction: row-reverse;
 }
 
-/* reply design */
+/* reply by user design */
 .media-chat.media-chat-reverse .media-body p {
     float: right;
     clear: right;
     background-color:#67686b;
     color: var(--pearl-color);
     padding: 10px;
-    border-radius: var(--border-radius-s);
+    border-radius: 15px;
 }
 
 .media-chat.media-chat-reverse .media-body .time-stamp{
