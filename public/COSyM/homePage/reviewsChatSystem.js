@@ -24,18 +24,26 @@ const db = getFirestore();
 const database = getDatabase(app);
 auth.languageCode = 'en';
 
-// elements
-const message = document.getElementById('message').value;
-const username = document.getElementById('username').value;
-const time = document.getElementById('time').value;
-const date = document.getElementById('date').value;
-const userProfile = document.getElementById('userProfile').value;
-
 // button
 const submitButton = document.getElementById("submitButton").value;
 
 submitButton.addEventListener('click',(e)=>{
-  
+  // elements 
+    var message = document.getElementById('message').value;
+    var username = document.getElementById('username').value;
+    var time = document.getElementById('time').value;
+    var date = document.getElementById('date').value;
+    var userProfile = document.getElementById('userProfile').value;
+
+    const id =push(child(ref(database), 'messages')).key;
+
+    set(ref(database, 'messages/' + id), {
+      username: username,
+      message: message
+    });
+
+    alert('message sent');
+
 });
 
 
