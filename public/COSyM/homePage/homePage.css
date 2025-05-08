@@ -836,10 +836,11 @@ h4.card-title {
 }
 
 button, input, optgroup, select, textarea {
-    font-family: popp,sans-serif;
-    font-weight: 300;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
 }
 
+/* buttons in the reply bar */
 .publisher-btn {
     background-color: transparent;
     border: none;
@@ -875,5 +876,5 @@ button, input, optgroup, select, textarea {
 }
 
 .text-info {
-    color: #48b0f7 !important;
+    color: var(--orange-color);
 }
