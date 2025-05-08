@@ -760,7 +760,7 @@ h4.card-title {
     background: none;
     padding: 0;
     margin: 0;
-    font-size: 16px;
+    font-size: 15px;
     color: #67686b;
     margin-left: 40px;
   }
@@ -797,20 +797,23 @@ h4.card-title {
 
 .border-light {
     border-color: var(--gray-color);
+    background-color: var(--gray-color);
 }
 
+/* publisher line top */
 .bt-1 {
-    border-top: 1px solid #ebebeb !important;
+    border-top: 8px solid var(--orange-color);
 }
 
+/* background publisher */
 .publisher {
     position: relative;
-    display: -webkit-box;
     display: flex;
-    -webkit-box-align: center;
     align-items: center;
     padding: 12px 20px;
-    background-color: #f9fafb;
+    background-color: var(--gray-color);
+    border-radius: 10px;
+    
 }
 
 .publisher>*:first-child {
@@ -825,12 +828,12 @@ h4.card-title {
     -webkit-box-flex: 1;
     flex-grow: 1;
     border: none;
-    outline: none !important;
+    outline: none;
     background-color: transparent;
 }
 
 button, input, optgroup, select, textarea {
-    font-family: Roboto,sans-serif;
+    font-family: popp,sans-serif;
     font-weight: 300;
 }
 
