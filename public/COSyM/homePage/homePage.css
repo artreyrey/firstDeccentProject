@@ -845,11 +845,27 @@ button, input, optgroup, select, textarea {
     background-color: transparent;
     border: none;
     color: #8b95a5;
-    font-size: 16px;
+    font-size: 30px;
     cursor: pointer;
     overflow: -moz-hidden-unscrollable;
-    -webkit-transition: .2s linear;
     transition: .2s linear;
+}
+
+/* star design */
+.publisher-btn-star{
+    background-color: transparent;
+    border: none;
+    color: #cac7c7;
+    font-size: 20px;
+    cursor: pointer;
+    overflow: -moz-hidden-unscrollable;
+    transition: .2s linear;
+}
+
+/* send button */
+.text-info {
+    color: var(--orange-color);
+    font-size: 20px;
 }
 
 .file-group {
@@ -861,7 +877,7 @@ button, input, optgroup, select, textarea {
     background-color: transparent;
     border: none;
     color: #cac7c7;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
     overflow: -moz-hidden-unscrollable;
     -webkit-transition: .2s linear;
@@ -873,8 +889,5 @@ button, input, optgroup, select, textarea {
     opacity: 0;
     z-index: -1; 
     width: 20px;
-}
-
-.text-info {
-    color: var(--orange-color);
+    
 }
