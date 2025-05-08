@@ -25,6 +25,9 @@ const messagesContainer = document.getElementById('chat-content');
 const currentDateElement = document.getElementById('current-date');
 const replierFirstName = document.getElementById('replierFirstName');
 
+// Track the last displayed date
+let lastDisplayedDate = null;
+
 // Generate random anonymous name
 const getRandomName = () => {
   const adjectives = ["Happy", "Funny", "Clever", "Brave", "Gentle", "Lucky", "Wise"];
@@ -35,137 +38,161 @@ const getRandomName = () => {
 // Initialize chat system
 const initChatSystem = () => {
   // Verify all required elements exist
-  if (!messageInput || !submitButton || !messagesContainer || !currentDateElement || !replierFirstName) {
+  if (!messageInput || !submitButton || !messagesContainer || !currentDateElement) {
     console.error('Missing required elements in HTML');
     return;
   }
 
-  // Set up user
-  let username = sessionStorage.getItem('anonymousName') || getRandomName();
+  // Initialize username
+  const username = sessionStorage.getItem('anonymousName') || getRandomName();
   sessionStorage.setItem('anonymousName', username);
-  replierFirstName.textContent = username;
+  if (replierFirstName) {
+    replierFirstName.textContent = username;
+  }
 
   // Update current date
   updateCurrentDate();
 
   // Set up event listeners
-  setupEventListeners();
+  setupEventListeners(username);
 
   // Test Firebase connection
   testConnection();
+
+  // Load existing messages
+  loadExistingMessages(username);
+};
+
+// Load existing messages with proper date grouping
+const loadExistingMessages = (username) => {
+  // Clear the container first
+  messagesContainer.innerHTML = '';
+  // Reset the last displayed date
+  lastDisplayedDate = null;
 };
 
 // Update current date display
 const updateCurrentDate = () => {
   const today = new Date();
   currentDateElement.textContent = today.toLocaleDateString('en-US', { 
-    weekday: 'long', 
     month: 'long', 
-    day: 'numeric' 
+    day: 'numeric', 
+    year: 'numeric' 
   });
 };
 
 // Set up event listeners
-const setupEventListeners = () => {
-  submitButton.addEventListener('click', (e) => {
+const setupEventListeners = (username) => {
+  const sendMessage = async () => {
+    const messageText = messageInput.value.trim();
+    if (!messageText) {
+      alert('Please enter a message');
+      return;
+    }
+
+    try {
+      // Ensure authentication
+      if (!auth.currentUser) {
+        await signInAnonymously(auth);
+      }
+
+      const timestamp = Date.now();
+      const timeString = new Date(timestamp).toLocaleTimeString('en-US', { 
+        hour: 'numeric',  // Changed to 'numeric' for single digit hours
+        minute: '2-digit',
+        hour12: true
+      }).toLowerCase();   // Convert to lowercase for "am/pm"
+
+      const messagesRef = ref(database, 'messages');
+      const newMessageRef = push(messagesRef);
+      
+      await set(newMessageRef, {
+        message: messageText,
+        sender: username,
+        time: timeString,
+        timestamp: timestamp
+      });
+
+      messageInput.value = '';
+      
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert('Failed to send message: ' + error.message);
+    }
+  };
+
+  const handleSendMessage = (e) => {
     e.preventDefault();
     sendMessage();
-  });
+  };
 
+  submitButton.addEventListener('click', handleSendMessage);
   messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
-      sendMessage();
+      handleSendMessage(e);
     }
   });
 
   // Listen for new messages
   onChildAdded(ref(database, 'messages'), (snapshot) => {
-    displayMessage(snapshot.val());
+    displayMessage(snapshot.val(), username);
   });
 };
 
-// Send message function
-const sendMessage = async () => {
-  const messageText = messageInput.value.trim();
-  if (!messageText) {
-    alert('Please enter a message');
-    return;
-  }
-
-  try {
-    // Ensure authentication
-    if (!auth.currentUser) {
-      await signInAnonymously(auth);
-    }
-
-    const timestamp = Date.now();
-    const timeString = new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-
-    const messagesRef = ref(database, 'messages');
-    const newMessageRef = push(messagesRef);
-    
-    await set(newMessageRef, {
-      message: messageText,
-      sender: username,
-      time: timeString,
-      timestamp: timestamp
-    });
-
-    messageInput.value = '';
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    
-  } catch (error) {
-    console.error("Error sending message:", error);
-    alert('Failed to send message: ' + error.message);
-  }
-};
-
-// Display messages
-const displayMessage = (messageData) => {
-  if (!messageData || !messageData.sender || !messageData.message) {
+// Display messages with date header only once per day
+const displayMessage = (messageData, username) => {
+  if (!messageData || !messageData.sender || !messageData.message || !messageData.timestamp) {
     console.error('Invalid message data:', messageData);
     return;
   }
 
+  const messageDate = new Date(messageData.timestamp);
+  const currentDate = messageDate.toDateString(); // Gets date in "Day Mon DD YYYY" format
+
+  // Only show date header if it's a new day
+  if (currentDate !== lastDisplayedDate) {
+    const formattedDate = messageDate.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'media media-meta-day';
+    dateDiv.textContent = formattedDate;
+    messagesContainer.appendChild(dateDiv);
+    
+    lastDisplayedDate = currentDate;
+  }
+
+  // Create message element
   const messageDiv = document.createElement('div');
   const isCurrentUser = messageData.sender === username;
   messageDiv.className = `media ${isCurrentUser ? 'media-chat media-chat-reverse' : 'media media-chat'}`;
 
-  const timeElement = `<time datetime="${new Date(messageData.timestamp).toISOString()}">${messageData.time}</time>`;
+  const timeElement = `<time datetime="${messageDate.toISOString()}">${messageData.time}</time>`;
 
-  if (isCurrentUser) {
-    messageDiv.innerHTML = `
+  messageDiv.innerHTML = isCurrentUser
+    ? `
       <div class="media-body">
         <p class="upcoming-message">${messageData.message}</p>
         <p class="time-stamp">${timeElement}</p>
       </div>
-    `;
-  } else {
-    messageDiv.innerHTML = `
+    `
+    : `
       <p class="replier-first-name">${messageData.sender}</p>
-      <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/10928/10928539.png">
+      <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/10928/10928539.png" alt="${messageData.sender}'s avatar">
       <div class="media-body">
         <p class="replier-message">${messageData.message}</p>
         <p class="time-stamp">${timeElement}</p>
       </div>
     `;
-  }
-
-  // Add date separator if needed
-  const lastMessage = messagesContainer.querySelector('.media:not(.media-meta-day)');
-  if (!lastMessage) {
-    const dateDiv = document.createElement('div');
-    dateDiv.className = 'media media-meta-day';
-    dateDiv.textContent = new Date(messageData.timestamp).toLocaleDateString();
-    messagesContainer.appendChild(dateDiv);
-  }
 
   messagesContainer.appendChild(messageDiv);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  messagesContainer.scrollTo({
+    top: messagesContainer.scrollHeight,
+    behavior: 'smooth'
+  });
 };
 
 // Test Firebase connection
