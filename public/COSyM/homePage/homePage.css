@@ -790,6 +790,7 @@ h4.card-title {
     color: var(--pearl-color);
     padding: 10px;
     border-radius: 15px;
+    
 }
 
 /* user reply timestamp */
@@ -833,6 +834,8 @@ h4.card-title {
     border: none;
     outline: none;
     background-color: transparent;
+    font-size: 18px;
+    color: var(--pearl-color);
 }
 
 button, input, optgroup, select, textarea {
@@ -852,7 +855,7 @@ button, input, optgroup, select, textarea {
 }
 
 /* star design */
-.publisher-btn-star{
+.publisher-btn-star-one, .publisher-btn-star-two, .publisher-btn-star-three, .publisher-btn-star-four, .publisher-btn-star-five{
     background-color: transparent;
     border: none;
     color: #cac7c7;
@@ -862,11 +865,6 @@ button, input, optgroup, select, textarea {
     transition: .2s linear;
 }
 
-/* send button */
-.text-info {
-    color: var(--orange-color);
-    font-size: 20px;
-}
 
 .file-group {
     position: relative;
@@ -890,4 +888,10 @@ button, input, optgroup, select, textarea {
     z-index: -1; 
     width: 20px;
     
+}
+
+/* send button */
+.text-info {
+    color: var(--orange-color);
+    font-size: 20px;
 }
