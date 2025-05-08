@@ -732,30 +732,29 @@ h4.card-title {
 }
 
 /* message design */
-.media-chat .media-body p {
+.media-chat .media-body p  {
     position: relative;
     padding: 6px 8px;
     margin: 4px 0;
-    background-color: var(--pearl-color);
-    border-radius: 3px;
+    background-color: var(--gray-color);
+    border-radius: 15px;
     font-size: 19px;
     font-weight: 600;
-    color: var(--gray-color);
+    color: var(--pearl-color);
+    border-color: var(--gray-color);
+    border-width: 2px;
 }
 
+/* time */
 .media-chat .media-body .time-stamp {
     background: none;
     padding: 0;
     margin: 0;
     font-size: 16px;
+    color: #67686b;
   }
 
-.media-chat .media-body p.meta {
-    background-color: transparent !important;
-    padding: 0;
-    opacity: .8;
-}
-
+  /* day */
 .media-meta-day {
     text-align: center;
     margin-bottom: 0;
@@ -765,20 +764,8 @@ h4.card-title {
 }
 
 .media-chat.media-chat-reverse {
-    padding-left: 1200px;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
+    padding-left: 1200px;   
     flex-direction: row-reverse;
-}
-
-.media-chat {
-    padding-right: 64px;
-    margin-bottom: 0;
-}
-
-.media {
-    padding: 16px 12px;
-    transition: background-color .2s linear;
 }
 
 /* reply design */
@@ -788,17 +775,13 @@ h4.card-title {
     background-color:#67686b;
     color: var(--pearl-color);
     padding: 10px;
-    border-radius: var(--border-radius-m);
+    border-radius: var(--border-radius-s);
 }
 
-.media-chat .media-body p {
-    position: relative;
-    padding: 6px 8px;
-    margin: 4px 0;
-    background-color: #f5f6f7;
-    border-radius: 3px;
+.media-chat.media-chat-reverse .media-body .time-stamp{
+    background-color: transparent ;
+    color: #67686b;
 }
-
 
 .border-light {
     border-color: #f1f2f3 !important;
