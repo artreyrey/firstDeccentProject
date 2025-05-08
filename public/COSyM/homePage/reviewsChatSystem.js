@@ -2,7 +2,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
   import {getAuth} 
   from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-  import {getFirestore, setDoc, doc} 
+  import {getFirestore, set, ref, push, child, onValue} 
   from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
   // TODO: Add SDKs for Firebase products that you want to use
@@ -21,4 +21,21 @@
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore();
+const database = getDatabase(app);
 auth.languageCode = 'en';
+
+// elements
+const message = document.getElementById('message').value;
+const username = document.getElementById('username').value;
+const time = document.getElementById('time').value;
+const date = document.getElementById('date').value;
+const userProfile = document.getElementById('userProfile').value;
+
+// button
+const submitButton = document.getElementById("submitButton").value;
+
+submitButton.addEventListener('click',(e)=>{
+  
+});
+
+
