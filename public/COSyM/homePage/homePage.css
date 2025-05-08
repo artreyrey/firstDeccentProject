@@ -840,9 +840,8 @@ h4.card-title {
 
 /* placeholder design in the input box */
 .publisher-input::placeholder {
-    color: #ff6f00; /* Orange color */
-    font-style: italic;
-    opacity: 1;
+    color: var(--pearl-color); /* Orange color */
+    opacity: 0.7;
 }
 
 
@@ -936,10 +935,28 @@ button, input, optgroup, select, textarea {
 .publisher-btn-star-four.selected { color: #ffb300; }
 .publisher-btn-star-five.selected { color: #ffc107; }
 
-
+/* file button */
 .file-group {
     position: relative;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Hover animation - subtle elevation and glow */
+.file-group:hover {
+    color: #ffa000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Active state - pressed down effect */
+.file-group:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.file-group:hover::after {
+    transform: scaleX(1);
 }
 
 .publisher-btn {
@@ -962,7 +979,22 @@ button, input, optgroup, select, textarea {
 }
 
 /* send button */
-.text-info {
+.publisher-btn-text-info {
     color: var(--orange-color);
     font-size: 20px;
+    transition: all 0.3s ease;
+    display: inline-block; /* Required for transform effects */
+}
+
+/* Hover - Color shift & slight grow */
+.publisher-btn-text-info:hover {
+    color: #ff8f00; /* Brighter orange */
+    transform: scale(1.3);
+    text-shadow: 0 2px 4px rgba(255, 143, 0, 0.2);
+}
+
+/* Active - Pressed effect */
+.publisher-btn-text-info:active {
+    color: #ff6f00; /* Deeper orange */
+    transform: scale(0.98);
 }
