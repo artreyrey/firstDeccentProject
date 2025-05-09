@@ -206,7 +206,9 @@
 
             <!-- Events section// -->
             <section id="events-section" class="events">
-                
+                <div class="events-content-calendar">
+                </div>
+                <script src="eventCallendar.js"></script>
                 </section>
 
             <!-- Reviews section// -->
@@ -230,8 +232,8 @@
                         <input class="publisher-input" id="message" type="text" placeholder="Write something">
                         
                         <span class="publisher-btn file-group">
-                          <i class="fa fa-paperclip file-browser"></i>
-                          <input type="file">
+                          <i class="fa fa-paperclip file-browser" onclick="document.getElementById('file').click()"></i>
+                          <input type="file" id="file">
                         </span>
                         
                         <!-- Star rating buttons (unchanged) -->

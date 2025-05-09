@@ -215,3 +215,17 @@ if (document.readyState === 'loading') {
 } else {
   initChatSystem();
 }
+
+// File button
+document.getElementById('file').addEventListener('change', function(e) {
+      if (this.files.length > 0) {
+        const fileInfo = document.getElementById('fileInfo');
+        fileInfo.innerHTML = `
+          <p>Selected file: ${this.files[0].name}</p>
+          <p>Type: ${this.files[0].type}</p>
+          <p>Size: ${Math.round(this.files[0].size/1024)} KB</p>
+        `;
+        
+        // Here you could also upload the file or process it
+      }
+    });
