@@ -630,6 +630,210 @@ main {
 /* Funds Designs */
 
 /* Events Designs */
+.calendar {
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.month-year {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.nav-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.nav-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #f0f2f5;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: 600;
+    color: #555;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 10px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.day:hover {
+    background: #f0f5ff;
+}
+
+.day-number {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.event-dot {
+    width: 5px;
+    height: 5px;
+    background: #667eea;
+    border-radius: 50%;
+    margin-top: 2px;
+}
+
+.other-month {
+    color: #aaa;
+}
+
+.today {
+    background: #e1f0ff;
+    font-weight: bold;
+}
+
+.selected {
+    background: #667eea;
+    color: white;
+}
+
+.selected .event-dot {
+    background: white;
+}
+
+.calendar-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+}
+
+.today-btn {
+    padding: 8px 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.today-btn:hover {
+    background: #5a6fd1;
+}
+
+.event-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #777;
+}
+
+.modal-title {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.event-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.event-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.add-btn {
+    padding: 10px 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.events-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.event-item {
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-btn {
+    color: #ff6b6b;
+    cursor: pointer;
+}
 
 
 
