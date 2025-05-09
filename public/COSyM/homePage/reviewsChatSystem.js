@@ -226,6 +226,5 @@ document.getElementById('file').addEventListener('change', function(e) {
           <p>Size: ${Math.round(this.files[0].size/1024)} KB</p>
         `;
         
-        // Here you could also upload the file or process it
       }
     });
