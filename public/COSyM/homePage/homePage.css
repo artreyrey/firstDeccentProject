@@ -145,15 +145,6 @@ main {
 
 }
 
-/* Events Section */
-.events .events-content {
-    text-align: center;
-    font-size: var(--font-size-xxl);
-    margin-top: 300px;
-    color: var(--gray-color);
-
-}
-
 /* Mobile Styles of */
 .sidebar-toggle {
     display: none;
@@ -639,8 +630,6 @@ main {
 /* Funds Designs */
 
 /* Events Designs */
-
-
 
 
 
