@@ -206,8 +206,45 @@
 
             <!-- Events section// -->
             <section id="events-section" class="events">
-                <div class="events-content-calendar">
-                </div>
+                <div class="calendar">
+        <div class="calendar-header">
+            <button class="nav-btn" id="prev-month"><i class="fas fa-chevron-left"></i></button>
+            <div class="month-year" id="month-year">Month Year</div>
+            <button class="nav-btn" id="next-month"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        
+        <div class="weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        
+        <div class="days" id="days-container"></div>
+        
+        <div class="calendar-footer">
+            <button class="today-btn" id="today-btn">Today</button>
+            <div class="event-indicator">
+                <div class="event-dot"></div>
+                <span>Events</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-modal" id="event-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <h2 class="modal-title" id="modal-date">Date</h2>
+            <div class="event-input">
+                <input type="text" id="event-text" placeholder="Add event...">
+                <button class="add-btn" id="add-event">Add</button>
+            </div>
+            <div class="events-list" id="events-list"></div>
+        </div>
+    </div>
                 <script src="eventCallendar.js"></script>
                 </section>
 
