@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, onValue, update, set, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs,Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, serverTimestamp, query, where, getDocs,Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -53,6 +53,15 @@ let selectedEventId = null;
 // Initialize calendar
 renderCalendar(currentMonth, currentYear);
 
+// Add this to handle auth errors
+auth.onAuthStateChanged((user) => {
+    if (!user) {
+        signInAnonymously(auth).catch(error => {
+            console.error("Auto sign-in failed:", error);
+        });
+    }
+});
+
 // Check auth state and user role
 onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -63,19 +72,32 @@ onAuthStateChanged(auth, async (user) => {
                 userRole = userDoc.data().role || 'student';
                 console.log(`User is signed in as ${userRole}`);
                 updateUIForRole();
+                
+                // If user is student, hide create event UI
+                if (userRole === 'student') {
+                    eventInputContainer.style.display = 'none';
+                    addBtnContainer.style.display = 'none';
+                }
             }
         } catch (error) {
             console.error("Error getting user role:", error);
+            // Default to student if there's an error
+            userRole = 'student';
+            updateUIForRole();
         }
     } else {
-        // User is signed out - sign in anonymously as student
+        // Sign in anonymously but default to student role
         signInAnonymously(auth)
             .then(() => {
-                console.log("Signed in anonymously as student");
+                console.log("Signed in anonymously");
                 userRole = 'student';
                 updateUIForRole();
             })
-            .catch((error) => console.error("Error signing in:", error));
+            .catch((error) => {
+                console.error("Error signing in:", error);
+                userRole = 'student';
+                updateUIForRole();
+            });
     }
 });
 
@@ -140,7 +162,22 @@ addEventBtn.addEventListener('click', async () => {
         return;
     }
     
+    if (!selectedDate) {
+        alert('Please select a date first');
+        return;
+    }
+    
     try {
+        // Ensure user is authenticated
+        if (!auth.currentUser) {
+            await signInAnonymously(auth);
+        }
+        
+        // Check role again in case it changed
+        if (userRole === 'student') {
+            throw new Error("Students cannot create events");
+        }
+        
         const eventData = {
             title: title,
             description: link,
@@ -149,51 +186,27 @@ addEventBtn.addEventListener('click', async () => {
         };
         
         const eventId = await createEvent(eventData);
-        console.log("Event created with ID:", eventId);
         
+        // Refresh the display
         resetEventForm();
         renderCalendar(currentMonth, currentYear);
         displayEventsForDate(selectedDate);
+        
+        // Close modal after successful creation
+        eventModal.style.display = 'none';
     } catch (error) {
-        console.error("Error creating event:", error);
-        alert('Failed to create event: ' + error.message);
-    }
-});
-
-
-// check if user is signed in
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        try {
-            const userDoc = await getDoc(doc(firestore, "users", user.uid));
-            if (userDoc.exists()) {
-                // Normalize role to lowercase for consistent comparison
-                userRole = (userDoc.data().role || 'student').toLowerCase();
-                console.log(`User is signed in as ${userRole}`);
-                updateUIForRole();
-            }
-        } catch (error) {
-            console.error("Error getting user role:", error);
-        }
-    } else {
-        signInAnonymously(auth)
-            .then(() => {
-                console.log("Signed in anonymously as student");
-                userRole = 'student';
-                updateUIForRole();
-            })
-            .catch((error) => console.error("Error signing in:", error));
+        console.error("Event creation failed:", error);
+        alert(`Failed to create event: ${error.message}`);
     }
 });
 
 // Functions
 function updateUIForRole() {
-    // Check if role is NOT student (case-insensitive)
-    const isOfficer = userRole !== 'student';
-    eventInputContainer.style.display = isOfficer ? 'flex' : 'none';
-    addBtnContainer.style.display = isOfficer ? 'block' : 'none';
-    doneBtnContainer.style.display = isOfficer ? 'block' : 'none';
-    starRatingContainer.style.display = isOfficer ? 'none' : 'block';
+    const isStudent = userRole === 'student';
+    eventInputContainer.style.display = isStudent ? 'none' : 'flex';
+    addBtnContainer.style.display = isStudent ? 'none' : 'block';
+    doneBtnContainer.style.display = isStudent ? 'none' : 'block';
+    starRatingContainer.style.display = isStudent ? 'block' : 'none';
 }
 
 function renderCalendar(month, year) {
@@ -253,10 +266,10 @@ function createDayElement(day, isOtherMonth) {
     
     if (!isOtherMonth) {
         dayElement.addEventListener('click', () => {
-            document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
-            dayElement.classList.add('selected');
-            selectedDate = date;
-            openEventModal(date);
+        document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
+        dayElement.classList.add('selected');
+        selectedDate = new Date(currentYear, currentMonth, day); // Create new Date object
+        openEventModal(selectedDate);
         });
     }
     
@@ -268,49 +281,46 @@ async function checkDayEvents(date, dayElement) {
     dayElement.querySelectorAll('.event-indicator, .average-rating').forEach(el => el.remove());
     
     try {
-        const startDate = new Date(date);
-        startDate.setHours(0, 0, 0, 0);
-        const endDate = new Date(date);
-        endDate.setHours(23, 59, 59, 999);
+        const dateKey = formatDateKey(date);
         
-        const q = query(
-            collection(firestore, "events"),
-            where("date", ">=", Timestamp.fromDate(startDate)),
-            where("date", "<=", Timestamp.fromDate(endDate))
-        );
+        // Query RTDB directly for events on this date
+        const eventsRef = ref(database, 'events');
+        const snapshot = await get(eventsRef);
         
-        const querySnapshot = await getDocs(q);
-        
-        if (!querySnapshot.empty) {
-            dayElement.classList.add('has-event');
-            
+        if (snapshot.exists()) {
+            const allEvents = snapshot.val();
+            let eventsOnThisDay = [];
             let totalRating = 0;
-            let eventCount = 0;
+            let ratedEventsCount = 0;
             
-            for (const doc of querySnapshot.docs) {
-                const eventData = doc.data();
-                if (eventData.rtdbRatingPath) {
-                    try {
-                        const ratingSnapshot = await get(ref(database, `${eventData.rtdbRatingPath}/average`));
-                        if (ratingSnapshot.exists()) {
-                            const rating = ratingSnapshot.val();
-                            if (typeof rating === 'number' && rating > 0) {
-                                totalRating += rating;
-                                eventCount++;
-                            }
-                        }
-                    } catch (error) {
-                        console.error(`Rating error for event ${doc.id}:`, error);
+            // Find events for this date
+            for (const eventId in allEvents) {
+                const event = allEvents[eventId];
+                if (event.formattedDate === dateKey) {
+                    eventsOnThisDay.push(event);
+                    if (event.averageRating > 0) {
+                        totalRating += event.averageRating;
+                        ratedEventsCount++;
                     }
                 }
             }
             
-            if (eventCount > 0) {
-                const averageRating = (totalRating / eventCount).toFixed(1);
-                const ratingElement = document.createElement('div');
-                ratingElement.classList.add('average-rating');
-                ratingElement.innerHTML = `${averageRating} <i class="fas fa-star"></i>`;
-                dayElement.appendChild(ratingElement);
+            if (eventsOnThisDay.length > 0) {
+                dayElement.classList.add('has-event');
+                
+                // Add event indicator
+                const indicator = document.createElement('div');
+                indicator.classList.add('event-indicator');
+                dayElement.appendChild(indicator);
+                
+                // Show average rating if available
+                if (ratedEventsCount > 0) {
+                    const averageRating = (totalRating / ratedEventsCount).toFixed(1);
+                    const ratingElement = document.createElement('div');
+                    ratingElement.classList.add('average-rating');
+                    ratingElement.innerHTML = `${averageRating} <i class="fas fa-star"></i>`;
+                    dayElement.appendChild(ratingElement);
+                }
             }
         }
     } catch (error) {
@@ -324,6 +334,11 @@ async function checkDayEvents(date, dayElement) {
 }
 
 function openEventModal(date) {
+    if (!date || !(date instanceof Date)) {
+        console.error("Invalid date provided to openEventModal");
+        return;
+    }
+    selectedDate = date;
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     modalDateElement.textContent = date.toLocaleDateString('en-US', options);
     
@@ -336,12 +351,15 @@ async function displayEventsForDate(date) {
     eventsListElement.innerHTML = '<div class="no-events">Loading events...</div>';
     
     try {
-        // Create Firestore-compatible timestamps
+        const dateKey = formatDateKey(date);
+        
+        // Query both Firestore and RTDB for consistency
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
         const endDate = new Date(date);
         endDate.setHours(23, 59, 59, 999);
         
+        // Firestore query
         const q = query(
             collection(firestore, "events"),
             where("date", ">=", Timestamp.fromDate(startDate)),
@@ -356,22 +374,49 @@ async function displayEventsForDate(date) {
             
             for (const doc of querySnapshot.docs) {
                 const eventData = doc.data();
-                // Convert Firestore timestamp to JS Date for display
-                const eventDate = eventData.date.toDate();
+                // Get RTDB data
+                const rtdbSnapshot = await get(ref(database, eventData.rtdbPath));
+                const rtdbData = rtdbSnapshot.val();
                 
-                const eventElement = await createEventElement({
-                    id: doc.id,
-                    ...eventData,
-                    date: eventDate  // Pass the converted date
-                });
+                const eventElement = document.createElement('div');
+                eventElement.classList.add('event-item');
+                eventElement.dataset.eventId = doc.id;
+                
+                let eventHTML = `
+                    <div class="event-content">
+                        <strong>${eventData.title}</strong>
+                        <p><a href="${eventData.description}" target="_blank">View Document</a></p>
+                `;
+                
+                if (rtdbData) {
+                    eventHTML += `
+                        <div class="event-rating">
+                            ${rtdbData.averageRating ? rtdbData.averageRating.toFixed(1) : '0.0'} 
+                            <i class="fas fa-star"></i>
+                            (${rtdbData.ratingCount || 0} ratings)
+                        </div>
+                    `;
+                }
+                
+                if (userRole === 'officer') {
+                    eventHTML += `<button class="complete-btn">Mark Complete</button>`;
+                }
+                
+                eventHTML += `</div>`;
+                eventElement.innerHTML = eventHTML;
+                
+                if (userRole === 'officer') {
+                    eventElement.querySelector('.complete-btn').addEventListener('click', () => {
+                        markEventAsComplete(doc.id);
+                    });
+                }
                 
                 eventsListElement.appendChild(eventElement);
-                await displayEventRatings(doc.id, eventData.rtdbRatingPath);
             }
         } else {
             eventsListElement.innerHTML = '<div class="no-events">No events scheduled</div>';
-            averageRatingValue.textContent = '0.0';
         }
+        averageRatingValue.textContent = '0.0';
     } catch (error) {
         console.error("Event load error:", error);
         eventsListElement.innerHTML = `
@@ -413,10 +458,10 @@ async function createEventElement(event) {
 async function displayEventRatings(eventId, rtdbPath) {
     if (!rtdbPath) return;
     
-    const ratingsRef = ref(database, `${rtdbPath}`);
-    onValue(ratingsRef, (snapshot) => {
-        const ratingsData = snapshot.val();
-        if (ratingsData) {
+    const eventRef = ref(database, rtdbPath);
+    onValue(eventRef, (snapshot) => {
+        const eventData = snapshot.val();
+        if (eventData) {
             const eventElement = document.querySelector(`.event-item[data-event-id="${eventId}"]`);
             if (eventElement) {
                 const ratingDisplay = eventElement.querySelector('.event-rating') || 
@@ -424,9 +469,9 @@ async function displayEventRatings(eventId, rtdbPath) {
                 
                 ratingDisplay.classList.add('event-rating');
                 ratingDisplay.innerHTML = `
-                    ${ratingsData.average ? ratingsData.average.toFixed(1) : '0.0'} 
+                    ${eventData.averageRating ? eventData.averageRating.toFixed(1) : '0.0'} 
                     <i class="fas fa-star"></i>
-                    (${ratingsData.count || 0} ratings)
+                    (${eventData.ratingCount || 0} ratings)
                 `;
                 
                 if (!eventElement.querySelector('.event-rating')) {
@@ -435,7 +480,8 @@ async function displayEventRatings(eventId, rtdbPath) {
                 
                 // Update main average display if this is the selected event
                 if (selectedEventId === eventId) {
-                    averageRatingValue.textContent = ratingsData.average ? ratingsData.average.toFixed(1) : '0.0';
+                    averageRatingValue.textContent = eventData.averageRating ? 
+                        eventData.averageRating.toFixed(1) : '0.0';
                 }
             }
         }
@@ -452,35 +498,59 @@ function updateStarRating(rating) {
 
 async function createEvent(eventData) {
     const user = auth.currentUser;
-    if (!user) throw new Error("Not authenticated");
-    // Change this line to check for any non-student role
-    if (userRole === 'student') throw new Error("Unauthorized - Students cannot create events");
+    if (!user) {
+        // Force sign-in if not authenticated
+        await signInAnonymously(auth);
+    }
     
-    // Convert JS Date to Firestore Timestamp
-    const eventDate = Timestamp.fromDate(eventData.date);
+    // Check if user is student (after ensuring they're authenticated)
+    if (userRole === 'student') {
+        throw new Error("Unauthorized - Students cannot create events");
+    }
     
-    // 1. Create RTDB entry for ratings
-    const eventId = doc(collection(firestore, 'events')).id;
-    const rtdbRatingPath = `eventRatings/${eventId}`;
-    
-    await set(ref(database, rtdbRatingPath), {
-        ratings: {},
-        average: 0,
-        count: 0
-    });
-    
-    // 2. Create Firestore event
-    await set(doc(firestore, 'events', eventId), {
-        title: eventData.title,
-        description: eventData.description,
-        date: eventDate,  // Use the converted timestamp
-        createdBy: user.uid,
-        rtdbRatingPath: rtdbRatingPath,
-        completed: false,
-        createdAt: serverTimestamp()
-    });
-    
-    return eventId;
+    try {
+        // Generate a unique ID for the event
+        const eventId = generateUniqueId();
+        
+        // Create the RTDB event structure
+        const rtdbEventPath = `events/${eventId}`;
+        
+        const newEvent = {
+            title: eventData.title,
+            link: eventData.description,
+            date: eventData.date.getTime(),
+            formattedDate: formatDateKey(eventData.date),
+            ratings: {},
+            averageRating: 0,
+            ratingCount: 0,
+            createdAt: Date.now(),
+            createdBy: auth.currentUser.uid // Use current user after auth
+        };
+
+        // Create RTDB entry
+        await set(ref(database, rtdbEventPath), newEvent);
+
+        // Create Firestore document with reference to RTDB path
+        await set(doc(firestore, 'events', eventId), {
+            title: eventData.title,
+            description: eventData.description,
+            date: Timestamp.fromDate(new Date(eventData.date)),
+            createdBy: auth.currentUser.uid,
+            rtdbPath: rtdbEventPath,
+            completed: false,
+            createdAt: serverTimestamp()
+        });
+        
+        return eventId;
+    } catch (error) {
+        console.error("Error creating event:", error);
+        throw error;
+    }
+}
+
+// Helper function to generate unique ID
+function generateUniqueId() {
+    return 'event-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
 }
 
 async function submitRating(eventId, ratingValue) {
@@ -488,21 +558,25 @@ async function submitRating(eventId, ratingValue) {
     if (!user) throw new Error("Not authenticated");
     if (userRole !== 'student') throw new Error("Unauthorized");
     
-    // 1. Get the RTDB path from Firestore
-    const eventDoc = await getDoc(doc(firestore, 'events', eventId));
-    if (!eventDoc.exists()) throw new Error("Event not found");
-    
-    const rtdbPath = eventDoc.data().rtdbRatingPath;
-    const ratingRef = ref(database, `${rtdbPath}/ratings/${user.uid}`);
-    
-    // 2. Update rating in RTDB
-    await set(ratingRef, ratingValue);
-    
-    // 3. Update average
-    await updateAverageRating(rtdbPath);
-    
-    // Set this as selected event for UI updates
-    selectedEventId = eventId;
+    try {
+        // 1. Get the RTDB path from Firestore
+        const eventDoc = await getDoc(doc(firestore, 'events', eventId));
+        if (!eventDoc.exists()) throw new Error("Event not found");
+        
+        const rtdbPath = eventDoc.data().rtdbPath;
+        const ratingRef = ref(database, `${rtdbPath}/ratings/${user.uid}`);
+
+        // 2. Update rating in RTDB
+        await set(ratingRef, ratingValue);
+
+        // 3. Update average rating
+        await updateAverageRating(rtdbPath);
+        
+        selectedEventId = eventId; // For UI updates
+    } catch (error) {
+        console.error("Rating submission failed:", error);
+        throw error;
+    }
 }
 
 async function updateAverageRating(rtdbPath) {
@@ -512,17 +586,21 @@ async function updateAverageRating(rtdbPath) {
     
     const values = Object.values(ratings);
     const sum = values.reduce((a, b) => a + b, 0);
-    const average = values.length > 0 ? sum / values.length : 0;
+    const count = values.length;
+    const average = count > 0 ? sum / count : 0;
     
+    // Update the event with new average and count
     await update(ref(database, rtdbPath), {
-        average: average,
-        count: values.length
+        averageRating: average,
+        ratingCount: count
     });
 }
 
 async function markEventAsComplete(eventId) {
     try {
-        if (userRole !== 'officer') throw new Error("Unauthorized");
+       if (userRole.toLowerCase() === 'student') {
+            throw new Error("Unauthorized - Only officers can mark events as complete");
+        }
         
         await update(doc(firestore, 'events', eventId), {
             completed: true,
@@ -545,9 +623,9 @@ function resetEventForm() {
 }
 
 function formatDateKey(date) {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
-
-console.log("Selected date:", selectedDate);
-console.log("Title length:", eventTitleInput.value?.length);
-console.log("Link length:", eventLinkInput.value?.length);
