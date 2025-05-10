@@ -1,6 +1,7 @@
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getDatabase, ref, set, push, onChildAdded, update, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { collection, getDocs, getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getDatabase, ref, set, push, update, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -14,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
