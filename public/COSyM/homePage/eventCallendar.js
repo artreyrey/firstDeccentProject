@@ -44,20 +44,21 @@ let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 let selectedDate = null;
-let userRole = 'student'; // Default to student
+let userRole = 'student'; // Default to student (lowercase)
 let currentRating = 0;
 let selectedEventId = null;
 
 // Initialize calendar
 renderCalendar(currentMonth, currentYear);
 
-// Auth state handler
+// Auth state handler with case-insensitive role checking
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
             if (userDoc.exists()) {
-                userRole = userDoc.data().role || 'student';
+                // Convert role to lowercase for case-insensitive comparison
+                userRole = (userDoc.data().role || 'student').toLowerCase();
                 updateUIForRole();
             }
         } catch (error) {
@@ -166,7 +167,7 @@ addEventBtn.addEventListener('click', async () => {
     }
 });
 
-// Functions
+// Functions with case-insensitive role checking
 function updateUIForRole() {
     const isStudent = userRole === 'student';
     
