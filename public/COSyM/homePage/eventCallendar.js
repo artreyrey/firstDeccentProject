@@ -188,7 +188,8 @@ onAuthStateChanged(auth, async (user) => {
 
 // Functions
 function updateUIForRole() {
-    const isOfficer = userRole !== 'Student';
+    // Check if role is NOT student (case-insensitive)
+    const isOfficer = userRole !== 'student';
     eventInputContainer.style.display = isOfficer ? 'flex' : 'none';
     addBtnContainer.style.display = isOfficer ? 'block' : 'none';
     doneBtnContainer.style.display = isOfficer ? 'block' : 'none';
@@ -450,10 +451,10 @@ function updateStarRating(rating) {
 }
 
 async function createEvent(eventData) {
-     const user = auth.currentUser;
+    const user = auth.currentUser;
     if (!user) throw new Error("Not authenticated");
     // Change this line to check for any non-student role
-    if (userRole === 'Student') throw new Error("Unauthorized");
+    if (userRole === 'student') throw new Error("Unauthorized - Students cannot create events");
     
     // Convert JS Date to Firestore Timestamp
     const eventDate = Timestamp.fromDate(eventData.date);
