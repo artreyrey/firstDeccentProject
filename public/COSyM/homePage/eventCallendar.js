@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getDatabase, ref, set, push, onChildAdded, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getDatabase, ref, set, push, onChildAdded, update, onValue } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,7 +30,8 @@ const modalDateElement = document.getElementById('modal-date');
 const eventsListElement = document.getElementById('events-list');
 const addEventBtn = document.getElementById('add-event');
 const doneEventBtn = document.getElementById('done-event');
-const eventTextInput = document.getElementById('event-text');
+const eventTitleInput = document.getElementById('event-title');
+const eventLinkInput = document.getElementById('event-link');
 const starRating = document.getElementById('stars');
 
 // Current date info
@@ -38,11 +39,9 @@ let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 let selectedDate = null;
-let userRole = null; // 'officer' or 'student'
+let userRole = 'student'; // Default to student
 let currentRating = 0;
-
-// Events storage
-let events = {};
+let selectedEventId = null;
 
 // Initialize calendar
 renderCalendar(currentMonth, currentYear);
@@ -50,19 +49,25 @@ renderCalendar(currentMonth, currentYear);
 // Check auth state
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // User is signed in
-        // In a real app, you would check the user's role from your database
-        // For this example, we'll randomly assign a role
-        userRole = Math.random() > 0.5 ? 'officer' : 'student';
-        console.log(`User is signed in as ${userRole}`);
-        
-        // Load events
-        loadEvents();
+        // User is signed in - check their role
+        checkUserRole(user.uid).then(role => {
+            userRole = role;
+            console.log(`User is signed in as ${userRole}`);
+            
+            // Load events
+            loadEvents();
+            
+            // Update UI based on role
+            updateUIForRole();
+        });
     } else {
-        // User is signed out
+        // User is signed out - sign in anonymously as student
         signInAnonymously(auth)
             .then(() => {
-                console.log("Signed in anonymously");
+                console.log("Signed in anonymously as student");
+                userRole = 'student';
+                updateUIForRole();
+                loadEvents();
             })
             .catch((error) => {
                 console.error("Error signing in anonymously:", error);
@@ -98,32 +103,65 @@ todayBtn.addEventListener('click', () => {
 
 closeModalBtn.addEventListener('click', () => {
     eventModal.style.display = 'none';
+    resetEventForm();
 });
 
 addEventBtn.addEventListener('click', addEvent);
 doneEventBtn.addEventListener('click', markEventAsDone);
 
 // Star rating
-document.querySelectorAll('.publisher-btn-star-one, .publisher-btn-star-two, .publisher-btn-star-three, .publisher-btn-star-four, .publisher-btn-star-five')
-    .forEach((star, index) => {
-        star.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (userRole === 'student') {
-                currentRating = index + 1;
-                updateStarRating(currentRating);
-                saveRating();
-            }
-        });
+document.querySelectorAll('.star-rating a').forEach((star, index) => {
+    star.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (userRole === 'student') {
+            currentRating = index + 1;
+            updateStarRating(currentRating);
+            saveRating();
+        }
     });
+});
 
 // Close modal when clicking outside
 window.addEventListener('click', (e) => {
     if (e.target === eventModal) {
         eventModal.style.display = 'none';
+        resetEventForm();
     }
 });
 
 // Functions
+async function checkUserRole(uid) {
+    // In a real app, you would check the user's role from your database
+    // For this example, we'll use a simple check
+    try {
+        const userRef = ref(database, `users/${uid}`);
+        const snapshot = await onValue(userRef, (snapshot) => {
+            const userData = snapshot.val();
+            return userData && userData.role ? userData.role : 'student';
+        }, { onlyOnce: true });
+        
+        // Default to student if role not found
+        return 'student';
+    } catch (error) {
+        console.error("Error checking user role:", error);
+        return 'student';
+    }
+}
+
+function updateUIForRole() {
+    if (userRole === 'officer') {
+        // Show add event button and form fields
+        document.querySelector('.event-input').style.display = 'flex';
+        document.querySelector('.add-btn').style.display = 'block';
+        document.querySelector('.done-btn').style.display = 'block';
+    } else {
+        // Hide add event button and form fields for students
+        document.querySelector('.event-input').style.display = 'none';
+        document.querySelector('.add-btn').style.display = 'none';
+        document.querySelector('.done-btn').style.display = 'none';
+    }
+}
+
 function renderCalendar(month, year) {
     // Update month/year display
     const monthNames = ["January", "February", "March", "April", "May", "June", 
@@ -182,19 +220,43 @@ function createDayElement(day, isOtherMonth) {
     // Check for events
     const date = new Date(currentYear, currentMonth, day);
     const dateKey = formatDateKey(date);
+    const eventsRef = ref(database, `events/${dateKey}`);
     
-    if (events[dateKey]) {
-        // Highlight with orange if there are events
-        dayElement.style.backgroundColor = 'rgba(255, 165, 0, 0.2)';
+    onValue(eventsRef, (snapshot) => {
+        const eventsData = snapshot.val();
         
-        // Show average rating if available
-        if (events[dateKey].averageRating) {
-            const ratingElement = document.createElement('div');
-            ratingElement.classList.add('average-rating');
-            ratingElement.innerHTML = `<i class="fas fa-star"></i> ${events[dateKey].averageRating.toFixed(1)}`;
-            dayElement.appendChild(ratingElement);
+        // Clear previous event indicators
+        dayElement.querySelectorAll('.event-indicator, .average-rating').forEach(el => el.remove());
+        
+        if (eventsData) {
+            // Highlight with orange if there are active events
+            const hasActiveEvents = Object.values(eventsData).some(
+                event => !event.completed && new Date(event.timestamp) >= new Date()
+            );
+            
+            if (hasActiveEvents) {
+                dayElement.style.backgroundColor = 'rgba(255, 165, 0, 0.2)';
+                
+                // Add event indicator
+                const eventIndicator = document.createElement('div');
+                eventIndicator.classList.add('event-indicator');
+                dayElement.appendChild(eventIndicator);
+            }
+            
+            // Calculate and show average rating if available
+            const ratings = Object.values(eventsData)
+                .filter(event => event.rating)
+                .map(event => event.rating);
+            
+            if (ratings.length > 0) {
+                const averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
+                const ratingElement = document.createElement('div');
+                ratingElement.classList.add('average-rating');
+                ratingElement.innerHTML = `<i class="fas fa-star"></i> ${averageRating.toFixed(1)}`;
+                dayElement.appendChild(ratingElement);
+            }
         }
-    }
+    }, { onlyOnce: true });
     
     if (!isOtherMonth) {
         dayElement.addEventListener('click', () => {
@@ -224,123 +286,127 @@ function openEventModal(date) {
     const dateKey = formatDateKey(date);
     displayEvents(dateKey);
     
-    // Show/hide elements based on user role
-    if (userRole === 'officer') {
-        document.querySelector('.event-input').style.display = 'flex';
-        document.querySelector('.add-btn').style.display = 'block';
-    } else {
-        document.querySelector('.event-input').style.display = 'none';
-        document.querySelector('.add-btn').style.display = 'none';
-    }
-    
     eventModal.style.display = 'flex';
-    eventTextInput.focus();
+    eventTitleInput.focus();
 }
 
 function displayEvents(dateKey) {
     eventsListElement.innerHTML = '';
+    const eventsRef = ref(database, `events/${dateKey}`);
     
-    if (events[dateKey] && events[dateKey].events) {
-        events[dateKey].events.forEach((event, index) => {
-            const eventElement = document.createElement('div');
-            eventElement.classList.add('event-item');
-            
-            let eventHTML = `
-                <div>
-                    <strong>${event.title}</strong>
-                    <p><a href="${event.link}" target="_blank">View Document</a></p>
-            `;
-            
-            if (event.rating) {
-                eventHTML += `<p>Rating: ${event.rating}/5</p>`;
-            }
-            
-            if (userRole === 'officer' && !event.completed) {
-                eventHTML += `<button class="complete-btn" data-index="${index}">Mark as Complete</button>`;
-            }
-            
-            eventHTML += `</div>`;
-            
-            eventElement.innerHTML = eventHTML;
-            eventsListElement.appendChild(eventElement);
-        });
+    onValue(eventsRef, (snapshot) => {
+        const eventsData = snapshot.val();
+        eventsListElement.innerHTML = '';
         
-        // Add event listeners to complete buttons
-        document.querySelectorAll('.complete-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                markEventAsComplete(dateKey, parseInt(e.target.dataset.index));
+        if (eventsData) {
+            Object.entries(eventsData).forEach(([eventId, event]) => {
+                if (!event.completed || new Date(event.timestamp) >= new Date()) {
+                    const eventElement = document.createElement('div');
+                    eventElement.classList.add('event-item');
+                    eventElement.setAttribute('data-event-id', eventId);
+                    
+                    let eventHTML = `
+                        <div class="event-content">
+                            <strong>${event.title || 'No title'}</strong>
+                            <p><a href="${event.link || '#'}" target="_blank">View Document</a></p>
+                    `;
+                    
+                    if (event.rating) {
+                        eventHTML += `<div class="event-rating">Rating: ${event.rating}/5</div>`;
+                    }
+                    
+                    if (userRole === 'officer' && !event.completed) {
+                        eventHTML += `<button class="complete-btn">Mark as Complete</button>`;
+                    }
+                    
+                    eventHTML += `</div>`;
+                    
+                    eventElement.innerHTML = eventHTML;
+                    eventsListElement.appendChild(eventElement);
+                    
+                    // Add event listener to complete button if it exists
+                    const completeBtn = eventElement.querySelector('.complete-btn');
+                    if (completeBtn) {
+                        completeBtn.addEventListener('click', () => {
+                            markEventAsComplete(dateKey, eventId);
+                        });
+                    }
+                }
             });
-        });
-    }
+        } else {
+            eventsListElement.innerHTML = '<div class="no-events">No events for this date</div>';
+        }
+    });
 }
 
 function addEvent() {
-    const eventTitle = eventTextInput.value.trim();
-    if (!eventTitle) return;
+    const eventTitle = eventTitleInput.value.trim();
+    const eventLink = eventLinkInput.value.trim();
     
-    // In a real app, you would have a proper link input
-    const eventLink = prompt("Please enter the document link:");
-    if (!eventLink) return;
-    
-    const dateKey = formatDateKey(selectedDate);
-    
-    if (!events[dateKey]) {
-        events[dateKey] = {
-            events: [],
-            averageRating: 0
-        };
+    if (!eventTitle || !eventLink) {
+        alert('Please enter both title and document link');
+        return;
     }
     
+    const dateKey = formatDateKey(selectedDate);
     const newEvent = {
         title: eventTitle,
         link: eventLink,
         completed: false,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        createdBy: userRole === 'officer' ? 'officer' : 'student'
     };
     
     // Push to Firebase
-    const eventsRef = ref(database, `events/${dateKey}/events`);
+    const eventsRef = ref(database, `events/${dateKey}`);
     const newEventRef = push(eventsRef);
-    set(newEventRef, newEvent);
-    
-    // Update local state
-    events[dateKey].events.push(newEvent);
-    
-    // Clear input
-    eventTextInput.value = '';
-    
-    // Re-render calendar
-    renderCalendar(currentMonth, currentYear);
+    set(newEventRef, newEvent)
+        .then(() => {
+            // Clear inputs
+            resetEventForm();
+            
+            // Re-render calendar to show new event
+            renderCalendar(currentMonth, currentYear);
+        })
+        .catch((error) => {
+            console.error("Error adding event:", error);
+            alert('Failed to add event: ' + error.message);
+        });
 }
 
-function markEventAsComplete(dateKey, index) {
-    if (events[dateKey] && events[dateKey].events[index]) {
-        // Update in Firebase
-        const updates = {};
-        updates[`events/${dateKey}/events/${index}/completed`] = true;
-        update(ref(database), updates);
-        
-        // Update local state
-        events[dateKey].events[index].completed = true;
-        
-        // Show notification
-        alert("Event marked as completed!");
-        
-        // Refresh display
-        displayEvents(dateKey);
-        renderCalendar(currentMonth, currentYear);
-    }
+function markEventAsComplete(dateKey, eventId) {
+    if (!dateKey || !eventId) return;
+    
+    const updates = {};
+    updates[`events/${dateKey}/${eventId}/completed`] = true;
+    updates[`events/${dateKey}/${eventId}/completedAt`] = Date.now();
+    
+    update(ref(database), updates)
+        .then(() => {
+            alert("Event marked as completed!");
+            displayEvents(dateKey);
+            renderCalendar(currentMonth, currentYear);
+        })
+        .catch((error) => {
+            console.error("Error marking event as complete:", error);
+            alert('Failed to mark event as complete');
+        });
 }
 
 function markEventAsDone() {
     const dateKey = formatDateKey(selectedDate);
-    if (events[dateKey] && events[dateKey].events) {
-        events[dateKey].events.forEach((event, index) => {
-            if (!event.completed) {
-                markEventAsComplete(dateKey, index);
-            }
-        });
-    }
+    const eventsRef = ref(database, `events/${dateKey}`);
+    
+    onValue(eventsRef, (snapshot) => {
+        const eventsData = snapshot.val();
+        if (eventsData) {
+            Object.keys(eventsData).forEach(eventId => {
+                if (!eventsData[eventId].completed) {
+                    markEventAsComplete(dateKey, eventId);
+                }
+            });
+        }
+    }, { onlyOnce: true });
 }
 
 function updateStarRating(rating) {
@@ -356,37 +422,44 @@ function updateStarRating(rating) {
 
 function saveRating() {
     const dateKey = formatDateKey(selectedDate);
-    if (events[dateKey] && events[dateKey].events) {
-        // In a real app, you would save this to Firebase
-        // For now, we'll just update local state
-        const eventIndex = 0; // Assuming rating first event
-        if (events[dateKey].events[eventIndex]) {
-            events[dateKey].events[eventIndex].rating = currentRating;
-            
-            // Calculate new average rating
-            const ratings = events[dateKey].events
-                .filter(e => e.rating)
-                .map(e => e.rating);
-            
-            if (ratings.length > 0) {
-                events[dateKey].averageRating = ratings.reduce((a, b) => a + b) / ratings.length;
+    const eventsRef = ref(database, `events/${dateKey}`);
+    
+    onValue(eventsRef, (snapshot) => {
+        const eventsData = snapshot.val();
+        if (eventsData) {
+            // For simplicity, we'll rate the first event on the date
+            const eventId = Object.keys(eventsData)[0];
+            if (eventId) {
+                const updates = {};
+                updates[`events/${dateKey}/${eventId}/rating`] = currentRating;
+                updates[`events/${dateKey}/${eventId}/ratedBy`] = auth.currentUser.uid;
+                
+                update(ref(database), updates)
+                    .then(() => {
+                        console.log("Rating saved successfully");
+                    })
+                    .catch((error) => {
+                        console.error("Error saving rating:", error);
+                    });
             }
-            
-            // Re-render calendar to show updated rating
-            renderCalendar(currentMonth, currentYear);
         }
-    }
+    }, { onlyOnce: true });
 }
 
 function loadEvents() {
-    const eventsRef = ref(database, 'events');
-    onChildAdded(eventsRef, (snapshot) => {
-        const dateKey = snapshot.key;
-        events[dateKey] = snapshot.val();
-        renderCalendar(currentMonth, currentYear);
-    });
+    // Events are loaded dynamically when dates are rendered
+    // and when the modal is opened for a specific date
+    console.log("Events will be loaded as needed");
 }
 
 function formatDateKey(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+function resetEventForm() {
+    eventTitleInput.value = '';
+    eventLinkInput.value = '';
+    currentRating = 0;
+    updateStarRating(0);
+    selectedEventId = null;
 }

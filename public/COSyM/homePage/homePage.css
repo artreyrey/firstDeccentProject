@@ -757,6 +757,7 @@ main {
     background: #5a6fd1;
 }
 
+/* Event inputs */
 .event-modal {
     display: none;
     position: fixed;
@@ -764,75 +765,341 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
     background: white;
     width: 90%;
-    max-width: 400px;
-    border-radius: 10px;
-    padding: 20px;
+    max-width: 500px;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .close-btn {
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
-    color: #777;
+    color: #666;
+    transition: color 0.2s;
 }
 
-.modal-title {
-    margin-bottom: 20px;
+.close-btn:hover {
     color: #333;
 }
 
-.event-input {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+.modal-title {
+    margin: 0 0 20px;
+    color: #444;
+    font-size: 1.4rem;
+    font-weight: 600;
 }
 
-.event-input input {
-    flex: 1;
-    padding: 10px;
+/* Event Input Form */
+.event-input {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    display: none; /* Hidden by default, shown for officers */
+}
+
+.event-title-input,
+.event-link-input {
+    width: 100%;
+    padding: 12px 15px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+.event-title-input:focus,
+.event-link-input:focus {
+    border-color: #667eea;
     outline: none;
 }
 
-.add-btn {
-    padding: 10px 15px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.event-link-input {
+    font-size: 0.9rem;
 }
 
+.add-btn, .done-btn {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.add-btn {
+    background: #667eea;
+    color: white;
+}
+
+.add-btn:hover {
+    background: #5a6fd1;
+}
+
+.done-btn {
+    background: #4CAF50;
+    color: white;
+    margin-top: 10px;
+}
+
+.done-btn:hover {
+    background: #45a049;
+}
+
+/* Star Rating */
+.star-rating-container {
+    margin: 20px 0;
+    text-align: center;
+    display: none; /* Hidden by default, shown for students */
+}
+
+.rating-label {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.star-rating a {
+    color: #ddd;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.star-rating a:hover,
+.star-rating a.active {
+    color: gold;
+}
+
+/* Events List */
 .events-list {
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
+    padding-right: 5px;
 }
 
 .event-item {
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border-left: 4px solid #667eea;
+    transition: transform 0.2s;
 }
 
-.delete-btn {
-    color: #ff6b6b;
+.event-item:hover {
+    transform: translateX(3px);
+}
+
+.event-content {
+    flex: 1;
+}
+
+.event-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.event-item a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.event-item a:hover {
+    text-decoration: underline;
+}
+
+.event-rating {
+    color: #ff9800;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.complete-btn {
+    padding: 8px 12px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.8rem;
     cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+.complete-btn:hover {
+    background: #e68a00;
+}
+
+.no-events {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+}
+
+/* Calendar Day Styling */
+.day.has-event {
+    background: rgba(255, 165, 0, 0.15);
+    position: relative;
+}
+
+.day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #ff9800;
+    border-radius: 50%;
+}
+
+/* Average rating design */
+.average-rating {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: #ff9800;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.average-rating-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #ff9800;
+}
+
+#average-rating-value {
+    font-weight: 600;
+}
+
+.average-star {
+    color: #ff9800;
+    font-size: 1.1rem;
+}
+
+/* Star Rating Container */
+.star-rating-container {
+    margin: 15px 0;
+    text-align: center;
+    display: none; /* Hidden by default, shown for students */
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.rating-label {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.star-rating a {
+    color: #ddd;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.star-rating a:hover,
+.star-rating a.active {
+    color: gold;
+}
+
+/* Event Item Rating Display */
+.event-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #ff9800;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.event-rating i {
+    font-size: 0.9rem;
+}
+
+/* Calendar Day Rating Display */
+.day .average-rating {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.7rem;
+    color: #ff9800;
+}
+
+.day .average-rating i {
+    font-size: 0.7rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 500px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px 15px;
+    }
+    
+    .event-title-input,
+    .event-link-input {
+        padding: 10px 12px;
+    }
+    
+    .star-rating a {
+        font-size: 1.5rem;
+    }
 }
 
 

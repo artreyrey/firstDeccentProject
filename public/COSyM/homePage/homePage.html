@@ -236,24 +236,36 @@
 
     <!-- Inputting event -->
     <div class="event-modal" id="event-modal">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <h2 class="modal-title" id="modal-date">Date</h2>
-            <div class="event-input">
-                <input type="text" id="event-text" placeholder="Add event...">
-                <button class="add-btn" id="add-event"><i class="fas fa-cloud-upload"></i></button>
-                <button class="done-btn" id="done-event"><i class="fas fa-check-square"></i></button>
-            </div>
+    <div class="modal-content">
+        <span class="close-btn" id="close-modal">&times;</span>
+        <h2 class="modal-title" id="modal-date">Date</h2>
+        
+        <!-- Event Input Form (Visible to Officers) -->
+        <div class="event-input">
+            <input type="text" id="event-title" placeholder="Event title..." class="event-title-input">
+            <input type="url" id="event-link" placeholder="Documentation link..." class="event-link-input">
+            <button class="add-btn" id="add-event"><i class="fas fa-plus"></i> Add</button>
+            <button class="done-btn" id="done-event"><i class="fas fa-check"></i> Complete All</button>
+        </div>
+        
+        <!-- Star Rating (Visible to Students) -->
+        <div class="star-rating-container">
+            <p class="rating-label">Rate this event:</p>
             <div class="star-rating" id="stars">
-                <a class="publisher-btn-star-one" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                <a class="publisher-btn-star-two" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                <a class="publisher-btn-star-three" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                <a class="publisher-btn-star-four" href="#" data-abc="true"><i class="fa fa-star"></i></a>
-                <a class="publisher-btn-star-five" href="#" data-abc="true"><i class="fa fa-star"></i></a>
+                <a class="star" href="#" data-rating="1"><i class="far fa-star"></i></a>
+                <a class="star" href="#" data-rating="2"><i class="far fa-star"></i></a>
+                <a class="star" href="#" data-rating="3"><i class="far fa-star"></i></a>
+                <a class="star" href="#" data-rating="4"><i class="far fa-star"></i></a>
+                <a class="star" href="#" data-rating="5"><i class="far fa-star"></i></a>
             </div>
-            <div class="events-list" id="events-list"></div>
+        </div>
+        
+        <!-- Events List -->
+        <div class="events-list" id="events-list">
+            <div class="no-events">No events for this date</div>
         </div>
     </div>
+</div>
                 <script src="eventCallendar.js"></script>
                 </section>
 
