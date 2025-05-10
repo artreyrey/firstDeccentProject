@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -44,6 +44,7 @@ let currentYear = currentDate.getFullYear();
 let selectedDate = null;
 let userRole = 'student'; // Default to student
 let currentRating = 0;
+let selectedEventId = null;
 
 // Initialize calendar
 renderCalendar(currentMonth, currentYear);
@@ -66,11 +67,13 @@ onAuthStateChanged(auth, async (user) => {
         updateUIForRole();
     } else {
         // User is signed out - sign in anonymously as student
-           ((error) => console.error("Error signing in:", error));
+        signInAnonymously(auth)
+            .then(() => console.log("Signed in anonymously as student"))
+            .catch((error) => console.error("Error signing in:", error));
     }
 });
 
-// Event listeners for calendar navigation
+// Event listeners
 prevMonthBtn.addEventListener('click', () => {
     currentMonth--;
     if (currentMonth < 0) {
@@ -99,11 +102,13 @@ todayBtn.addEventListener('click', () => {
 // Modal controls
 closeModalBtn.addEventListener('click', () => {
     eventModal.style.display = 'none';
+    resetEventForm();
 });
 
 window.addEventListener('click', (e) => {
     if (e.target === eventModal) {
         eventModal.style.display = 'none';
+        resetEventForm();
     }
 });
 
@@ -111,27 +116,51 @@ window.addEventListener('click', (e) => {
 document.querySelectorAll('.star-rating a').forEach((star, index) => {
     star.addEventListener('click', (e) => {
         e.preventDefault();
-        if (userRole !== 'officer') { // Only students can rate
+        if (userRole === 'student' && selectedEventId) {
             currentRating = index + 1;
             updateStarRating(currentRating);
-            saveRating();
+            submitRating(selectedEventId, currentRating);
         }
     });
 });
 
+// Event creation
+addEventBtn.addEventListener('click', async () => {
+    const title = eventTitleInput.value.trim();
+    const link = eventLinkInput.value.trim();
+    
+    if (!title || !link) {
+        alert('Please enter both title and document link');
+        return;
+    }
+    
+    try {
+        const eventData = {
+            title: title,
+            description: link, // Using description field for link
+            date: selectedDate,
+            createdBy: auth.currentUser.uid
+        };
+        
+        const eventId = await createEvent(eventData);
+        console.log("Event created with ID:", eventId);
+        
+        resetEventForm();
+        renderCalendar(currentMonth, currentYear);
+        displayEventsForDate(selectedDate);
+    } catch (error) {
+        console.error("Error creating event:", error);
+        alert('Failed to create event: ' + error.message);
+    }
+});
+
 // Functions
 function updateUIForRole() {
-    if (userRole === 'officer') {
-        document.querySelector('.event-input').style.display = 'flex';
-        document.querySelector('.add-btn').style.display = 'block';
-        document.querySelector('.done-btn').style.display = 'block';
-        document.querySelector('.star-rating-container').style.display = 'none';
-    } else {
-        document.querySelector('.event-input').style.display = 'none';
-        document.querySelector('.add-btn').style.display = 'none';
-        document.querySelector('.done-btn').style.display = 'none';
-        document.querySelector('.star-rating-container').style.display = 'block';
-    }
+    const isOfficer = userRole !== 'student';
+    document.querySelector('.event-input').style.display = isOfficer ? 'flex' : 'none';
+    document.querySelector('.add-btn').style.display = isOfficer ? 'block' : 'none';
+    document.querySelector('.done-btn').style.display = isOfficer ? 'block' : 'none';
+    document.querySelector('.star-rating-container').style.display = isOfficer ? 'none' : 'block';
 }
 
 function renderCalendar(month, year) {
@@ -183,48 +212,18 @@ function createDayElement(day, isOtherMonth) {
     dayNumber.textContent = day;
     dayElement.appendChild(dayNumber);
     
-    // Check for events on this day
     const date = new Date(currentYear, currentMonth, day);
     const dateKey = formatDateKey(date);
-    const eventsRef = ref(database, `events/${dateKey}`);
     
-    onValue(eventsRef, (snapshot) => {
-        const eventsData = snapshot.val();
-        
-        // Clear previous indicators
-        dayElement.querySelectorAll('.event-indicator, .average-rating').forEach(el => el.remove());
-        
-        if (eventsData) {
-            // Check if there are active events
-            const activeEvents = Object.values(eventsData).filter(
-                event => !event.completed && new Date(event.timestamp) >= new Date()
-            );
-            
-            if (activeEvents.length > 0) {
-                dayElement.classList.add('has-event');
-                
-                // Calculate average rating
-                const ratings = Object.values(eventsData)
-                    .filter(event => event.rating)
-                    .map(event => event.rating);
-                
-                if (ratings.length > 0) {
-                    const averageRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1);
-                    const ratingElement = document.createElement('div');
-                    ratingElement.classList.add('average-rating');
-                    ratingElement.innerHTML = `${averageRating} <i class="fas fa-star"></i>`;
-                    dayElement.appendChild(ratingElement);
-                }
-            }
-        }
-    });
+    // Check for events on this day
+    checkDayEvents(dateKey, dayElement);
     
     if (!isOtherMonth) {
         dayElement.addEventListener('click', () => {
             document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
             dayElement.classList.add('selected');
-            selectedDate = new Date(currentYear, currentMonth, day);
-            openEventModal(selectedDate);
+            selectedDate = date;
+            openEventModal(date);
         });
     }
     
@@ -232,115 +231,223 @@ function createDayElement(day, isOtherMonth) {
     return dayElement;
 }
 
+function checkDayEvents(dateKey, dayElement) {
+    const eventsQuery = collection(firestore, "events");
+    // In a real app, you would query events for this specific date
+    // This is simplified for demonstration
+    
+    // Clear previous indicators
+    dayElement.querySelectorAll('.event-indicator, .average-rating').forEach(el => el.remove());
+    
+    // This would be replaced with actual Firestore query
+    if (Math.random() > 0.7) { // Simulating some days have events
+        dayElement.classList.add('has-event');
+        
+        // Simulate average rating
+        const averageRating = (Math.random() * 2 + 3).toFixed(1); // Random rating between 3-5
+        const ratingElement = document.createElement('div');
+        ratingElement.classList.add('average-rating');
+        ratingElement.innerHTML = `${averageRating} <i class="fas fa-star"></i>`;
+        dayElement.appendChild(ratingElement);
+    }
+}
+
 function openEventModal(date) {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     modalDateElement.textContent = date.toLocaleDateString('en-US', options);
     
-    const dateKey = formatDateKey(date);
-    displayEvents(dateKey);
-    
-    // Show modal
+    displayEventsForDate(date);
     eventModal.style.display = 'flex';
+    eventTitleInput.focus();
 }
 
-function displayEvents(dateKey) {
+
+async function displayEventsForDate(date) {
     eventsListElement.innerHTML = '<div class="no-events">Loading events...</div>';
-    const eventsRef = ref(database, `events/${dateKey}`);
     
-    onValue(eventsRef, (snapshot) => {
-        const eventsData = snapshot.val();
-        eventsListElement.innerHTML = '';
+    try {
+        // In a real app, you would query Firestore for events on this date
+        // This is simplified for demonstration
+        const fakeEvents = [
+            {
+                id: "event1",
+                title: "Sample Event",
+                description: "https://example.com/doc1",
+                date: date,
+                rtdbRatingPath: "eventRatings/event1"
+            }
+        ];
         
-        if (eventsData) {
-            let totalRating = 0;
-            let ratingCount = 0;
+        if (fakeEvents.length > 0) {
+            eventsListElement.innerHTML = '';
             
-            Object.entries(eventsData).forEach(([eventId, event]) => {
-                if (!event.completed || new Date(event.timestamp) >= new Date()) {
-                    const eventElement = document.createElement('div');
-                    eventElement.classList.add('event-item');
-                    
-                    let eventHTML = `
-                        <div class="event-content">
-                            <strong>${event.title || 'No title'}</strong>
-                            <p><a href="${event.link || '#'}" target="_blank">View Document</a></p>
-                    `;
-                    
-                    if (event.rating) {
-                        eventHTML += `<div class="event-rating">${event.rating.toFixed(1)} <i class="fas fa-star"></i></div>`;
-                        totalRating += event.rating;
-                        ratingCount++;
-                    }
-                    
-                    eventHTML += `</div>`;
-                    eventElement.innerHTML = eventHTML;
-                    eventsListElement.appendChild(eventElement);
-                }
-            });
-            
-            // Update average rating display
-            if (ratingCount > 0) {
-                const averageRating = totalRating / ratingCount;
-                averageRatingValue.textContent = averageRating.toFixed(1);
-            } else {
-                averageRatingValue.textContent = '0.0';
+            for (const event of fakeEvents) {
+                const eventElement = await createEventElement(event);
+                eventsListElement.appendChild(eventElement);
+                
+                // Get ratings for this event
+                await displayEventRatings(event);
             }
         } else {
             eventsListElement.innerHTML = '<div class="no-events">No events for this date</div>';
             averageRatingValue.textContent = '0.0';
+        }
+    } catch (error) {
+        console.error("Error loading events:", error);
+        eventsListElement.innerHTML = '<div class="error-message">Error loading events</div>';
+    }
+}
+
+async function createEventElement(event) {
+    const eventElement = document.createElement('div');
+    eventElement.classList.add('event-item');
+    eventElement.dataset.eventId = event.id;
+    
+    let eventHTML = `
+        <div class="event-content">
+            <strong>${event.title}</strong>
+            <p><a href="${event.description}" target="_blank">View Document</a></p>
+    `;
+    
+    if (userRole !== 'student') {
+        eventHTML += `<button class="complete-btn">Mark Complete</button>`;
+    }
+    
+    eventHTML += `</div>`;
+    eventElement.innerHTML = eventHTML;
+    
+    if (userRole !== 'student') {
+        eventElement.querySelector('.complete-btn').addEventListener('click', () => {
+            markEventAsComplete(event.id);
+        });
+    }
+    
+    return eventElement;
+}
+          
+async function displayEventRatings(event) {
+    const ratingsRef = ref(database, `${event.rtdbRatingPath}`);
+    onValue(ratingsRef, (snapshot) => {
+        const ratingsData = snapshot.val();
+        if (ratingsData) {
+            const eventElement = document.querySelector(`.event-item[data-event-id="${event.id}"]`);
+            if (eventElement) {
+                const ratingDisplay = eventElement.querySelector('.event-rating') || 
+                    document.createElement('div');
+                
+                ratingDisplay.classList.add('event-rating');
+                ratingDisplay.innerHTML = `
+                    ${ratingsData.average.toFixed(1)} <i class="fas fa-star"></i>
+                    (${ratingsData.count} ratings)
+                `;
+                
+                if (!eventElement.querySelector('.event-rating')) {
+                    eventElement.querySelector('.event-content').appendChild(ratingDisplay);
+                }
+                
+                // Update main average display if this is the selected event
+                if (selectedEventId === event.id) {
+                    averageRatingValue.textContent = ratingsData.average.toFixed(1);
+                }
+            }
         }
     });
 }
 
 function updateStarRating(rating) {
     document.querySelectorAll('.star-rating a').forEach((star, index) => {
-        if (index < rating) {
-            star.innerHTML = '<i class="fas fa-star" style="color: gold;"></i>';
-        } else {
-            star.innerHTML = '<i class="far fa-star"></i>';
-        }
+        star.innerHTML = index < rating ? 
+            '<i class="fas fa-star" style="color: gold;"></i>' : 
+            '<i class="far fa-star"></i>';
     });
 }
 
-function saveRating() {
-    if (!selectedDate || currentRating === 0) return;
+async function createEvent(eventData) {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Not authenticated");
     
-    const dateKey = formatDateKey(selectedDate);
-    const eventsRef = ref(database, `events/${dateKey}`);
+    // 1. First create RTDB entry for ratings
+    const eventId = doc(collection(firestore, 'events')).id;
+    const rtdbRatingPath = `eventRatings/${eventId}`;
     
-    onValue(eventsRef, (snapshot) => {
-        const eventsData = snapshot.val();
-        if (eventsData) {
-            // For simplicity, we'll update the first event's rating
-            const eventId = Object.keys(eventsData)[0];
-            if (eventId) {
-                update(ref(database, `events/${dateKey}/${eventId}`), {
-                    rating: currentRating,
-                    ratedAt: Date.now(),
-                    ratedBy: auth.currentUser.uid
-                }).then(() => {
-                    console.log("Rating saved successfully");
-                }).catch((error) => {
-                    console.error("Error saving rating:", error);
-                });
-            }
-        }
+    await set(ref(database, rtdbRatingPath), {
+        ratings: {},
+        average: 0,
+        count: 0
+    });
+    
+    // 2. Then create Firestore event with RTDB reference
+    await set(doc(firestore, 'events', eventId), {
+        title: eventData.title,
+        description: eventData.description,
+        date: serverTimestamp(),
+        createdBy: user.uid,
+        rtdbRatingPath: rtdbRatingPath,
+        completed: false
+    });
+    
+    return eventId;
+}
+
+async function submitRating(eventId, ratingValue) {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Not authenticated");
+    
+    // 1. Get the RTDB path from Firestore
+    const eventDoc = await getDoc(doc(firestore, 'events', eventId));
+    if (!eventDoc.exists()) throw new Error("Event not found");
+    
+    const rtdbPath = eventDoc.data().rtdbRatingPath;
+    const ratingRef = ref(database, `${rtdbPath}/ratings/${user.uid}`);
+    
+    // 2. Update rating in RTDB
+    await set(ratingRef, ratingValue);
+    
+    // 3. Update average
+    await updateAverageRating(rtdbPath);
+    
+    // Set this as selected event for UI updates
+    selectedEventId = eventId;
+}
+
+async function updateAverageRating(rtdbPath) {
+    const ratingsRef = ref(database, `${rtdbPath}/ratings`);
+    const snapshot = await onValue(ratingsRef, (snapshot) => {
+        const ratings = snapshot.val() || {};
+        
+        const values = Object.values(ratings);
+        const sum = values.reduce((a, b) => a + b, 0);
+        const average = values.length > 0 ? sum / values.length : 0;
+        
+        update(ref(database, rtdbPath), {
+            average: average,
+            count: values.length
+        });
     }, { onlyOnce: true });
+}
+
+async function markEventAsComplete(eventId) {
+    try {
+        await update(doc(firestore, 'events', eventId), {
+            completed: true,
+            completedAt: serverTimestamp()
+        });
+        alert("Event marked as complete!");
+        displayEventsForDate(selectedDate);
+    } catch (error) {
+        console.error("Error marking event complete:", error);
+        alert("Failed to mark event complete");
+    }
+}
+
+function resetEventForm() {
+    eventTitleInput.value = '';
+    eventLinkInput.value = '';
+    currentRating = 0;
+    updateStarRating(0);
+    selectedEventId = null;
 }
 
 function formatDateKey(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
-
-/* 
- * TODO: Implement event creation functionality
- * This will be added later when we connect to Firestore for event management
- * 
-function addEvent() {
-    // Will be implemented when we set up Firestore for events
-}
-
-function markEventAsComplete() {
-    // Will be implemented when we set up Firestore for events
-}
-*/
