@@ -748,19 +748,42 @@ main {
 
 .today-btn {
     padding: 8px 15px;
-    background-color: var(--orange-color);
-    color: white;
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
     font-size: 18px;
+    font-weight: 500;
+    transform: scale(1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: var(--pearl-color);
+    background: var(--gray-color);
 }
 
 .today-btn:hover {
-    background: #ff990077;
+    color: var(--pearl-color);
+    background-color: var(--orange-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
+.today-btn:active {
+    transform: scale(0.8);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.1s ease;
+}
+
+/* Optional: Add a subtle pulse animation when the page loads */
+@keyframes subtlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* Add this class via JavaScript when you want the animation */
+.today-btn.pulse {
+    animation: subtlePulse 1s ease;
+}
 /* Event inputs */
 .event-modal {
     display: none;
@@ -778,6 +801,8 @@ main {
 
 .modal-content {
     background: white;
+    font-size: 18px;
+    font-weight: 600;
     width: 90%;
     max-width: 500px;
     border-radius: 30px;
@@ -824,7 +849,8 @@ main {
     padding: 12px 15px;
     border: 1px solid #ddd;
     border-radius: var(--border-radius-m);
-    font-size: 0.95rem;
+    font-size: 15px;
+    font-weight: 500;
     transition: border-color 0.3s;
 }
 
@@ -835,7 +861,8 @@ main {
 }
 
 .event-link-input {
-    font-size: 0.9rem;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .add-btn, .done-btn {
@@ -994,7 +1021,6 @@ main {
 
 /* Average rating design */
 /* Average Rating Styles (unchanged) *//* Average Rating Styles - Adjusted to Match Publisher Design */
-/* Average Rating Styles */
 .average-rating {
     position: absolute;
     bottom: 5px;
@@ -1026,7 +1052,7 @@ main {
     font-size: 1.1rem;
 }
 
-/* Star Rating Container */
+/* Star Rating Container - Adjusted */
 .star-rating-container {
     margin: 15px 0;
     text-align: center;
@@ -1034,7 +1060,7 @@ main {
     background: #f8f9fa;
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .rating-label {
@@ -1052,7 +1078,7 @@ main {
 .star-rating a {
     background-color: transparent;
     border: none;
-    color: #e0e0e0; /* Lighter gray for better shading */
+    color: #cac7c7; /* Matching publisher gray */
     font-size: 1.8rem;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1061,28 +1087,28 @@ main {
     padding: 0;
     margin: 0;
     line-height: 1;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2); /* Subtle shading */
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1)); /* Depth effect */
 }
 
-/* Hover Effects - Shaded Colors */
-.star-rating a:nth-child(1):hover { color: #f5f5f5; transform: scale(1.15); }
-.star-rating a:nth-child(2):hover { color: #ffd699; transform: scale(1.2); }
-.star-rating a:nth-child(3):hover { color: #ffb84d; transform: scale(1.25); }
-.star-rating a:nth-child(4):hover { color: #ff9933; transform: scale(1.2); }
-.star-rating a:nth-child(5):hover { color: #ff8000; transform: scale(1.15); }
+/* Hover Effects - Matching Publisher Design */
+.star-rating a:nth-child(1):hover { color: #5c5c5c73; transform: scale(1.15) rotate(5deg); }
+.star-rating a:nth-child(2):hover { color: #ffe0b2; transform: scale(1.2) rotate(5deg); }
+.star-rating a:nth-child(3):hover { color: #ffcc80; transform: scale(1.25) rotate(5deg); }
+.star-rating a:nth-child(4):hover { color: #ffb74d; transform: scale(1.2) rotate(5deg); }
+.star-rating a:nth-child(5):hover { color: #ff9800; transform: scale(1.15) rotate(5deg); }
+
+.star-rating a:hover {
+    text-shadow: 0 0 8px currentColor;
+}
 
 /* Active/Pressed State */
 .star-rating a:active {
     transform: scale(0.95);
     transition: all 0.1s ease-out;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3)); /* Deeper shadow when pressed */
 }
 
-/* Selected State - Shaded Colors */
+/* Selected State - Matching Publisher Animation */
 .star-rating a.active {
     animation: starSelected 0.6s ease-out;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Stronger shading when selected */
 }
 
 @keyframes starSelected {
@@ -1093,46 +1119,31 @@ main {
     100% { transform: scale(1.1) rotate(0); }
 }
 
-.star-rating a:nth-child(1).active { color: #ffcc99; }
-.star-rating a:nth-child(2).active { color: #ffb366; }
-.star-rating a:nth-child(3).active { color: #ff9933; }
-.star-rating a:nth-child(4).active { color: #ff8000; }
-.star-rating a:nth-child(5).active { color: #e67300; }
+/* Selected Colors - Matching Publisher */
+.star-rating a:nth-child(1).active { color: #ffb74d; }
+.star-rating a:nth-child(2).active { color: #ffa726; }
+.star-rating a:nth-child(3).active { color: #ff9800; }
+.star-rating a:nth-child(4).active { color: #fb8c00; }
+.star-rating a:nth-child(5).active { color: #f57c00; }
 
-/* Event Item Rating Display - Shaded Version */
+/* Event Item Rating Display - Adjusted */
 .event-rating {
     display: flex;
     align-items: center;
     gap: 5px;
-    color: #ff9933; /* Slightly shaded orange */
+    color: #ff9800;
     font-size: 0.9rem;
     margin-top: 8px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .event-rating i {
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
 }
 
-/* Calendar Day Rating Display */
-.day .average-rating {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.7rem;
-    color: #ff9933; /* Shaded version */
-    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
-}
-
-.day .average-rating i {
-    font-size: 0.7rem;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+.event-rating:hover i {
+    transform: scale(1.1);
+    text-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
 }
 
 /* Calendar Day Rating Display - Adjusted */

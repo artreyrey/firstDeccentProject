@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, onValue, update, set, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs,Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -163,30 +163,32 @@ addEventBtn.addEventListener('click', async () => {
 
 // check if user is signed in
 onAuthStateChanged(auth, async (user) => {
-    try {
-        if (user) {
+    if (user) {
+        try {
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
             if (userDoc.exists()) {
-                userRole = userDoc.data().role || 'student';
+                // Normalize role to lowercase for consistent comparison
+                userRole = (userDoc.data().role || 'student').toLowerCase();
                 console.log(`User is signed in as ${userRole}`);
                 updateUIForRole();
             }
-        } else {
-            // Sign in anonymously
-            await signInAnonymously(auth);
-            userRole = 'student';
-            updateUIForRole();
+        } catch (error) {
+            console.error("Error getting user role:", error);
         }
-    } catch (error) {
-        console.error("Authentication error:", error);
-        userRole = 'student';
-        updateUIForRole();
+    } else {
+        signInAnonymously(auth)
+            .then(() => {
+                console.log("Signed in anonymously as student");
+                userRole = 'student';
+                updateUIForRole();
+            })
+            .catch((error) => console.error("Error signing in:", error));
     }
 });
 
 // Functions
 function updateUIForRole() {
-    const isOfficer = userRole === 'officer';
+    const isOfficer = userRole !== 'Student';
     eventInputContainer.style.display = isOfficer ? 'flex' : 'none';
     addBtnContainer.style.display = isOfficer ? 'block' : 'none';
     doneBtnContainer.style.display = isOfficer ? 'block' : 'none';
@@ -262,21 +264,18 @@ function createDayElement(day, isOtherMonth) {
 }
 
 async function checkDayEvents(date, dayElement) {
-    // Clear previous indicators
     dayElement.querySelectorAll('.event-indicator, .average-rating').forEach(el => el.remove());
     
     try {
-        // Format date for query (ignoring time)
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
-        
         const endDate = new Date(date);
         endDate.setHours(23, 59, 59, 999);
         
         const q = query(
             collection(firestore, "events"),
-            where("date", ">=", startDate),
-            where("date", "<=", endDate)
+            where("date", ">=", Timestamp.fromDate(startDate)),
+            where("date", "<=", Timestamp.fromDate(endDate))
         );
         
         const querySnapshot = await getDocs(q);
@@ -284,7 +283,6 @@ async function checkDayEvents(date, dayElement) {
         if (!querySnapshot.empty) {
             dayElement.classList.add('has-event');
             
-            // Calculate average rating for all events on this day
             let totalRating = 0;
             let eventCount = 0;
             
@@ -293,12 +291,15 @@ async function checkDayEvents(date, dayElement) {
                 if (eventData.rtdbRatingPath) {
                     try {
                         const ratingSnapshot = await get(ref(database, `${eventData.rtdbRatingPath}/average`));
-                        if (ratingSnapshot.exists() && ratingSnapshot.val() > 0) {
-                            totalRating += ratingSnapshot.val();
-                            eventCount++;
+                        if (ratingSnapshot.exists()) {
+                            const rating = ratingSnapshot.val();
+                            if (typeof rating === 'number' && rating > 0) {
+                                totalRating += rating;
+                                eventCount++;
+                            }
                         }
                     } catch (error) {
-                        console.error("Error getting rating for event:", eventData.id, error);
+                        console.error(`Rating error for event ${doc.id}:`, error);
                     }
                 }
             }
@@ -313,11 +314,10 @@ async function checkDayEvents(date, dayElement) {
         }
     } catch (error) {
         console.error("Error checking day events:", error);
-        // Add error indicator if needed
         const errorElement = document.createElement('div');
         errorElement.classList.add('error-indicator');
         errorElement.textContent = '!';
-        errorElement.title = 'Error loading events';
+        errorElement.title = error.message;
         dayElement.appendChild(errorElement);
     }
 }
@@ -335,17 +335,16 @@ async function displayEventsForDate(date) {
     eventsListElement.innerHTML = '<div class="no-events">Loading events...</div>';
     
     try {
-        // Format date for query
+        // Create Firestore-compatible timestamps
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
-        
         const endDate = new Date(date);
         endDate.setHours(23, 59, 59, 999);
         
         const q = query(
             collection(firestore, "events"),
-            where("date", ">=", startDate),
-            where("date", "<=", endDate),
+            where("date", ">=", Timestamp.fromDate(startDate)),
+            where("date", "<=", Timestamp.fromDate(endDate)),
             orderBy("date", "asc")
         );
         
@@ -356,22 +355,30 @@ async function displayEventsForDate(date) {
             
             for (const doc of querySnapshot.docs) {
                 const eventData = doc.data();
+                // Convert Firestore timestamp to JS Date for display
+                const eventDate = eventData.date.toDate();
+                
                 const eventElement = await createEventElement({
                     id: doc.id,
-                    ...eventData
+                    ...eventData,
+                    date: eventDate  // Pass the converted date
                 });
-                eventsListElement.appendChild(eventElement);
                 
-                // Get ratings for this event
+                eventsListElement.appendChild(eventElement);
                 await displayEventRatings(doc.id, eventData.rtdbRatingPath);
             }
         } else {
-            eventsListElement.innerHTML = '<div class="no-events">No events for this date</div>';
+            eventsListElement.innerHTML = '<div class="no-events">No events scheduled</div>';
             averageRatingValue.textContent = '0.0';
         }
     } catch (error) {
-        console.error("Error loading events:", error);
-        eventsListElement.innerHTML = '<div class="error-message">Error loading events</div>';
+        console.error("Event load error:", error);
+        eventsListElement.innerHTML = `
+            <div class="error-message">
+                Error loading events<br>
+                <small>${error.message}</small>
+            </div>
+        `;
     }
 }
 
@@ -443,11 +450,15 @@ function updateStarRating(rating) {
 }
 
 async function createEvent(eventData) {
-    const user = auth.currentUser;
+     const user = auth.currentUser;
     if (!user) throw new Error("Not authenticated");
-    if (userRole !== 'officer') throw new Error("Unauthorized");
+    // Change this line to check for any non-student role
+    if (userRole === 'Student') throw new Error("Unauthorized");
     
-    // 1. First create RTDB entry for ratings
+    // Convert JS Date to Firestore Timestamp
+    const eventDate = Timestamp.fromDate(eventData.date);
+    
+    // 1. Create RTDB entry for ratings
     const eventId = doc(collection(firestore, 'events')).id;
     const rtdbRatingPath = `eventRatings/${eventId}`;
     
@@ -457,16 +468,16 @@ async function createEvent(eventData) {
         count: 0
     });
     
-    // 2. Then create Firestore event with RTDB reference
+    // 2. Create Firestore event
     await set(doc(firestore, 'events', eventId), {
-    title: eventData.title,
-    description: eventData.description,
-    date: serverTimestamp(),
-    createdBy: user.uid,
-    rtdbRatingPath: rtdbRatingPath,
-    completed: false,
-    createdAt: serverTimestamp()
-});
+        title: eventData.title,
+        description: eventData.description,
+        date: eventDate,  // Use the converted timestamp
+        createdBy: user.uid,
+        rtdbRatingPath: rtdbRatingPath,
+        completed: false,
+        createdAt: serverTimestamp()
+    });
     
     return eventId;
 }
@@ -535,3 +546,7 @@ function resetEventForm() {
 function formatDateKey(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
+
+console.log("Selected date:", selectedDate);
+console.log("Title length:", eventTitleInput.value?.length);
+console.log("Link length:", eventLinkInput.value?.length);
