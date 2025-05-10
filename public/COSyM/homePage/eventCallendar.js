@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getDatabase, ref, onValue, update, set, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -36,6 +36,10 @@ const eventTitleInput = document.getElementById('event-title');
 const eventLinkInput = document.getElementById('event-link');
 const starRating = document.getElementById('stars');
 const averageRatingValue = document.getElementById('average-rating-value');
+const eventInputContainer = document.querySelector('.event-input');
+const addBtnContainer = document.querySelector('.add-btn');
+const doneBtnContainer = document.querySelector('.done-btn');
+const starRatingContainer = document.querySelector('.star-rating-container');
 
 // Current date info
 let currentDate = new Date();
@@ -58,17 +62,19 @@ onAuthStateChanged(auth, async (user) => {
             if (userDoc.exists()) {
                 userRole = userDoc.data().role || 'student';
                 console.log(`User is signed in as ${userRole}`);
+                updateUIForRole();
             }
         } catch (error) {
             console.error("Error getting user role:", error);
         }
-        
-        // Update UI based on role
-        updateUIForRole();
     } else {
         // User is signed out - sign in anonymously as student
         signInAnonymously(auth)
-            .then(() => console.log("Signed in anonymously as student"))
+            .then(() => {
+                console.log("Signed in anonymously as student");
+                userRole = 'student';
+                updateUIForRole();
+            })
             .catch((error) => console.error("Error signing in:", error));
     }
 });
@@ -137,7 +143,7 @@ addEventBtn.addEventListener('click', async () => {
     try {
         const eventData = {
             title: title,
-            description: link, // Using description field for link
+            description: link,
             date: selectedDate,
             createdBy: auth.currentUser.uid
         };
@@ -154,13 +160,37 @@ addEventBtn.addEventListener('click', async () => {
     }
 });
 
+
+// check if user is signed in
+onAuthStateChanged(auth, async (user) => {
+    try {
+        if (user) {
+            const userDoc = await getDoc(doc(firestore, "users", user.uid));
+            if (userDoc.exists()) {
+                userRole = userDoc.data().role || 'student';
+                console.log(`User is signed in as ${userRole}`);
+                updateUIForRole();
+            }
+        } else {
+            // Sign in anonymously
+            await signInAnonymously(auth);
+            userRole = 'student';
+            updateUIForRole();
+        }
+    } catch (error) {
+        console.error("Authentication error:", error);
+        userRole = 'student';
+        updateUIForRole();
+    }
+});
+
 // Functions
 function updateUIForRole() {
-    const isOfficer = userRole !== 'student';
-    document.querySelector('.event-input').style.display = isOfficer ? 'flex' : 'none';
-    document.querySelector('.add-btn').style.display = isOfficer ? 'block' : 'none';
-    document.querySelector('.done-btn').style.display = isOfficer ? 'block' : 'none';
-    document.querySelector('.star-rating-container').style.display = isOfficer ? 'none' : 'block';
+    const isOfficer = userRole === 'officer';
+    eventInputContainer.style.display = isOfficer ? 'flex' : 'none';
+    addBtnContainer.style.display = isOfficer ? 'block' : 'none';
+    doneBtnContainer.style.display = isOfficer ? 'block' : 'none';
+    starRatingContainer.style.display = isOfficer ? 'none' : 'block';
 }
 
 function renderCalendar(month, year) {
@@ -216,7 +246,7 @@ function createDayElement(day, isOtherMonth) {
     const dateKey = formatDateKey(date);
     
     // Check for events on this day
-    checkDayEvents(dateKey, dayElement);
+    checkDayEvents(date, dayElement);
     
     if (!isOtherMonth) {
         dayElement.addEventListener('click', () => {
@@ -231,24 +261,64 @@ function createDayElement(day, isOtherMonth) {
     return dayElement;
 }
 
-function checkDayEvents(dateKey, dayElement) {
-    const eventsQuery = collection(firestore, "events");
-    // In a real app, you would query events for this specific date
-    // This is simplified for demonstration
-    
+async function checkDayEvents(date, dayElement) {
     // Clear previous indicators
     dayElement.querySelectorAll('.event-indicator, .average-rating').forEach(el => el.remove());
     
-    // This would be replaced with actual Firestore query
-    if (Math.random() > 0.7) { // Simulating some days have events
-        dayElement.classList.add('has-event');
+    try {
+        // Format date for query (ignoring time)
+        const startDate = new Date(date);
+        startDate.setHours(0, 0, 0, 0);
         
-        // Simulate average rating
-        const averageRating = (Math.random() * 2 + 3).toFixed(1); // Random rating between 3-5
-        const ratingElement = document.createElement('div');
-        ratingElement.classList.add('average-rating');
-        ratingElement.innerHTML = `${averageRating} <i class="fas fa-star"></i>`;
-        dayElement.appendChild(ratingElement);
+        const endDate = new Date(date);
+        endDate.setHours(23, 59, 59, 999);
+        
+        const q = query(
+            collection(firestore, "events"),
+            where("date", ">=", startDate),
+            where("date", "<=", endDate)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+            dayElement.classList.add('has-event');
+            
+            // Calculate average rating for all events on this day
+            let totalRating = 0;
+            let eventCount = 0;
+            
+            for (const doc of querySnapshot.docs) {
+                const eventData = doc.data();
+                if (eventData.rtdbRatingPath) {
+                    try {
+                        const ratingSnapshot = await get(ref(database, `${eventData.rtdbRatingPath}/average`));
+                        if (ratingSnapshot.exists() && ratingSnapshot.val() > 0) {
+                            totalRating += ratingSnapshot.val();
+                            eventCount++;
+                        }
+                    } catch (error) {
+                        console.error("Error getting rating for event:", eventData.id, error);
+                    }
+                }
+            }
+            
+            if (eventCount > 0) {
+                const averageRating = (totalRating / eventCount).toFixed(1);
+                const ratingElement = document.createElement('div');
+                ratingElement.classList.add('average-rating');
+                ratingElement.innerHTML = `${averageRating} <i class="fas fa-star"></i>`;
+                dayElement.appendChild(ratingElement);
+            }
+        }
+    } catch (error) {
+        console.error("Error checking day events:", error);
+        // Add error indicator if needed
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('error-indicator');
+        errorElement.textContent = '!';
+        errorElement.title = 'Error loading events';
+        dayElement.appendChild(errorElement);
     }
 }
 
@@ -261,32 +331,39 @@ function openEventModal(date) {
     eventTitleInput.focus();
 }
 
-
 async function displayEventsForDate(date) {
     eventsListElement.innerHTML = '<div class="no-events">Loading events...</div>';
     
     try {
-        // In a real app, you would query Firestore for events on this date
-        // This is simplified for demonstration
-        const fakeEvents = [
-            {
-                id: "event1",
-                title: "Sample Event",
-                description: "https://example.com/doc1",
-                date: date,
-                rtdbRatingPath: "eventRatings/event1"
-            }
-        ];
+        // Format date for query
+        const startDate = new Date(date);
+        startDate.setHours(0, 0, 0, 0);
         
-        if (fakeEvents.length > 0) {
+        const endDate = new Date(date);
+        endDate.setHours(23, 59, 59, 999);
+        
+        const q = query(
+            collection(firestore, "events"),
+            where("date", ">=", startDate),
+            where("date", "<=", endDate),
+            orderBy("date", "asc")
+        );
+        
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
             eventsListElement.innerHTML = '';
             
-            for (const event of fakeEvents) {
-                const eventElement = await createEventElement(event);
+            for (const doc of querySnapshot.docs) {
+                const eventData = doc.data();
+                const eventElement = await createEventElement({
+                    id: doc.id,
+                    ...eventData
+                });
                 eventsListElement.appendChild(eventElement);
                 
                 // Get ratings for this event
-                await displayEventRatings(event);
+                await displayEventRatings(doc.id, eventData.rtdbRatingPath);
             }
         } else {
             eventsListElement.innerHTML = '<div class="no-events">No events for this date</div>';
@@ -309,14 +386,14 @@ async function createEventElement(event) {
             <p><a href="${event.description}" target="_blank">View Document</a></p>
     `;
     
-    if (userRole !== 'student') {
+    if (userRole === 'officer') {
         eventHTML += `<button class="complete-btn">Mark Complete</button>`;
     }
     
     eventHTML += `</div>`;
     eventElement.innerHTML = eventHTML;
     
-    if (userRole !== 'student') {
+    if (userRole === 'officer') {
         eventElement.querySelector('.complete-btn').addEventListener('click', () => {
             markEventAsComplete(event.id);
         });
@@ -324,21 +401,24 @@ async function createEventElement(event) {
     
     return eventElement;
 }
-          
-async function displayEventRatings(event) {
-    const ratingsRef = ref(database, `${event.rtdbRatingPath}`);
+
+async function displayEventRatings(eventId, rtdbPath) {
+    if (!rtdbPath) return;
+    
+    const ratingsRef = ref(database, `${rtdbPath}`);
     onValue(ratingsRef, (snapshot) => {
         const ratingsData = snapshot.val();
         if (ratingsData) {
-            const eventElement = document.querySelector(`.event-item[data-event-id="${event.id}"]`);
+            const eventElement = document.querySelector(`.event-item[data-event-id="${eventId}"]`);
             if (eventElement) {
                 const ratingDisplay = eventElement.querySelector('.event-rating') || 
                     document.createElement('div');
                 
                 ratingDisplay.classList.add('event-rating');
                 ratingDisplay.innerHTML = `
-                    ${ratingsData.average.toFixed(1)} <i class="fas fa-star"></i>
-                    (${ratingsData.count} ratings)
+                    ${ratingsData.average ? ratingsData.average.toFixed(1) : '0.0'} 
+                    <i class="fas fa-star"></i>
+                    (${ratingsData.count || 0} ratings)
                 `;
                 
                 if (!eventElement.querySelector('.event-rating')) {
@@ -346,8 +426,8 @@ async function displayEventRatings(event) {
                 }
                 
                 // Update main average display if this is the selected event
-                if (selectedEventId === event.id) {
-                    averageRatingValue.textContent = ratingsData.average.toFixed(1);
+                if (selectedEventId === eventId) {
+                    averageRatingValue.textContent = ratingsData.average ? ratingsData.average.toFixed(1) : '0.0';
                 }
             }
         }
@@ -365,6 +445,7 @@ function updateStarRating(rating) {
 async function createEvent(eventData) {
     const user = auth.currentUser;
     if (!user) throw new Error("Not authenticated");
+    if (userRole !== 'officer') throw new Error("Unauthorized");
     
     // 1. First create RTDB entry for ratings
     const eventId = doc(collection(firestore, 'events')).id;
@@ -378,13 +459,14 @@ async function createEvent(eventData) {
     
     // 2. Then create Firestore event with RTDB reference
     await set(doc(firestore, 'events', eventId), {
-        title: eventData.title,
-        description: eventData.description,
-        date: serverTimestamp(),
-        createdBy: user.uid,
-        rtdbRatingPath: rtdbRatingPath,
-        completed: false
-    });
+    title: eventData.title,
+    description: eventData.description,
+    date: serverTimestamp(),
+    createdBy: user.uid,
+    rtdbRatingPath: rtdbRatingPath,
+    completed: false,
+    createdAt: serverTimestamp()
+});
     
     return eventId;
 }
@@ -392,6 +474,7 @@ async function createEvent(eventData) {
 async function submitRating(eventId, ratingValue) {
     const user = auth.currentUser;
     if (!user) throw new Error("Not authenticated");
+    if (userRole !== 'student') throw new Error("Unauthorized");
     
     // 1. Get the RTDB path from Firestore
     const eventDoc = await getDoc(doc(firestore, 'events', eventId));
@@ -412,22 +495,23 @@ async function submitRating(eventId, ratingValue) {
 
 async function updateAverageRating(rtdbPath) {
     const ratingsRef = ref(database, `${rtdbPath}/ratings`);
-    const snapshot = await onValue(ratingsRef, (snapshot) => {
-        const ratings = snapshot.val() || {};
-        
-        const values = Object.values(ratings);
-        const sum = values.reduce((a, b) => a + b, 0);
-        const average = values.length > 0 ? sum / values.length : 0;
-        
-        update(ref(database, rtdbPath), {
-            average: average,
-            count: values.length
-        });
-    }, { onlyOnce: true });
+    const snapshot = await get(ratingsRef);
+    const ratings = snapshot.val() || {};
+    
+    const values = Object.values(ratings);
+    const sum = values.reduce((a, b) => a + b, 0);
+    const average = values.length > 0 ? sum / values.length : 0;
+    
+    await update(ref(database, rtdbPath), {
+        average: average,
+        count: values.length
+    });
 }
 
 async function markEventAsComplete(eventId) {
     try {
+        if (userRole !== 'officer') throw new Error("Unauthorized");
+        
         await update(doc(firestore, 'events', eventId), {
             completed: true,
             completedAt: serverTimestamp()
