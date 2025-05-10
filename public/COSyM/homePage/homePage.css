@@ -940,7 +940,7 @@ main {
     background: #f8f9fa;
     border-radius: 8px;
     margin-bottom: 12px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid var(--orange-color);
     transition: transform 0.2s;
 }
 
@@ -959,7 +959,7 @@ main {
 }
 
 .event-item a {
-    color: #667eea;
+    color: var(--orange-color);
     text-decoration: none;
     font-size: 0.9rem;
     display: inline-block;
@@ -969,6 +969,55 @@ main {
 .event-item a:hover {
     text-decoration: underline;
 }
+
+.event-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.event-actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.event-actions .complete-btn {
+    background-color: var(--orange-color);
+    color: white;
+}
+
+.event-actions .delete-btn {
+    background-color: var(--gray-color);
+    color: var(--gray-color);
+}
+
+.event-item {
+    transition: all 0.3s ease;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.event-item:hover {
+    background-color: #f0f0f0;
+}
+
+.star-rating-container {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+/* Hide rating container by default for students */
+.star-rating-container:not(.visible) {
+    visibility: hidden;
+}
+
 
 .event-rating {
     color: #ff9800;
