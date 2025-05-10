@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
@@ -66,9 +66,7 @@ onAuthStateChanged(auth, async (user) => {
         updateUIForRole();
     } else {
         // User is signed out - sign in anonymously as student
-        signInAnonymously(auth)
-            .then(() => console.log("Signed in anonymously as student"))
-            .catch((error) => console.error("Error signing in:", error));
+           ((error) => console.error("Error signing in:", error));
     }
 });
 
