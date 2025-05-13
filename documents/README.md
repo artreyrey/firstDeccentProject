@@ -12,7 +12,7 @@ March 30, 2025
   = Next will be the managing of members 3rd day
   = Next will be the funds 4th day
   = Callendars next 5th day
-  = Freedom wall next 6th day
+  = Freedom wall next 6th day 
   = home page 7th day
   = foucs on day 1's and not general 
   = I will take 3 rest day before starting while brainstorming
