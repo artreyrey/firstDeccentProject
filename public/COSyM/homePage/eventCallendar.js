@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, onValue, update, set, get, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 import { getFirestore, doc, getDoc, collection, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
