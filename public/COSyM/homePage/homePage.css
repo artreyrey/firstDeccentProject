@@ -136,15 +136,6 @@ main {
     color: var(--gray-color);
 }
 
-/* Funds Section */
-.funds .funds-content {
-    text-align: center;
-    font-size: var(--font-size-xxl);
-    margin-top: 300px;
-    color: var(--gray-color);
-
-}
-
 /* Mobile Styles of */
 .sidebar-toggle {
     display: none;
@@ -628,6 +619,10 @@ main {
 /* Members responsiveness */
 
 /* Funds Designs */
+.funds{
+    color: var(--orange-color);
+}
+
 
 /* Events Designs */
 .calendar {
