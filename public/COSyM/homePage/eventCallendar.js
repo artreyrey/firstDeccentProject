@@ -38,7 +38,7 @@ const averageRatingValue = document.getElementById('average-rating-value');
 const eventInputContainer = document.querySelector('.event-input');
 const addBtnContainer = document.querySelector('.add-btn');
 const starRatingContainer = document.querySelector('.star-rating-container');
-const completeEventBtn = document.getElementById('complete-event');
+const markCompleteBtn = document.getElementById('mark-complete-btn');
 
 // Current date info
 let currentDate = new Date();
@@ -126,33 +126,45 @@ document.querySelectorAll('.star-rating a').forEach((star, index) => {
     });
 });
 
-completeEventBtn.addEventListener('click', async () => {
-    if (!selectedEventId) return;
-    
-    try {
-        if (userRole === 'student') {
-            throw new Error("Students cannot complete events");
+// Event marking as complete (for non-students only)
+if (markCompleteBtn) {
+    markCompleteBtn.addEventListener('click', async () => {
+        if (!selectedEventId || userRole === 'student') return;
+        
+        try {
+            await update(ref(database, `events/${selectedEventId}`), {
+                completed: true
+            });
+            
+            displayEventsForDate(selectedDate);
+            renderCalendar(currentMonth, currentYear);
+            alert("Event marked as completed! Students can no longer rate this event.");
+        } catch (error) {
+            console.error("Error completing event:", error);
+            alert(`Failed to mark event as complete: ${error.message}`);
         }
-        
-        await update(ref(database, `events/${selectedEventId}`), {
-            completed: true
-        });
-        
-        displayEventsForDate(selectedDate);
-        renderCalendar(currentMonth, currentYear);
-        alert("Event marked as completed!");
-    } catch (error) {
-        console.error("Error completing event:", error);
-        alert(`Failed to complete event: ${error.message}`);
-    }
-});
+    });
+}
 
 addEventBtn.addEventListener('click', async () => {
     const title = eventTitleInput.value.trim();
     const link = eventLinkInput.value.trim();
     
-    if (!title || !link) {
-        alert('Please enter both title and document link');
+    if (!title) {
+        alert('Please enter an event title');
+        return;
+    }
+    
+    if (!link) {
+        alert('Please enter a document link');
+        return;
+    }
+    
+    // Basic URL validation
+    try {
+        new URL(link);
+    } catch (e) {
+        alert('Please enter a valid URL for the document link');
         return;
     }
     
@@ -162,27 +174,41 @@ addEventBtn.addEventListener('click', async () => {
     }
     
     try {
-        if (!auth.currentUser) await signInAnonymously(auth);
-        if (userRole === 'student') throw new Error("Students cannot create events");
+        if (userRole === 'student') {
+            throw new Error("Students cannot create events");
+        }
         
         const eventData = {
             title: title,
             link: link,
             date: selectedDate,
-            createdBy: auth.currentUser.uid,
-            completed: false
+            createdBy: auth.currentUser.uid
         };
         
-        const eventId = await createEvent(eventData);
+        // Show loading state
+        addEventBtn.disabled = true;
+        addEventBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
         
+        const eventId = await createEvent(eventData);
+        console.log("Event created with ID:", eventId);
+        
+        // Refresh the display
         displayEventsForDate(selectedDate);
         renderCalendar(currentMonth, currentYear);
         
+        // Reset form
         eventModal.style.display = 'none';
         resetEventForm();
+        
     } catch (error) {
         console.error("Event creation failed:", error);
         alert(`Failed to create event: ${error.message}`);
+    } finally {
+        // Reset button state
+        if (addEventBtn) {
+            addEventBtn.disabled = false;
+            addEventBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
+        }
     }
 });
 
@@ -190,10 +216,11 @@ addEventBtn.addEventListener('click', async () => {
 function updateUIForRole() {
     const isStudent = userRole === 'student';
     
+    // Show/hide elements based on role
     eventInputContainer.style.display = isStudent ? 'none' : 'flex';
     addBtnContainer.style.display = isStudent ? 'none' : 'block';
     starRatingContainer.style.display = isStudent ? 'block' : 'none';
-    completeEventBtn.style.display = isStudent ? 'none' : 'block';
+
 }
 
 function renderCalendar(month, year) {
@@ -313,6 +340,11 @@ function openEventModal(date) {
     currentRating = 0;
     updateStarRating(0);
     
+    // Hide mark complete button by default
+    if (markCompleteBtn) {
+        markCompleteBtn.style.display = 'none';
+    }
+    
     displayEventsForDate(date);
     eventModal.style.display = 'flex';
     
@@ -386,6 +418,7 @@ function createEventElement(event) {
         eventHTML += `
             <div class="event-actions">
                 <button class="delete-btn">Delete Event</button>
+                ${!event.completed ? '<button class="complete-btn">Mark Complete</button>' : ''}
             </div>
         `;
     }
@@ -394,12 +427,24 @@ function createEventElement(event) {
     eventElement.innerHTML = eventHTML;
     
     if (userRole !== 'student') {
+        // Add delete event handler
         eventElement.querySelector('.delete-btn').addEventListener('click', async (e) => {
             e.stopPropagation();
             if (confirm("Are you sure you want to delete this event?")) {
                 await deleteEvent(event.id);
             }
         });
+        
+        // Add mark complete handler if the button exists
+        const completeBtn = eventElement.querySelector('.complete-btn');
+        if (completeBtn) {
+            completeBtn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                if (confirm("Mark this event as complete? Students will no longer be able to rate it.")) {
+                    await markEventComplete(event.id);
+                }
+            });
+        }
     }
     
     eventElement.addEventListener('click', () => {
@@ -414,8 +459,17 @@ function createEventElement(event) {
             updateStarRating(0);
         }
         
-        // Show complete button only for non-students and if event isn't completed
-        completeEventBtn.style.display = (userRole !== 'student' && !event.completed) ? 'block' : 'none';
+        // Only enable rating for students and for events that aren't completed
+        if (userRole === 'student') {
+            starRatingContainer.style.display = event.completed ? 'none' : 'block';
+            if (event.completed) {
+                eventsListElement.querySelector('.rating-disabled-message')?.remove();
+                const message = document.createElement('p');
+                message.className = 'rating-disabled-message';
+                message.textContent = 'This event is completed and cannot be rated';
+                eventsListElement.appendChild(message);
+            }
+        }
     });
     
     return eventElement;
@@ -436,6 +490,26 @@ async function deleteEvent(eventId) {
     } catch (error) {
         console.error("Error deleting event:", error);
         alert("Failed to delete event: " + error.message);
+    }
+}
+
+async function markEventComplete(eventId) {
+    try {
+        if (userRole === 'student') {
+            throw new Error("Unauthorized - Students cannot mark events as complete");
+        }
+        
+        await update(ref(database, `events/${eventId}`), {
+            completed: true
+        });
+        
+        displayEventsForDate(selectedDate);
+        renderCalendar(currentMonth, currentYear);
+        
+        alert("Event marked as complete. Students can no longer rate this event.");
+    } catch (error) {
+        console.error("Error marking event as complete:", error);
+        alert("Failed to mark event as complete: " + error.message);
     }
 }
 
@@ -460,7 +534,7 @@ async function createEvent(eventData) {
             completed: false
         };
 
-        // Only set the event in database
+        // Set the event in database
         await set(ref(database, `events/${eventId}`), newEvent);
         
         return eventId;
@@ -534,7 +608,6 @@ function resetEventForm() {
     currentRating = 0;
     updateStarRating(0);
     selectedEventId = null;
-    completeEventBtn.style.display = 'none';
 }
 
 function formatDateKey(date) {
@@ -548,3 +621,26 @@ function formatDateKey(date) {
 function generateUniqueId() {
     return 'event-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
 }
+
+// Check database connection
+async function checkRTDBConnection() {
+    try {
+        const testRef = ref(database, 'connection_test');
+        await set(testRef, {
+            timestamp: Date.now(),
+            status: "success"
+        });
+        console.log("✅ Events RTDB connection successful");
+        return true;
+    } catch (error) {
+        console.error("❌ Events RTDB connection failed:", error);
+        return false;
+    }
+}
+
+// Call this at startup
+checkRTDBConnection().then(success => {
+    if (!success) {
+        alert("Failed to connect to database. Please check your connection.");
+    }
+});

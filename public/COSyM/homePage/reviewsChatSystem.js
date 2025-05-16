@@ -203,9 +203,9 @@ const testConnection = async () => {
       status: "connected", 
       timestamp: Date.now() 
     });
-    console.log("✅ Database connection successful!");
+    console.log("✅ Review Database connection successful!");
   } catch (error) {
-    console.error("❌ Connection failed:", error);
+    console.error("❌ Review Connection failed:", error);
   }
 };
 
