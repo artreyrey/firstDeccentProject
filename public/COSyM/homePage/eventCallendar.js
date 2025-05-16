@@ -57,23 +57,20 @@ onAuthStateChanged(auth, async (user) => {
         try {
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
             if (userDoc.exists()) {
-                // Convert role to lowercase for case-insensitive comparison
                 userRole = (userDoc.data().role || 'student').toLowerCase();
                 updateUIForRole();
+            } else {
+                console.error("User document not found");
+                // Redirect to login or show error
+                alert("User profile not found. Please contact administrator.");
             }
         } catch (error) {
             console.error("Error getting user role:", error);
-            userRole = 'student';
-            updateUIForRole();
+            alert("Error loading user profile. Please try again.");
         }
     } else {
-        signInAnonymously(auth)
-            .then(() => console.log("Signed in anonymously"))
-            .catch((error) => {
-                console.error("Error signing in:", error);
-                userRole = 'student';
-                updateUIForRole();
-            });
+        // User not authenticated - redirect to login
+        window.location.href = "/login.html"; // Change to your login page
     }
 });
 
@@ -358,14 +355,17 @@ function createEventElement(event) {
     eventElement.classList.add('event-item');
     eventElement.dataset.eventId = event.id;
     
+    // Calculate rounded average for display
+    const avgRating = event.averageRating ? Math.round(event.averageRating * 10) / 10 : 0;
+    const ratingCount = event.ratingCount || 0;
+    
     let eventHTML = `
         <div class="event-content">
             <strong>${event.title}</strong>
             <p><a href="${event.link}" target="_blank">View Document</a></p>
             <div class="event-rating">
-                ${event.averageRating ? event.averageRating.toFixed(1) : '0.0'} 
-                <i class="fas fa-star"></i>
-                (${event.ratingCount || 0} ratings)
+                ${avgRating} <i class="fas fa-star"></i>
+                (${ratingCount} ${ratingCount === 1 ? 'rating' : 'ratings'})
             </div>
     `;
     
@@ -390,12 +390,12 @@ function createEventElement(event) {
         });
     }
     
-    // For students - make the event selectable for rating
-    if (userRole === 'student') {
+    // For non-students - make the event selectable for rating
+    if (userRole !== 'student') {
         eventElement.style.cursor = 'pointer';
         eventElement.addEventListener('click', () => {
             selectedEventId = event.id;
-            averageRatingValue.textContent = event.averageRating ? event.averageRating.toFixed(1) : '0.0';
+            averageRatingValue.textContent = avgRating;
             
             // Highlight current user's rating if exists
             if (auth.currentUser && event.ratings && event.ratings[auth.currentUser.uid]) {
@@ -443,8 +443,7 @@ async function deleteEvent(eventId) {
 async function createEvent(eventData) {
     const user = auth.currentUser;
     if (!user) {
-        await signInAnonymously(auth);
-        throw new Error("Please sign in to create events");
+        throw new Error("User not authenticated");
     }
     
     if (userRole === 'student') {
@@ -519,37 +518,38 @@ async function submitRating(eventId, ratingValue) {
     }
 }
 
-async function updateAverageRating(rtdbPath) {
+async function submitRating(eventId, ratingValue) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Please sign in to rate events");
+        return;
+    }
+    
+    // Changed to allow only non-students to rate
+    if (userRole === 'student') {
+        alert("Students cannot rate events");
+        return;
+    }
+    
     try {
-        const ratingsRef = ref(database, `${rtdbPath}/ratings`);
-        const snapshot = await get(ratingsRef);
+        const eventDoc = await getDoc(doc(firestore, 'events', eventId));
+        if (!eventDoc.exists()) throw new Error("Event not found");
         
-        if (!snapshot.exists()) {
-            // No ratings yet, set to 0
-            await update(ref(database, rtdbPath), {
-                averageRating: 0,
-                ratingCount: 0
-            });
-            return;
-        }
+        const rtdbPath = eventDoc.data().rtdbPath;
+        if (!rtdbPath) throw new Error("Event path not found");
         
-        const ratings = snapshot.val();
-        const ratingValues = Object.values(ratings);
+        const ratingRef = ref(database, `${rtdbPath}/ratings/${user.uid}`);
+        await set(ratingRef, ratingValue);
         
-        // Calculate average
-        const sum = ratingValues.reduce((total, value) => total + value, 0);
-        const count = ratingValues.length;
-        const average = count > 0 ? sum / count : 0;
+        await updateAverageRating(rtdbPath);
         
-        // Update the event with new average and count
-        await update(ref(database, rtdbPath), {
-            averageRating: average,
-            ratingCount: count,
-            ratings: ratings // Make sure ratings object is preserved
-        });
+        selectedEventId = eventId;
+        displayEventsForDate(selectedDate);
+        
+        // No alert to avoid interrupting UX
     } catch (error) {
-        console.error("Error updating average rating:", error);
-        throw error;
+        console.error("Rating submission failed:", error);
+        alert("Failed to submit rating: " + error.message);
     }
 }
 
