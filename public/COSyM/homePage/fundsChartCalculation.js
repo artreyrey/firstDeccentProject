@@ -1,10 +1,9 @@
-// This would be replaced with your actual Firebase/RTDB implementation
-        document.addEventListener('DOMContentLoaded', function() {
-            const editBtn = document.getElementById('editBtn');
-            const editSection = document.getElementById('editSection');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const eventSelect = document.getElementById('eventSelect');
+document.addEventListener('DOMContentLoaded', function() {
+            const editBtn = document.getElementById('fundsEditBtn');
+            const editSection = document.getElementById('fundsEditSection');
+            const cancelBtn = document.getElementById('fundsCancelBtn');
+            const saveBtn = document.getElementById('fundsSaveBtn');
+            const eventSelect = document.getElementById('fundsEventSelect');
             
             // Sample data - replace with your RTDB data
             let fundsData = {
@@ -40,7 +39,7 @@
             eventSelect.addEventListener('change', loadEventData);
             
             // End goal input should update yearly goals
-            document.getElementById('endGoal').addEventListener('input', updateYearlyGoals);
+            document.getElementById('fundsEndGoal').addEventListener('input', updateYearlyGoals);
             
             // Toggle edit section
             function toggleEditSection() {
@@ -48,11 +47,11 @@
                 
                 if (editSection.style.display === 'block') {
                     // Populate edit form with current data
-                    document.getElementById('startDate').value = fundsData.startDate;
-                    document.getElementById('endDate').value = fundsData.endDate;
-                    document.getElementById('endGoal').value = fundsData.endGoal;
-                    document.getElementById('documentation').value = fundsData.documentation;
-                    document.getElementById('naToggle').checked = fundsData.isNA;
+                    document.getElementById('fundsStartDate').value = fundsData.startDate;
+                    document.getElementById('fundsEndDate').value = fundsData.endDate;
+                    document.getElementById('fundsEndGoal').value = fundsData.endGoal;
+                    document.getElementById('fundsDocumentation').value = fundsData.documentation;
+                    document.getElementById('fundsNaToggle').checked = fundsData.isNA;
                     
                     updateYearlyGoals();
                     renderEditYearChart();
@@ -92,18 +91,18 @@
             // Update display with current data
             function updateDisplay() {
                 // Update summary
-                document.getElementById('endGoalDisplay').textContent = `₱${fundsData.endGoal.toLocaleString()}`;
-                document.getElementById('goalPerYearDisplay').textContent = `₱${fundsData.goalPerYear.toLocaleString()}`;
+                document.getElementById('fundsEndGoalDisplay').textContent = `₱${fundsData.endGoal.toLocaleString()}`;
+                document.getElementById('fundsGoalPerYearDisplay').textContent = `₱${fundsData.goalPerYear.toLocaleString()}`;
                 
                 // Calculate overall unpaid
                 let overallUnpaid = 0;
                 for (const year in fundsData.years) {
                     overallUnpaid += fundsData.years[year].unpaid;
                 }
-                document.getElementById('overallUnpaidDisplay').textContent = `₱${overallUnpaid.toLocaleString()}`;
+                document.getElementById('fundsOverallUnpaidDisplay').textContent = `₱${overallUnpaid.toLocaleString()}`;
                 
                 // Update documentation
-                document.getElementById('documentationText').textContent = 
+                document.getElementById('fundsDocumentationText').textContent = 
                     fundsData.isNA ? 'N/A' : fundsData.documentation || 'No documentation available.';
                 
                 // Render chart
@@ -112,7 +111,7 @@
             
             // Render the display chart
             function renderYearChart() {
-                const chartContainer = document.getElementById('yearChart');
+                const chartContainer = document.getElementById('fundsYearChart');
                 chartContainer.innerHTML = '';
                 
                 const years = ['CE 1st', 'CE 2nd', 'CE 3rd', 'CE 4th', 'CS 1st', 'CS 2nd', 'CS 3rd', 'CS 4th'];
@@ -123,14 +122,14 @@
                     const percentage = (yearData.paid / fundsData.goalPerYear) * 100;
                     
                     const chartItem = document.createElement('div');
-                    chartItem.className = 'chart-item';
+                    chartItem.className = 'funds-chart-item';
                     chartItem.innerHTML = `
-                        <div class="year">${years[index]}</div>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: ${percentage}%"></div>
+                        <div class="funds-year">${years[index]}</div>
+                        <div class="funds-progress-bar">
+                            <div class="funds-progress" style="width: ${percentage}%"></div>
                         </div>
-                        <div class="amount">₱${yearData.paid.toLocaleString()} / ₱${fundsData.goalPerYear.toLocaleString()}</div>
-                        <div class="amount">Unpaid: ₱${yearData.unpaid.toLocaleString()}</div>
+                        <div class="funds-amount">₱${yearData.paid.toLocaleString()} / ₱${fundsData.goalPerYear.toLocaleString()}</div>
+                        <div class="funds-amount">Unpaid: ₱${yearData.unpaid.toLocaleString()}</div>
                     `;
                     
                     chartContainer.appendChild(chartItem);
@@ -139,7 +138,7 @@
             
             // Render the edit chart
             function renderEditYearChart() {
-                const chartContainer = document.getElementById('editYearChart');
+                const chartContainer = document.getElementById('fundsEditYearChart');
                 chartContainer.innerHTML = '';
                 
                 const years = ['CE 1st', 'CE 2nd', 'CE 3rd', 'CE 4th', 'CS 1st', 'CS 2nd', 'CS 3rd', 'CS 4th'];
@@ -149,12 +148,12 @@
                     const yearData = fundsData.years[key];
                     
                     const chartItem = document.createElement('div');
-                    chartItem.className = 'chart-item';
+                    chartItem.className = 'funds-chart-item';
                     chartItem.innerHTML = `
-                        <div class="year">${years[index]}</div>
-                        <div class="form-group">
-                            <label>Paid Amount (₱)</label>
-                            <input type="number" id="${key}Paid" value="${yearData.paid}" class="paid-input">
+                        <div class="funds-year">${years[index]}</div>
+                        <div class="funds-form-group">
+                            <label class="funds-label">Paid Amount (₱)</label>
+                            <input type="number" id="${key}Paid" value="${yearData.paid}" class="funds-input funds-paid-input">
                         </div>
                     `;
                     
@@ -162,7 +161,7 @@
                 });
                 
                 // Add event listeners to paid inputs
-                document.querySelectorAll('.paid-input').forEach(input => {
+                document.querySelectorAll('.funds-paid-input').forEach(input => {
                     input.addEventListener('input', function() {
                         const yearKey = this.id.replace('Paid', '');
                         fundsData.years[yearKey].paid = parseFloat(this.value) || 0;
@@ -173,7 +172,7 @@
             
             // Update yearly goals when end goal changes
             function updateYearlyGoals() {
-                const endGoal = parseFloat(document.getElementById('endGoal').value) || 0;
+                const endGoal = parseFloat(document.getElementById('fundsEndGoal').value) || 0;
                 fundsData.goalPerYear = endGoal / 8;
                 
                 // Update unpaid amounts for all years
@@ -185,12 +184,12 @@
             // Save changes to "RTDB"
             function saveChanges() {
                 // Get values from form
-                fundsData.startDate = document.getElementById('startDate').value;
-                fundsData.endDate = document.getElementById('endDate').value;
-                fundsData.endGoal = parseFloat(document.getElementById('endGoal').value) || 0;
+                fundsData.startDate = document.getElementById('fundsStartDate').value;
+                fundsData.endDate = document.getElementById('fundsEndDate').value;
+                fundsData.endGoal = parseFloat(document.getElementById('fundsEndGoal').value) || 0;
                 fundsData.goalPerYear = fundsData.endGoal / 8;
-                fundsData.documentation = document.getElementById('documentation').value;
-                fundsData.isNA = document.getElementById('naToggle').checked;
+                fundsData.documentation = document.getElementById('fundsDocumentation').value;
+                fundsData.isNA = document.getElementById('fundsNaToggle').checked;
                 
                 // Update unpaid amounts based on paid amounts
                 for (const year in fundsData.years) {

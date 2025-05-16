@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, onValue, update, set, get, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-import { getFirestore, doc, getDoc, collection, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -38,6 +38,7 @@ const averageRatingValue = document.getElementById('average-rating-value');
 const eventInputContainer = document.querySelector('.event-input');
 const addBtnContainer = document.querySelector('.add-btn');
 const starRatingContainer = document.querySelector('.star-rating-container');
+const completeEventBtn = document.getElementById('complete-event');
 
 // Current date info
 let currentDate = new Date();
@@ -114,12 +115,36 @@ window.addEventListener('click', (e) => {
 document.querySelectorAll('.star-rating a').forEach((star, index) => {
     star.addEventListener('click', (e) => {
         e.preventDefault();
-        if (userRole !== 'student' && selectedEventId) {
-            currentRating = index + 1;
-            updateStarRating(currentRating);
-            submitRating(selectedEventId, currentRating);
+        if (userRole === 'student' && selectedEventId) {
+            const eventElement = document.querySelector(`.event-item[data-event-id="${selectedEventId}"]`);
+            if (eventElement && !eventElement.dataset.completed) {
+                currentRating = index + 1;
+                updateStarRating(currentRating);
+                submitRating(selectedEventId, currentRating);
+            }
         }
     });
+});
+
+completeEventBtn.addEventListener('click', async () => {
+    if (!selectedEventId) return;
+    
+    try {
+        if (userRole === 'student') {
+            throw new Error("Students cannot complete events");
+        }
+        
+        await update(ref(database, `events/${selectedEventId}`), {
+            completed: true
+        });
+        
+        displayEventsForDate(selectedDate);
+        renderCalendar(currentMonth, currentYear);
+        alert("Event marked as completed!");
+    } catch (error) {
+        console.error("Error completing event:", error);
+        alert(`Failed to complete event: ${error.message}`);
+    }
 });
 
 addEventBtn.addEventListener('click', async () => {
@@ -144,7 +169,8 @@ addEventBtn.addEventListener('click', async () => {
             title: title,
             link: link,
             date: selectedDate,
-            createdBy: auth.currentUser.uid
+            createdBy: auth.currentUser.uid,
+            completed: false
         };
         
         const eventId = await createEvent(eventData);
@@ -166,8 +192,8 @@ function updateUIForRole() {
     
     eventInputContainer.style.display = isStudent ? 'none' : 'flex';
     addBtnContainer.style.display = isStudent ? 'none' : 'block';
-    starRatingContainer.style.display = isStudent ? 'none' : 'block';
-    starRatingContainer.style.visibility = (!isStudent && selectedEventId) ? 'visible' : 'hidden';
+    starRatingContainer.style.display = isStudent ? 'block' : 'none';
+    completeEventBtn.style.display = isStudent ? 'none' : 'block';
 }
 
 function renderCalendar(month, year) {
@@ -286,7 +312,6 @@ function openEventModal(date) {
     selectedEventId = null;
     currentRating = 0;
     updateStarRating(0);
-    starRatingContainer.style.visibility = 'hidden';
     
     displayEventsForDate(date);
     eventModal.style.display = 'flex';
@@ -339,6 +364,10 @@ function createEventElement(event) {
     const eventElement = document.createElement('div');
     eventElement.classList.add('event-item');
     eventElement.dataset.eventId = event.id;
+    if (event.completed) {
+        eventElement.dataset.completed = 'true';
+        eventElement.classList.add('completed-event');
+    }
     
     const avgRating = event.averageRating ? Math.round(event.averageRating * 10) / 10 : 0;
     const ratingCount = event.ratingCount || 0;
@@ -365,30 +394,29 @@ function createEventElement(event) {
     eventElement.innerHTML = eventHTML;
     
     if (userRole !== 'student') {
-        eventElement.querySelector('.delete-btn').addEventListener('click', async () => {
+        eventElement.querySelector('.delete-btn').addEventListener('click', async (e) => {
+            e.stopPropagation();
             if (confirm("Are you sure you want to delete this event?")) {
                 await deleteEvent(event.id);
             }
         });
     }
     
-    if (userRole !== 'student') {
-        eventElement.style.cursor = 'pointer';
-        eventElement.addEventListener('click', () => {
-            selectedEventId = event.id;
-            averageRatingValue.textContent = avgRating;
-            
-            if (auth.currentUser && event.ratings && event.ratings[auth.currentUser.uid]) {
-                currentRating = event.ratings[auth.currentUser.uid];
-                updateStarRating(currentRating);
-            } else {
-                currentRating = 0;
-                updateStarRating(0);
-            }
-            
-            starRatingContainer.style.visibility = 'visible';
-        });
-    }
+    eventElement.addEventListener('click', () => {
+        selectedEventId = event.id;
+        averageRatingValue.textContent = avgRating;
+        
+        if (auth.currentUser && event.ratings && event.ratings[auth.currentUser.uid]) {
+            currentRating = event.ratings[auth.currentUser.uid];
+            updateStarRating(currentRating);
+        } else {
+            currentRating = 0;
+            updateStarRating(0);
+        }
+        
+        // Show complete button only for non-students and if event isn't completed
+        completeEventBtn.style.display = (userRole !== 'student' && !event.completed) ? 'block' : 'none';
+    });
     
     return eventElement;
 }
@@ -400,11 +428,6 @@ async function deleteEvent(eventId) {
         }
         
         await remove(ref(database, `events/${eventId}`));
-        
-        await setDoc(doc(firestore, 'events', eventId), {
-            deleted: true,
-            deletedAt: serverTimestamp()
-        }, { merge: true });
         
         displayEventsForDate(selectedDate);
         renderCalendar(currentMonth, currentYear);
@@ -424,26 +447,6 @@ async function createEvent(eventData) {
     try {
         const eventId = generateUniqueId();
         
-        const defaultFunds = {
-            endGoal: 0,
-            goalPerYear: 0,
-            currentFundsDocLink: "",
-            overallTotalPaid: 0,
-            overallTotalUnpaid: 0,
-            ce: {
-                year1: { paid: 0, unpaid: 0 },
-                year2: { paid: 0, unpaid: 0 },
-                year3: { paid: 0, unpaid: 0 },
-                year4: { paid: 0, unpaid: 0 }
-            },
-            cs: {
-                year1: { paid: 0, unpaid: 0 },
-                year2: { paid: 0, unpaid: 0 },
-                year3: { paid: 0, unpaid: 0 },
-                year4: { paid: 0, unpaid: 0 }
-            }
-        };
-
         const newEvent = {
             title: eventData.title,
             link: eventData.link,
@@ -454,30 +457,11 @@ async function createEvent(eventData) {
             ratingCount: 0,
             createdAt: Date.now(),
             createdBy: user.uid,
-            funds: defaultFunds
+            completed: false
         };
 
-        // First try to write to Realtime Database
-        await set(ref(database, `events/${eventId}`), newEvent)
-            .catch(error => {
-                console.error("RTDB Error:", error);
-                throw new Error("Failed to write to Realtime Database: " + error.message);
-            });
-
-        // Then try to write to Firestore
-        await setDoc(doc(firestore, 'events', eventId), {
-            title: eventData.title,
-            description: eventData.link,
-            date: eventData.date,
-            createdBy: user.uid,
-            rtdbPath: `events/${eventId}`,
-            completed: false,
-            createdAt: serverTimestamp(),
-            funds: defaultFunds
-        }).catch(error => {
-            console.error("Firestore Error:", error);
-            throw new Error("Failed to write to Firestore: " + error.message);
-        });
+        // Only set the event in database
+        await set(ref(database, `events/${eventId}`), newEvent);
         
         return eventId;
     } catch (error) {
@@ -493,8 +477,8 @@ async function submitRating(eventId, ratingValue) {
         return;
     }
     
-    if (userRole === 'student') {
-        alert("Students cannot rate events");
+    if (userRole !== 'student') {
+        alert("Only students can rate events");
         return;
     }
     
@@ -506,20 +490,25 @@ async function submitRating(eventId, ratingValue) {
             throw new Error("Event not found");
         }
         
+        const eventData = snapshot.val();
+        
+        if (eventData.completed) {
+            throw new Error("Cannot rate completed events");
+        }
+        
+        // Create updates object
         const updates = {};
         updates[`ratings/${user.uid}`] = ratingValue;
         
-        const eventData = snapshot.val();
-        const ratings = eventData.ratings || {};
-        ratings[user.uid] = ratingValue;
-        
+        // Calculate new average rating
+        const ratings = {...eventData.ratings, [user.uid]: ratingValue};
         const ratingValues = Object.values(ratings);
         const newAverage = ratingValues.reduce((sum, val) => sum + val, 0) / ratingValues.length;
-        const newCount = ratingValues.length;
         
         updates['averageRating'] = newAverage;
-        updates['ratingCount'] = newCount;
+        updates['ratingCount'] = ratingValues.length;
         
+        // Apply updates
         await update(eventRef, updates);
         
         selectedEventId = eventId;
@@ -545,6 +534,7 @@ function resetEventForm() {
     currentRating = 0;
     updateStarRating(0);
     selectedEventId = null;
+    completeEventBtn.style.display = 'none';
 }
 
 function formatDateKey(date) {

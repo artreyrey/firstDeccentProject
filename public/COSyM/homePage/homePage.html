@@ -199,8 +199,104 @@
 
             <!-- Funds section -->
             <section id="funds-section" class="funds">
-                <div class="funds-content">
-                    <h1> funds</h1>
+             <div class="funds-container">
+        <!-- Display Section -->
+        <div class="funds-card">
+            <div class="funds-header">
+                <h1 class="funds-title">Funds Overview</h1>
+                <button id="fundsEditBtn" class="funds-btn funds-btn-primary" style="display: none;">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+
+            <div class="funds-select-container">
+                <label for="fundsEventSelect" class="funds-label">Select Event</label>
+                <select id="fundsEventSelect" class="funds-select">
+                    <option value="">-- Select an event --</option>
+                    <option value="event1">Annual College Festival</option>
+                    <option value="event2">Sports Tournament</option>
+                    <option value="event3">Tech Symposium</option>
+                </select>
+            </div>
+
+            <div id="fundsDisplaySection">
+                <div class="funds-summary">
+                    <div class="funds-summary-item">
+                        <div class="funds-summary-title">End Goal</div>
+                        <div class="funds-summary-value" id="fundsEndGoalDisplay">₱0.00</div>
+                    </div>
+                    <div class="funds-summary-item">
+                        <div class="funds-summary-title">Goal per Year</div>
+                        <div class="funds-summary-value" id="fundsGoalPerYearDisplay">₱0.00</div>
+                    </div>
+                    <div class="funds-summary-item">
+                        <div class="funds-summary-title">Overall Unpaid</div>
+                        <div class="funds-summary-value" id="fundsOverallUnpaidDisplay">₱0.00</div>
+                    </div>
+                </div>
+
+                <div class="funds-chart-container">
+                    <h3 class="funds-title">Collection Progress by Year</h3>
+                    <div class="funds-chart" id="fundsYearChart">
+                        <!-- Chart items will be dynamically added here -->
+                    </div>
+                </div>
+
+                <div class="funds-documentation">
+                    <h3 class="funds-title">Documentation</h3>
+                    <p id="fundsDocumentationText">No documentation available.</p>
+                </div>
+            </div>
+
+            <!-- Edit Section (hidden by default) -->
+            <div id="fundsEditSection" class="funds-edit-section">
+                <h2 class="funds-title">Edit Funds</h2>
+                            <div class="funds-form-group">
+                                <label for="fundsStartDate" class="funds-label">Date Range</label>
+                                <div class="funds-date-range">
+                                    <div>
+                                        <input type="date" id="fundsStartDate" class="funds-input">
+                                    </div>
+                                    <div>
+                                        <input type="date" id="fundsEndDate" class="funds-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="funds-form-group">
+                                <label for="fundsEndGoal" class="funds-label">End Goal (₱)</label>
+                                <input type="number" id="fundsEndGoal" class="funds-input" placeholder="Enter total amount needed">
+                            </div>
+
+                            <div class="funds-form-group">
+                                <label class="funds-label">Yearly Goals (auto-calculated)</label>
+                                <div class="funds-chart" id="fundsEditYearChart">
+                                    <!-- Edit chart items will be dynamically added here -->
+                                </div>
+                            </div>
+
+                            <div class="funds-form-group">
+                                <label for="fundsDocumentation" class="funds-label">Documentation</label>
+                                <textarea id="fundsDocumentation" class="funds-textarea" placeholder="Add any documentation or notes"></textarea>
+                                <div class="funds-na-toggle">
+                                    <span>Mark as N/A</span>
+                                    <label class="funds-toggle-switch">
+                                        <input type="checkbox" id="fundsNaToggle">
+                                        <span class="funds-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="funds-button-group">
+                                <button id="fundsCancelBtn" class="funds-btn funds-btn-secondary">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                                <button id="fundsSaveBtn" class="funds-btn funds-btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </section>
 
