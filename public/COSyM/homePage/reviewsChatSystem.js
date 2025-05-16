@@ -205,7 +205,7 @@ const testConnection = async () => {
     });
     console.log("✅ Review Database connection successful!");
   } catch (error) {
-    console.error("❌ Review Connection failed:", error);
+    console.error("❌ ReviewConnection failed:", error);
   }
 };
 

@@ -879,7 +879,7 @@ main {
     flex-direction: column;
   }
 }
-
+    
 /* Events Designs */
 .calendar {
     width: 100%;
@@ -1149,6 +1149,7 @@ main {
 }
 
 /* Star Rating */
+
 .star-rating-container {
     margin: 20px 0;
     text-align: center;

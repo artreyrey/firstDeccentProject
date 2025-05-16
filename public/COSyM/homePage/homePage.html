@@ -199,9 +199,9 @@
 
             <!-- Funds section -->
             <section id="funds-section" class="funds">
-             <div class="funds-container">
-        <!-- Display Section -->
-        <div class="funds-card">
+            <div class="funds-container">
+            <!-- Display Section -->
+            <div class="funds-card">
             <div class="funds-header">
                 <h1 class="funds-title">Funds Overview</h1>
                 <button id="fundsEditBtn" class="funds-btn funds-btn-primary" style="display: none;">
@@ -231,26 +231,26 @@
                     </div>
                     <div class="funds-summary-item">
                         <div class="funds-summary-title">Overall Unpaid</div>
-                        <div class="funds-summary-value" id="fundsOverallUnpaidDisplay">₱0.00</div>
+                            <div class="funds-summary-value" id="fundsOverallUnpaidDisplay">₱0.00</div>
+                            </div>
+                        </div>
+
+                    <div class="funds-chart-container">
+                        <h3 class="funds-title">Collection Progress by Year</h3>
+                        <div class="funds-chart" id="fundsYearChart">
+                            <!-- Chart items will be dynamically added here -->
+                        </div>
+                    </div>
+
+                    <div class="funds-documentation">
+                        <h3 class="funds-title">Documentation</h3>
+                        <p id="fundsDocumentationText">No documentation available.</p>
                     </div>
                 </div>
 
-                <div class="funds-chart-container">
-                    <h3 class="funds-title">Collection Progress by Year</h3>
-                    <div class="funds-chart" id="fundsYearChart">
-                        <!-- Chart items will be dynamically added here -->
-                    </div>
-                </div>
-
-                <div class="funds-documentation">
-                    <h3 class="funds-title">Documentation</h3>
-                    <p id="fundsDocumentationText">No documentation available.</p>
-                </div>
-            </div>
-
-            <!-- Edit Section (hidden by default) -->
-            <div id="fundsEditSection" class="funds-edit-section">
-                <h2 class="funds-title">Edit Funds</h2>
+                        <!-- Edit Section (hidden by default) -->
+                        <div id="fundsEditSection" class="funds-edit-section">
+                            <h2 class="funds-title">Edit Funds</h2>
                             <div class="funds-form-group">
                                 <label for="fundsStartDate" class="funds-label">Date Range</label>
                                 <div class="funds-date-range">

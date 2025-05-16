@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getDatabase, ref, onValue, update, set, get, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { getDatabase, ref, update, set, get, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // Firebase configuration
@@ -33,11 +33,14 @@ const eventsListElement = document.getElementById('events-list');
 const addEventBtn = document.getElementById('add-event');
 const eventTitleInput = document.getElementById('event-title');
 const eventLinkInput = document.getElementById('event-link');
-const starRating = document.getElementById('stars');
+
+const starRatingContainer = document.getElementById('star-rating-container');
+const stars = document.querySelectorAll('.star-rating a');
 const averageRatingValue = document.getElementById('average-rating-value');
+
+
 const eventInputContainer = document.querySelector('.event-input');
 const addBtnContainer = document.querySelector('.add-btn');
-const starRatingContainer = document.querySelector('.star-rating-container');
 const markCompleteBtn = document.getElementById('mark-complete-btn');
 
 // Current date info
@@ -71,6 +74,21 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         window.location.href = "/login.html";
     }
+});
+
+stars.forEach((star) => {
+  star.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    if (userRole === 'student' && selectedEventId) {
+      const eventElement = document.querySelector(`.event-item[data-event-id="${selectedEventId}"]`);
+      if (eventElement && !eventElement.dataset.completed) {
+        const rating = parseInt(star.getAttribute('data-rating'));
+        updateStarRating(rating);
+        submitRating(selectedEventId, rating);
+      }
+    }
+  });
 });
 
 // Event listeners
@@ -219,8 +237,58 @@ function updateUIForRole() {
     // Show/hide elements based on role
     eventInputContainer.style.display = isStudent ? 'none' : 'flex';
     addBtnContainer.style.display = isStudent ? 'none' : 'block';
-    starRatingContainer.style.display = isStudent ? 'block' : 'none';
-
+    
+    // Configure UI based on role
+    if (isStudent) {
+        // For students, we'll control the star rating container visibility on event selection
+        // but make sure it exists in the DOM
+        if (!document.querySelector('.star-rating-container')) {
+            console.log("Adding star rating container to DOM");
+            const container = document.createElement('div');
+            container.className = 'star-rating-container';
+            container.innerHTML = `
+                <p>Rate this event:</p>
+                <div class="star-rating" id="stars">
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                </div>
+                <p>Average rating: <span id="average-rating-value">0.0</span></p>
+            `;
+            // Add it to the modal's content area right before the events list
+            document.querySelector('#events-list').before(container);
+            
+            // Re-initialize the star rating element reference
+            starRatingContainer = document.querySelector('.star-rating-container');
+            
+            // Add star rating handlers
+            document.querySelectorAll('.star-rating a').forEach((star, index) => {
+                star.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (userRole === 'student' && selectedEventId) {
+                        const eventElement = document.querySelector(`.event-item[data-event-id="${selectedEventId}"]`);
+                        if (eventElement && !eventElement.dataset.completed) {
+                            currentRating = index + 1;
+                            updateStarRating(currentRating);
+                            submitRating(selectedEventId, currentRating);
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Hide initially
+        if (starRatingContainer) {
+            starRatingContainer.style.display = 'none';
+        }
+    } else {
+        // Non-students don't need the rating container
+        if (starRatingContainer) {
+            starRatingContainer.style.display = 'none';
+        }
+    }
 }
 
 function renderCalendar(month, year) {
@@ -345,6 +413,54 @@ function openEventModal(date) {
         markCompleteBtn.style.display = 'none';
     }
     
+    // Ensure the necessary elements exist in the DOM
+    if (userRole === 'student') {
+        const starContainer = document.querySelector('.star-rating-container');
+        if (!starContainer) {
+            console.log("Creating star rating container in modal");
+            const container = document.createElement('div');
+            container.className = 'star-rating-container';
+            container.innerHTML = `
+                <p>Rate this event:</p>
+                <div class="star-rating" id="stars">
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                    <a href="#"><i class="far fa-star"></i></a>
+                </div>
+                <p>Average rating: <span id="average-rating-value">0.0</span></p>
+            `;
+            // Insert before the events list
+            document.querySelector('#events-list').before(container);
+            
+            // Re-initialize references
+            const newStarRatingContainer = document.querySelector('.star-rating-container');
+            if (newStarRatingContainer) {
+                // Add star rating handlers
+                newStarRatingContainer.querySelectorAll('.star-rating a').forEach((star, index) => {
+                    star.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (userRole === 'student' && selectedEventId) {
+                            const eventElement = document.querySelector(`.event-item[data-event-id="${selectedEventId}"]`);
+                            if (eventElement && !eventElement.dataset.completed) {
+                                currentRating = index + 1;
+                                updateStarRating(currentRating);
+                                submitRating(selectedEventId, currentRating);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    }
+    
+    // Hide star rating container initially when opening modal
+    const starContainer = document.querySelector('.star-rating-container');
+    if (starContainer) {
+        starContainer.style.display = 'none';
+    }
+    
     displayEventsForDate(date);
     eventModal.style.display = 'flex';
     
@@ -448,6 +564,10 @@ function createEventElement(event) {
     }
     
     eventElement.addEventListener('click', () => {
+        // Highlight the selected event
+        document.querySelectorAll('.event-item.selected').forEach(el => el.classList.remove('selected'));
+        eventElement.classList.add('selected');
+        
         selectedEventId = event.id;
         averageRatingValue.textContent = avgRating;
         
@@ -459,16 +579,40 @@ function createEventElement(event) {
             updateStarRating(0);
         }
         
-        // Only enable rating for students and for events that aren't completed
+        // Handle star rating visibility
         if (userRole === 'student') {
-            starRatingContainer.style.display = event.completed ? 'none' : 'block';
-            if (event.completed) {
-                eventsListElement.querySelector('.rating-disabled-message')?.remove();
-                const message = document.createElement('p');
-                message.className = 'rating-disabled-message';
-                message.textContent = 'This event is completed and cannot be rated';
-                eventsListElement.appendChild(message);
+            console.log("Student clicked event, showing rating stars for eventId:", selectedEventId);
+            // Get the star rating container
+            const starRatingContainer = document.querySelector('.star-rating-container');
+            
+            if (starRatingContainer) {
+                // Show star rating for unfinished events
+                if (!event.completed) {
+                    starRatingContainer.style.display = 'block';
+                    // Remove any previous disabled messages
+                    const oldMessage = document.querySelector('.rating-disabled-message');
+                    if (oldMessage) oldMessage.remove();
+                } else {
+                    // Hide rating for completed events
+                    starRatingContainer.style.display = 'none';
+                    
+                    // Show message that event can't be rated
+                    const oldMessage = document.querySelector('.rating-disabled-message');
+                    if (oldMessage) oldMessage.remove();
+                    
+                    const message = document.createElement('p');
+                    message.className = 'rating-disabled-message';
+                    message.textContent = 'This event is completed and cannot be rated';
+                    eventsListElement.appendChild(message);
+                }
+            } else {
+                console.error("Star rating container not found in the DOM!");
             }
+        }
+        
+        // Show mark complete button for teachers/admins
+        if (userRole !== 'student' && markCompleteBtn) {
+            markCompleteBtn.style.display = event.completed ? 'none' : 'block';
         }
     });
     
@@ -630,14 +774,13 @@ async function checkRTDBConnection() {
             timestamp: Date.now(),
             status: "success"
         });
-        console.log("✅ Events RTDB connection successful");
+        console.log("✅ RTDB connection successful");
         return true;
     } catch (error) {
-        console.error("❌ Events RTDB connection failed:", error);
+        console.error("❌ RTDB connection failed:", error);
         return false;
     }
 }
-
 // Call this at startup
 checkRTDBConnection().then(success => {
     if (!success) {
