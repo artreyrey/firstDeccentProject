@@ -457,8 +457,14 @@ async function createEvent(eventData) {
             funds: defaultFunds
         };
 
-        await set(ref(database, `events/${eventId}`), newEvent);
+        // First try to write to Realtime Database
+        await set(ref(database, `events/${eventId}`), newEvent)
+            .catch(error => {
+                console.error("RTDB Error:", error);
+                throw new Error("Failed to write to Realtime Database: " + error.message);
+            });
 
+        // Then try to write to Firestore
         await setDoc(doc(firestore, 'events', eventId), {
             title: eventData.title,
             description: eventData.link,
@@ -468,6 +474,9 @@ async function createEvent(eventData) {
             completed: false,
             createdAt: serverTimestamp(),
             funds: defaultFunds
+        }).catch(error => {
+            console.error("Firestore Error:", error);
+            throw new Error("Failed to write to Firestore: " + error.message);
         });
         
         return eventId;
