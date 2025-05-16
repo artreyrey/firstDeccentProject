@@ -31,8 +31,73 @@
             <!-- home section -->
             <section id="home-section" class="home"> 
                 <div class="home-content">
-                    <h1> home</h1>
+        
+     <div class="uds-container">
+        <div class="uds-grid">
+            <!-- Rating Panel -->
+            <div class="uds-card uds-rating-panel">
+                <h2>Organization Excellence Rating</h2>
+                <div class="uds-rating-value">4.7</div>
+                <div class="uds-rating-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
                 </div>
+                <p>Based on 248 reviews</p>
+            </div>
+
+            <!-- Department Distribution Chart -->
+            <div class="uds-card">
+                <h2>Student Population Distribution</h2>
+                <div class="uds-chart-container">
+                    <canvas id="udsDepartmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements Section -->
+        <div class="uds-card uds-announcements">
+            <h2>Recent Announcements</h2>
+            <div class="uds-announcement-card">
+                <h3>Orientation Schedule Update</h3>
+                <p>First year orientation will be held on September 5th at the main auditorium.</p>
+                <div class="uds-post-meta">Posted 2 hours ago · CS Department</div>
+            </div>
+        </div>
+
+        <!-- Posting System -->
+        <div class="uds-post-system">
+            <div class="uds-fab" id="udsNewPostBtn">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+
+        <!-- Post Form -->
+        <div class="uds-post-form" id="udsPostForm">
+            <h2>Create New Announcement</h2>
+            <form id="udsNewPostForm">
+                <div class="uds-form-group">
+                    <label>Title</label>
+                    <input type="text" class="uds-form-input" required>
+                </div>
+                <div class="uds-form-group">
+                    <label>Content</label>
+                    <textarea class="uds-form-input" rows="4" required></textarea>
+                </div>
+                <div class="uds-form-group">
+                    <label>Target Department</label>
+                    <select class="uds-form-input" required>
+                        <option value="CE">Civil Engineering</option>
+                        <option value="CS">Computer Science</option>
+                    </select>
+                </div>
+                <button type="submit" class="uds-form-button">Publish Announcement</button>
+            </form>
+        </div>
+    </div>
+        <script src="dashBoard.js"></script>
             </section>
     
             <!-- Profile section // -->

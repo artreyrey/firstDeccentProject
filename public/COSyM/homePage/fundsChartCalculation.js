@@ -1,3 +1,27 @@
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getDatabase, ref, update, set, get, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCNVoM7hQ6a1zcP5zDITcdmUKlfs6lcDBY",
+  authDomain: "login-form-783e1.firebaseapp.com",
+  databaseURL: "https://login-form-783e1-default-rtdb.firebaseio.com",
+  projectId: "login-form-783e1",
+  storageBucket: "login-form-783e1.appspot.com",
+  messagingSenderId: "598925515666",
+  appId: "1:598925515666:web:5acb6fa146b160cca47f4b"
+};
+
+// Initialize Firebase
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth(app);
+const database = getDatabase(app);
+const firestore = getFirestore(app);
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
             const editBtn = document.getElementById('fundsEditBtn');
             const editSection = document.getElementById('fundsEditSection');
