@@ -44,14 +44,14 @@ let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 let selectedDate = null;
-let userRole = 'student'; // Default to student (lowercase)
+let userRole = 'student';
 let currentRating = 0;
 let selectedEventId = null;
 
 // Initialize calendar
 renderCalendar(currentMonth, currentYear);
 
-// Auth state handler with case-insensitive role checking
+// Auth state handler
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
@@ -61,7 +61,6 @@ onAuthStateChanged(auth, async (user) => {
                 updateUIForRole();
             } else {
                 console.error("User document not found");
-                // Redirect to login or show error
                 alert("User profile not found. Please contact administrator.");
             }
         } catch (error) {
@@ -69,8 +68,7 @@ onAuthStateChanged(auth, async (user) => {
             alert("Error loading user profile. Please try again.");
         }
     } else {
-        // User not authenticated - redirect to login
-        window.location.href = "/login.html"; // Change to your login page
+        window.location.href = "/login.html";
     }
 });
 
@@ -116,7 +114,7 @@ window.addEventListener('click', (e) => {
 document.querySelectorAll('.star-rating a').forEach((star, index) => {
     star.addEventListener('click', (e) => {
         e.preventDefault();
-        if (userRole === 'student' && selectedEventId) {
+        if (userRole !== 'student' && selectedEventId) {
             currentRating = index + 1;
             updateStarRating(currentRating);
             submitRating(selectedEventId, currentRating);
@@ -151,11 +149,9 @@ addEventBtn.addEventListener('click', async () => {
         
         const eventId = await createEvent(eventData);
         
-        // Refresh display
         displayEventsForDate(selectedDate);
         renderCalendar(currentMonth, currentYear);
         
-        // Close modal and reset
         eventModal.style.display = 'none';
         resetEventForm();
     } catch (error) {
@@ -164,17 +160,14 @@ addEventBtn.addEventListener('click', async () => {
     }
 });
 
-// Functions with case-insensitive role checking
+// Functions
 function updateUIForRole() {
     const isStudent = userRole === 'student';
     
-    // Event creation controls
     eventInputContainer.style.display = isStudent ? 'none' : 'flex';
     addBtnContainer.style.display = isStudent ? 'none' : 'block';
-    
-    // Rating controls
-    starRatingContainer.style.display = isStudent ? 'block' : 'none';
-    starRatingContainer.style.visibility = isStudent && selectedEventId ? 'visible' : 'hidden';
+    starRatingContainer.style.display = isStudent ? 'none' : 'block';
+    starRatingContainer.style.visibility = (!isStudent && selectedEventId) ? 'visible' : 'hidden';
 }
 
 function renderCalendar(month, year) {
@@ -188,12 +181,10 @@ function renderCalendar(month, year) {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const daysInPrevMonth = new Date(year, month, 0).getDate();
     
-    // Previous month days
     for (let i = firstDay - 1; i >= 0; i--) {
         createDayElement(daysInPrevMonth - i, true);
     }
     
-    // Current month days
     for (let i = 1; i <= daysInMonth; i++) {
         const dayElement = createDayElement(i, false);
         
@@ -202,7 +193,6 @@ function renderCalendar(month, year) {
         }
     }
     
-    // Next month days
     const totalDaysDisplayed = firstDay + daysInMonth;
     const remainingDays = 7 - (totalDaysDisplayed % 7);
     if (remainingDays < 7) {
@@ -225,7 +215,6 @@ function createDayElement(day, isOtherMonth) {
     const date = new Date(currentYear, currentMonth, day);
     const dateKey = formatDateKey(date);
     
-    // Check for events on this day
     checkDayEvents(date, dayElement);
     
     if (!isOtherMonth) {
@@ -294,18 +283,14 @@ function openEventModal(date) {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
     });
     
-    // Reset selected event for students
-    if (userRole === 'student') {
-        selectedEventId = null;
-        currentRating = 0;
-        updateStarRating(0);
-        starRatingContainer.style.visibility = 'hidden';
-    }
+    selectedEventId = null;
+    currentRating = 0;
+    updateStarRating(0);
+    starRatingContainer.style.visibility = 'hidden';
     
     displayEventsForDate(date);
     eventModal.style.display = 'flex';
     
-    // Only focus on title input if not student
     if (userRole !== 'student') {
         eventTitleInput.focus();
     }
@@ -355,7 +340,6 @@ function createEventElement(event) {
     eventElement.classList.add('event-item');
     eventElement.dataset.eventId = event.id;
     
-    // Calculate rounded average for display
     const avgRating = event.averageRating ? Math.round(event.averageRating * 10) / 10 : 0;
     const ratingCount = event.ratingCount || 0;
     
@@ -369,7 +353,6 @@ function createEventElement(event) {
             </div>
     `;
     
-    // Show action buttons for non-students
     if (userRole !== 'student') {
         eventHTML += `
             <div class="event-actions">
@@ -381,7 +364,6 @@ function createEventElement(event) {
     eventHTML += `</div>`;
     eventElement.innerHTML = eventHTML;
     
-    // Add delete button functionality for non-students
     if (userRole !== 'student') {
         eventElement.querySelector('.delete-btn').addEventListener('click', async () => {
             if (confirm("Are you sure you want to delete this event?")) {
@@ -390,14 +372,12 @@ function createEventElement(event) {
         });
     }
     
-    // For non-students - make the event selectable for rating
     if (userRole !== 'student') {
         eventElement.style.cursor = 'pointer';
         eventElement.addEventListener('click', () => {
             selectedEventId = event.id;
             averageRatingValue.textContent = avgRating;
             
-            // Highlight current user's rating if exists
             if (auth.currentUser && event.ratings && event.ratings[auth.currentUser.uid]) {
                 currentRating = event.ratings[auth.currentUser.uid];
                 updateStarRating(currentRating);
@@ -406,7 +386,6 @@ function createEventElement(event) {
                 updateStarRating(0);
             }
             
-            // Show the star rating container
             starRatingContainer.style.visibility = 'visible';
         });
     }
@@ -420,16 +399,13 @@ async function deleteEvent(eventId) {
             throw new Error("Unauthorized - Students cannot delete events");
         }
         
-        // Remove from RTDB
         await remove(ref(database, `events/${eventId}`));
         
-        // Update Firestore (optional - if you want to keep a record)
         await setDoc(doc(firestore, 'events', eventId), {
             deleted: true,
             deletedAt: serverTimestamp()
         }, { merge: true });
         
-        // Refresh the display
         displayEventsForDate(selectedDate);
         renderCalendar(currentMonth, currentYear);
         
@@ -442,17 +418,32 @@ async function deleteEvent(eventId) {
 
 async function createEvent(eventData) {
     const user = auth.currentUser;
-    if (!user) {
-        throw new Error("User not authenticated");
-    }
-    
-    if (userRole === 'student') {
-        throw new Error("Unauthorized - Students cannot create events");
-    }
+    if (!user) throw new Error("User not authenticated");
+    if (userRole === 'student') throw new Error("Unauthorized - Students cannot create events");
     
     try {
         const eventId = generateUniqueId();
         
+        const defaultFunds = {
+            endGoal: 0,
+            goalPerYear: 0,
+            currentFundsDocLink: "",
+            overallTotalPaid: 0,
+            overallTotalUnpaid: 0,
+            ce: {
+                year1: { paid: 0, unpaid: 0 },
+                year2: { paid: 0, unpaid: 0 },
+                year3: { paid: 0, unpaid: 0 },
+                year4: { paid: 0, unpaid: 0 }
+            },
+            cs: {
+                year1: { paid: 0, unpaid: 0 },
+                year2: { paid: 0, unpaid: 0 },
+                year3: { paid: 0, unpaid: 0 },
+                year4: { paid: 0, unpaid: 0 }
+            }
+        };
+
         const newEvent = {
             title: eventData.title,
             link: eventData.link,
@@ -462,7 +453,8 @@ async function createEvent(eventData) {
             averageRating: 0,
             ratingCount: 0,
             createdAt: Date.now(),
-            createdBy: user.uid
+            createdBy: user.uid,
+            funds: defaultFunds
         };
 
         await set(ref(database, `events/${eventId}`), newEvent);
@@ -474,7 +466,8 @@ async function createEvent(eventData) {
             createdBy: user.uid,
             rtdbPath: `events/${eventId}`,
             completed: false,
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            funds: defaultFunds
         });
         
         return eventId;
@@ -491,62 +484,38 @@ async function submitRating(eventId, ratingValue) {
         return;
     }
     
-    if (userRole !== 'student') {
-        alert("Only students can rate events");
-        return;
-    }
-    
-    try {
-        const eventDoc = await getDoc(doc(firestore, 'events', eventId));
-        if (!eventDoc.exists()) throw new Error("Event not found");
-        
-        const rtdbPath = eventDoc.data().rtdbPath;
-        if (!rtdbPath) throw new Error("Event path not found");
-        
-        const ratingRef = ref(database, `${rtdbPath}/ratings/${user.uid}`);
-        await set(ratingRef, ratingValue);
-        
-        await updateAverageRating(rtdbPath);
-        
-        selectedEventId = eventId;
-        displayEventsForDate(selectedDate);
-        
-        alert(`Thank you for rating this event ${ratingValue} stars!`);
-    } catch (error) {
-        console.error("Rating submission failed:", error);
-        alert("Failed to submit rating: " + error.message);
-    }
-}
-
-async function submitRating(eventId, ratingValue) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Please sign in to rate events");
-        return;
-    }
-    
-    // Changed to allow only non-students to rate
     if (userRole === 'student') {
         alert("Students cannot rate events");
         return;
     }
     
     try {
-        const eventDoc = await getDoc(doc(firestore, 'events', eventId));
-        if (!eventDoc.exists()) throw new Error("Event not found");
+        const eventRef = ref(database, `events/${eventId}`);
+        const snapshot = await get(eventRef);
         
-        const rtdbPath = eventDoc.data().rtdbPath;
-        if (!rtdbPath) throw new Error("Event path not found");
+        if (!snapshot.exists()) {
+            throw new Error("Event not found");
+        }
         
-        const ratingRef = ref(database, `${rtdbPath}/ratings/${user.uid}`);
-        await set(ratingRef, ratingValue);
+        const updates = {};
+        updates[`ratings/${user.uid}`] = ratingValue;
         
-        await updateAverageRating(rtdbPath);
+        const eventData = snapshot.val();
+        const ratings = eventData.ratings || {};
+        ratings[user.uid] = ratingValue;
+        
+        const ratingValues = Object.values(ratings);
+        const newAverage = ratingValues.reduce((sum, val) => sum + val, 0) / ratingValues.length;
+        const newCount = ratingValues.length;
+        
+        updates['averageRating'] = newAverage;
+        updates['ratingCount'] = newCount;
+        
+        await update(eventRef, updates);
         
         selectedEventId = eventId;
         displayEventsForDate(selectedDate);
         
-        // No alert to avoid interrupting UX
     } catch (error) {
         console.error("Rating submission failed:", error);
         alert("Failed to submit rating: " + error.message);
