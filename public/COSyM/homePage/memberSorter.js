@@ -20,6 +20,7 @@ const courseSelect = document.getElementById('course-select');
 const yearSelect = document.getElementById('year-select');
 const roleSelect = document.getElementById('role-select');
 const membersList = document.getElementById('members-list');
+const printButton = document.getElementById('printButton');
 
 // Cache for loaded members
 let allMembers = [];
@@ -219,63 +220,93 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 // print
-document.getElementById('printButton').addEventListener('click', function() {
-    // Get the current filtered members
-    const filteredMembers = getCurrentFilteredMembers(); // You'll need to implement this
-    
-    // Create a print-friendly HTML string
-    const printContent = `
-        <html>
-            <head>
-                <title>Members List</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    h1 { color: #333; text-align: center; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th { background-color: #f5f5f5; text-align: left; padding: 8px; }
-                    td { padding: 8px; border-bottom: 1px solid #eee; }
-                    .print-date { text-align: right; margin-bottom: 20px; }
-                </style>
-            </head>
-            <body>
-                <h1>Members List</h1>
-                <div class="print-date">Printed on ${new Date().toLocaleDateString()}</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Course</th>
-                            <th>Year</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${filteredMembers.map((member, index) => `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${member.lastName}, ${member.firstName} ${member.middleName ? member.middleName.charAt(0) + '.' : ''}</td>
-                                <td>${member.course || 'N/A'}</td>
-                                <td>${member.year || 'N/A'}</td>
-                                <td>${member.role || 'N/A'}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </body>
-        </html>
-    `;
+printButton.addEventListener('click', async function() {
+    try {
+        // Get the current filtered and sorted members
+        const membersRef = collection(db, "users");
+        const querySnapshot = await getDocs(membersRef);
+        
+        const allMembers = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                firstName: data.firstName || '',
+                lastName: data.lastName || '',
+                course: data.course || 'Not specified',
+                year: data.year || 'Not specified',
+                role: data.role || 'Not specified',
+                sortName: `${data.lastName || ''}, ${data.firstName || ''}`.trim()
+            };
+        });
 
-    // Open print window
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-    
-    // Wait for content to load before printing
-    setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-    }, 500);
+        // Sort members alphabetically by last name
+        const sortedMembers = allMembers.sort((a, b) => 
+            a.sortName.localeCompare(b.sortName)
+        );
+
+        // Create a print-friendly HTML string
+        const printContent = `
+            <html>
+                <head>
+                    <title>Members List</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1 { color: #333; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th { background-color: #f5f5f5; text-align: left; padding: 8px; }
+                        td { padding: 8px; border-bottom: 1px solid #eee; }
+                        .print-date { text-align: right; margin-bottom: 20px; }
+                        @media print {
+                            .no-print { display: none; }
+                            body { padding: 0; margin: 0; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Members List</h1>
+                    <div class="print-date">Printed on ${new Date().toLocaleDateString()}</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Year</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sortedMembers.map((member, index) => `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${member.lastName}, ${member.firstName}</td>
+                                    <td>${member.course}</td>
+                                    <td>${member.year}</td>
+                                    <td>${member.role}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </body>
+            </html>
+        `;
+
+        // Open print window
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        
+        // Wait for content to load before printing
+        printWindow.onload = function() {
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        };
+    } catch (error) {
+        console.error("Error printing members:", error);
+        alert("Failed to generate print preview. Please try again.");
+    }
 });
 
 // Helper function to get current filtered members to print

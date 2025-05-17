@@ -35,6 +35,8 @@ const saveButton = document.getElementById('saveProfileBtn');
 const cancelButton = document.getElementById('cancelEditBtn');
 const editForm = document.getElementById('editMode');
 const displayForm = document.getElementById('displayMode');
+const printButton = document.getElementById('printButton');
+
 
 // Display fields (including profile picture display)
 const [
