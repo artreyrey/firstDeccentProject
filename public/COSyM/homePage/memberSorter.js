@@ -311,8 +311,6 @@ printButton.addEventListener('click', async function() {
 
 // Helper function to get current filtered members to print
 function getCurrentFilteredMembers() {
-    // Implement this based on your existing filter logic
-    // Should return the currently displayed members array
     return allMembers.filter(member => {
         // Your existing filter logic from applyFilters()
     });

@@ -26,7 +26,7 @@ const firebaseConfig = {
 // Initialize services
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
-const auth = getAuth(app);
+const auth = getAuth(app); 
 auth.languageCode = 'en';
 
 // DOM elements
@@ -35,7 +35,6 @@ const saveButton = document.getElementById('saveProfileBtn');
 const cancelButton = document.getElementById('cancelEditBtn');
 const editForm = document.getElementById('editMode');
 const displayForm = document.getElementById('displayMode');
-const printButton = document.getElementById('printButton');
 
 
 // Display fields (including profile picture display)
